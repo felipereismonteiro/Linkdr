@@ -70,7 +70,7 @@ export default function TimelinePage() {
                         </ButtonDiv>
                     </Form>
                 </PublishingContainer>
-                {loading ? <Loading>Loading...</Loading> : posts.map((p) => <Post post={p}/> )}
+                {loading ? <Loading>Loading...</Loading> : posts.length === 0 ? <NoPostsMessage>There are no posts yet</NoPostsMessage> : posts.map((p) => <Post post={p}/> )}
             </CentralDiv>
         </Container>
         </>
@@ -184,6 +184,15 @@ const Button = styled.button`
 `
 
 const Loading = styled.p`
+
+    font-weight: 700;
+    font-size: 24px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-top: 75px;
+`
+
+const NoPostsMessage = styled.p`
 
     font-weight: 700;
     font-size: 24px;
