@@ -2,7 +2,8 @@ import {BrowserRouter, Routes, Route} from "react-router-dom"
 import GlobalStyle from "./GlobalStyle";
 import TimelinePage from "./TimelinePage";
 import PageView from "./View";
-import SignUpComponent from "../components/signUpComponent"
+import SignUpComponent from "./signUpComponent/signUpComponent"
+import SignInComponent from "./signInComponent/signInComponent";
 // import { TokenContextProvider } from "../contexts/TokenContext";
 // import { UserContextProvider } from "../contexts/UserContext";
 
@@ -15,7 +16,8 @@ function App() {
         <TokenContextProvider> */}
           <Routes>
             <Route path="/timeline" element={<TimelinePage/>}/>
-            <Route path="/sign-up" element={<SignUpComponent />} /> 
+            <Route path="/signup" element={<SignUpComponent />} /> 
+            <Route path="/" element={<SignInComponent />} /> 
           </Routes>
         {/* </TokenContextProvider>
         </UserContextProvider> */}
