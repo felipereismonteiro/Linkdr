@@ -102,6 +102,7 @@ const SignUp = styled.div`
         height: 70vh;
         position: initial;
     }
+    font-family: 'Passion One';
 `
 const Title = styled.h1`
     font-style: normal;
@@ -112,7 +113,7 @@ const Title = styled.h1`
 
     letter-spacing: 0.05em;
     color: #FFFFFF;
-
+    font-family: 'Passion One';
     @media (max-width: 1075px) {
         width: 167px;
 
@@ -134,7 +135,7 @@ const Desc = styled.p`
     font-weight: 700;
     font-size: 43px;
     line-height: 64px;
-
+    font-family: 'Passion One';
     color: #FFFFFF;
 
     @media (max-width: 1075px) {
