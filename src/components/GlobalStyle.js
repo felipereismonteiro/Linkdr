@@ -45,6 +45,10 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+textarea {
+    resize: none;
+}
 `
 
 export default GlobalStyle;

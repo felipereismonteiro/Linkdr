@@ -1,9 +1,46 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar.js";
 import Post from "./Post.js";
 import Title from "./Title.js";
+import axios from "axios"
 
 export default function TimelinePage() {
+
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        renderPosts()
+    }, [])
+
+    async function renderPosts() {
+        console.log("A função renderPosts será implementada em breve")
+    }
+
+    async function publish(e) {
+        e.preventDefault()
+
+        setLoading(true);
+
+        const postInfo = {
+            user_id: 5,
+            url: e.target.url.value,
+            content: e.target.content.value
+        }
+        try {
+            await axios.post("https://linkr-api-hhbp.onrender.com/posts", postInfo)
+            // await axios.post("http://localhost:4000/posts", postInfo)
+            setLoading(false)
+            e.target.url.value = "";
+            e.target.content.value = "";
+            renderPosts()
+        } catch(err) {
+            alert("Houve um erro ao publicar se link")
+            setLoading(false)
+        }
+        
+    }
+
     return(
         <>
         <Navbar />
@@ -13,12 +50,12 @@ export default function TimelinePage() {
                 <PostDiv>
                     {/* <UserPic src={userPic} alt="User picture"/> */}
                     <UserPic src="https://s1.r29static.com/bin/entry/b52/0,46,460,460/1200x1200,80/1471901/image.jpg" alt="User picture"/>
-                    <Form>
+                    <Form onSubmit={publish} >
                         <FormTitle>What are you going to share today?</FormTitle>
-                        <UrlInput placeholder="http://..."/>
-                        <ContentInput placeholder="Awesome article about #javascript"/>
+                        <UrlInput type="url" name="url" placeholder="http://..." required disabled={loading}/>
+                        <ContentInput name="content" placeholder="Awesome article about #javascript" disabled={loading}/>
                         <ButtonDiv>
-                            <Button type="submit" value="Publish" />
+                            <Button type="submit" disabled={loading}>{loading ? "Publishing..." : "Publish"}</Button>
                         </ButtonDiv>
                     </Form>
                 </PostDiv>
@@ -82,10 +119,13 @@ const FormTitle = styled.h2`
     margin-bottom: 10px;
 `
 const UrlInput = styled.input`
+    font-family: 'Lato', sans-serif;
     width: 100%;
     height: 30px;
     background: #EFEFEF;
     border-radius: 5px;
+    outline: none;
+    padding-left: 13px;
 
     &::placeholder {
         font-family: 'Lato', sans-serif;
@@ -95,11 +135,18 @@ const UrlInput = styled.input`
     }
 `
 
-const ContentInput = styled.input`
+const ContentInput = styled.textarea`
+    font-family: 'Lato', sans-serif;
      width: 100%;
     height: 66px;
     background: #EFEFEF;
     border-radius: 5px;
+    border: none;
+    outline: none;
+    padding-left: 13px;
+    padding-top: 8px;
+    text-align: start;
+    box-sizing: border-box;
 
     &::placeholder {
         font-family: 'Lato', sans-serif;
@@ -114,7 +161,7 @@ const ButtonDiv = styled.div`
     display: flex;
     justify-content: flex-end;
 `
-const Button = styled.input`
+const Button = styled.button`
     width: 112px;
     height: 31px;
     background: #1877F2;
@@ -123,4 +170,7 @@ const Button = styled.input`
     font-weight: 700;
     font-size: 14px;
     color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    /* pointer-events: none; */
 `
