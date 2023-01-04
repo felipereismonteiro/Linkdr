@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
+import LogoSignUpComponent from "../logoSignCOmponent";
 
 export default function SignUpComponent() {
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate()
 
     async function signUp(e) {
         setLoading(true);
@@ -21,6 +23,7 @@ export default function SignUpComponent() {
         try {
             const signup = await axios.post("https://linkr-api-hhbp.onrender.com/signup", config); 
             alert(signup.data)
+            navigate("/")
             setLoading(false);
         } catch (err) {
             console.log(err.response.data);
@@ -31,14 +34,7 @@ export default function SignUpComponent() {
     return(
         <>
             <Container>
-                <Logo>
-                    <Title>
-                        Linkr
-                    </Title>
-                    <Desc>
-                        save, share and discover the best links on the web 
-                    </Desc>
-                </Logo>
+                <LogoSignUpComponent/>
                 <SignUp>
                     <Form onSubmit={signUp}>
                         <input type="email" name="email" placeholder="e-mail" required />
@@ -57,7 +53,7 @@ export default function SignUpComponent() {
                             visible={true}
                              /></button>
                             : <button className="button" type="submit">Sign Up</button> }
-                        <Link style={{color: "gray", margin: "10px"}}>Switch back to log in</Link>
+                        <Link to="/" style={{color: "gray", margin: "10px"}}>Switch back to log in</Link>
                     </Form>
                 </SignUp>
             </Container>
@@ -69,26 +65,6 @@ const Container = styled.div`
     @media (max-width: 1075px) {
         display: flex;
         flex-direction: column;
-    }
-`
-const Logo = styled.div`
-    width: 60vw;
-    height: 100vh;
-    background: #151515;
-    box-sizing: border-box;
-    padding: 50px 100px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
-    z-index: 1;
-    @media (max-width: 1075px) {
-        width: 100vw;
-        height: 30vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 `
 const SignUp = styled.div`
@@ -103,54 +79,6 @@ const SignUp = styled.div`
         position: initial;
     }
     font-family: 'Passion One';
-`
-const Title = styled.h1`
-    font-style: normal;
-    font-weight: 700;
-    font-size: 106px;
-    line-height: 117px;
-    /* identical to box height */
-
-    letter-spacing: 0.05em;
-    color: #FFFFFF;
-    font-family: 'Passion One';
-    @media (max-width: 1075px) {
-        width: 167px;
-
-        font-family: 'Passion One';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 76px;
-        line-height: 84px;
-        /* identical to box height */
-
-        letter-spacing: 0.05em;
-
-        color: #FFFFFF;
-    }
-`
-const Desc = styled.p`
-    font-family: 'Oswald';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 43px;
-    line-height: 64px;
-    font-family: 'Passion One';
-    color: #FFFFFF;
-
-    @media (max-width: 1075px) {
-        width: 300px;
-
-        font-family: 'Oswald';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 23px;
-        line-height: 34px;
-        text-align: center;
-
-        color: #FFFFFF;
-
-    }
 `
 const Form = styled.form`
     display: flex;
