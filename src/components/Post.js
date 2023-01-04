@@ -1,14 +1,15 @@
 import styled from "styled-components";
 
-export default function Post() {
+export default function Post({post}) {
+    console.log(post)
     return(
         <Container>
             {/* <UserPic src={userPic} alt="User picture"/> */}
             <UserPic src="https://s1.r29static.com/bin/entry/b52/0,46,460,460/1200x1200,80/1471901/image.jpg" alt="User picture"/>
                     <PostContent>
-                        <Username>Rayandson Silva</Username>
-                        <Description>Muito maneiro esse tutorial de Material UI com React, deem uma olhada!</Description>
-                        <PostUrl>https://medium.com/@pshrmn/a-simple-react-router</PostUrl>
+                        <Username>{post.user_name}</Username>
+                        <Description>{post.content}</Description>
+                        <PostUrl>{post.url}</PostUrl>
                     </PostContent>
         </Container>
     )

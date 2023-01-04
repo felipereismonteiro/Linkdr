@@ -7,36 +7,47 @@ import axios from "axios"
 
 export default function TimelinePage() {
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [isPublishing, setIsPublishing] = useState(false);
+    const [posts, setPosts] = useState([])
 
     useEffect(() => {
         renderPosts()
     }, [])
 
     async function renderPosts() {
-        console.log("A função renderPosts será implementada em breve")
+        
+        try {
+            // const postsFound = await axios.get("https://linkr-api-hhbp.onrender.com/posts")
+            const postsFound = await axios.get("http://localhost:4000/posts");
+            setPosts(postsFound.data)
+            setLoading(false)
+        } catch {
+            alert("An error occured while trying to fetch the posts, please refresh the page")
+        }
+        
     }
 
     async function publish(e) {
         e.preventDefault()
 
-        setLoading(true);
+        setIsPublishing(true);
 
         const postInfo = {
-            user_id: 5,
+            user_id: 9,
             url: e.target.url.value,
             content: e.target.content.value
         }
         try {
-            await axios.post("https://linkr-api-hhbp.onrender.com/posts", postInfo)
-            // await axios.post("http://localhost:4000/posts", postInfo)
-            setLoading(false)
+            // await axios.post("https://linkr-api-hhbp.onrender.com/posts", postInfo)
+            await axios.post("http://localhost:4000/posts", postInfo)
+            setIsPublishing(false);
             e.target.url.value = "";
             e.target.content.value = "";
             renderPosts()
         } catch(err) {
             alert("Houve um erro ao publicar se link")
-            setLoading(false)
+            setIsPublishing(false);
         }
         
     }
@@ -47,21 +58,19 @@ export default function TimelinePage() {
         <Container>
             <CentralDiv>
                 <Title />
-                <PostDiv>
+                <PublishingContainer>
                     {/* <UserPic src={userPic} alt="User picture"/> */}
                     <UserPic src="https://s1.r29static.com/bin/entry/b52/0,46,460,460/1200x1200,80/1471901/image.jpg" alt="User picture"/>
                     <Form onSubmit={publish} >
                         <FormTitle>What are you going to share today?</FormTitle>
-                        <UrlInput type="url" name="url" placeholder="http://..." required disabled={loading}/>
-                        <ContentInput name="content" placeholder="Awesome article about #javascript" disabled={loading}/>
+                        <UrlInput type="url" name="url" placeholder="http://..." required disabled={isPublishing}/>
+                        <ContentInput name="content" placeholder="Awesome article about #javascript" disabled={isPublishing}/>
                         <ButtonDiv>
-                            <Button type="submit" disabled={loading}>{loading ? "Publishing..." : "Publish"}</Button>
+                            <Button type="submit" disabled={isPublishing}>{isPublishing ? "Publishing..." : "Publish"}</Button>
                         </ButtonDiv>
                     </Form>
-                </PostDiv>
-                <Post />
-                <Post />
-                <Post />
+                </PublishingContainer>
+                {loading ? <Loading>Loading...</Loading> : posts.map((p) => <Post post={p}/> )}
             </CentralDiv>
         </Container>
         </>
@@ -81,9 +90,9 @@ const Container = styled.div`
 const CentralDiv = styled.div`
     width: 611px;
     height: auto;
-    margin-top: 78px;
+    margin-top: 58px;
 `
-const PostDiv = styled.div`
+const PublishingContainer = styled.div`
     width: 100%;
     height: 209px;
     background: #FFFFFF;
@@ -172,5 +181,13 @@ const Button = styled.button`
     color: #FFFFFF;
     border: none;
     cursor: pointer;
-    /* pointer-events: none; */
+`
+
+const Loading = styled.p`
+
+    font-weight: 700;
+    font-size: 24px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-top: 75px;
 `
