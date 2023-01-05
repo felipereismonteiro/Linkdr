@@ -21,8 +21,8 @@ export default function SignUpComponent() {
         }
 
         try {
-            // const signup = await axios.post("https://linkr-api-hhbp.onrender.com/signup", config); 
-            const signup = await axios.post("http://localhost:4000/signup", config); 
+            const signup = await axios.post("https://linkr-api-hhbp.onrender.com/signup", config); 
+            // const signup = await axios.post("http://localhost:4000/signup", config); 
             alert(signup.data)
             navigate("/")
             setLoading(false);
