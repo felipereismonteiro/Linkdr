@@ -15,14 +15,15 @@ export default function TimelinePage() {
 
   useEffect(() => {
     renderPosts();
+    console.log("entrou no useEfect")
   }, []);
 
   async function renderPosts() {
     try {
-      const postsFound = await axios.get(
-        "https://linkr-api-hhbp.onrender.com/posts"
-      );
-      // const postsFound = await axios.get("http://localhost:4000/posts");
+    //   const postsFound = await axios.get(
+    //     "https://linkr-api-hhbp.onrender.com/posts"
+    //   );
+      const postsFound = await axios.get("http://localhost:4000/posts");
       setPosts(postsFound.data);
       setLoading(false);
     } catch (err) {
