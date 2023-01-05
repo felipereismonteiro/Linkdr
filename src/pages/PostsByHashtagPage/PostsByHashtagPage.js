@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 
 export default function PostsByHashtagPage() {
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState(true);
   const { hashtag } = useParams();
   const { state } = useLocation();
 
@@ -35,7 +35,7 @@ export default function PostsByHashtagPage() {
       <Navbar />
       <PageContainer>
         <MainContent>
-          <Title title={hashtag} />
+          <Title title={hashtag} showHashtag={true}/>
           {posts.map((post) => (
             <Post key={post.id} post={post} />
           ))}

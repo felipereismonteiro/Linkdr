@@ -1,8 +1,8 @@
 import styled from "styled-components"
 
-export default function Title({title}) {
+export default function Title({title, showHashtag}) {
     return(
-        <Header>{title}</Header>
+        <Header>{showHashtag && "#"}{title}</Header>
     )
 }
 
