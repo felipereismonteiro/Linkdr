@@ -11,13 +11,13 @@ function getHashtags() {
   return promise;
 }
 
-function getPostsByHashtagId(id) {
-  const promise = axios.get(`${BASE_URL}/hashtags/${id}`);
+function getPostsByHashtag(name) {
+  const promise = axios.get(`${BASE_URL}/posts/${name}`);
   return promise;
 }
 const api = {
   getHashtags,
-  getPostsByHashtagId,
+  getPostsByHashtag,
 };
 
 export default api;
