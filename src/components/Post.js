@@ -1,16 +1,15 @@
 import styled from "styled-components";
 
 export default function Post({post}) {
-    console.log(post)
+
     return(
         <Container>
-            {/* <UserPic src={userPic} alt="User picture"/> */}
-            <UserPic src="https://s1.r29static.com/bin/entry/b52/0,46,460,460/1200x1200,80/1471901/image.jpg" alt="User picture"/>
-                    <PostContent>
-                        <Username>{post.user_name}</Username>
-                        <Description>{post.content}</Description>
-                        <PostUrl>{post.url}</PostUrl>
-                    </PostContent>
+             <UserPic src={post.profile_picture} alt="User picture"/>
+                <PostContent>
+                    <Username>{post.user_name}</Username>
+                    <Description>{post.content}</Description>
+                    <PostUrl>{post.url}</PostUrl>
+                </PostContent>
         </Container>
     )
 }
