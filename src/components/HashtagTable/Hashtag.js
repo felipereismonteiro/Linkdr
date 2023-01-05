@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
-export default function Hashtag() {
-  return <Container># oieie</Container>;
+export default function Hashtag({id,name}) {
+  
+  return <Container># {name}</Container>;
 }
 
 const Container = styled.h3`
   font-style: normal;
+  font-family: "Lato";
   font-weight: 700;
   font-size: 19px;
   line-height: 23px;
@@ -13,5 +15,4 @@ const Container = styled.h3`
   color: #ffffff;
   margin-bottom: 3px;
   cursor: pointer;
-  overflow-y: auto;
 `;
