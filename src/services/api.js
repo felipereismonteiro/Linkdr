@@ -6,8 +6,13 @@ function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
 }
 
-function signInUser(config) {
-  const promisse = axios.post(`${BASE_URL}/signin`, config)
+function signInUser(body) {
+  const promisse = axios.post(`${BASE_URL}/signin`, body)
+  return promisse;
+}
+
+function signUpUser(body) {
+  const promisse = axios.post(`${BASE_URL}/signup`, body); 
   return promisse;
 }
 
@@ -23,7 +28,8 @@ function getPostsByHashtag(name) {
 const api = {
   getHashtags,
   getPostsByHashtag,
-  signInUser
+  signInUser,
+  signUpUser
 };
 
 export default api;

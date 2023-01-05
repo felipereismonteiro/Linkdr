@@ -4,6 +4,8 @@ import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import LogoSignUpComponent from "../../components/LogoSignComponent/LogoSignComponent";
+import api from "../../services/api";
+
 
 export default function SignUpPage() {
     const [loading, setLoading] = useState(false);
@@ -13,7 +15,7 @@ export default function SignUpPage() {
         setLoading(true);
         e.preventDefault();
 
-        const config = {
+        const body = {
             user_name: e.target.username.value,
             email: e.target.email.value,
             password:  e.target.password.value,
@@ -21,7 +23,7 @@ export default function SignUpPage() {
         }
 
         try {
-            const signup = await axios.post("https://linkr-api-hhbp.onrender.com/signup", config); 
+            const signup = await api.signUpUser(body);
             // const signup = await axios.post("http://localhost:4000/signup", config); 
             alert(signup.data)
             navigate("/")
