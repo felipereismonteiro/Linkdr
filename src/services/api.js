@@ -25,11 +25,20 @@ function getPostsByHashtag(name) {
   const promise = axios.get(`${BASE_URL}/posts/${name}`);
   return promise;
 }
+
+function getPosts() {
+  const promise = axios.get(
+    "https://linkr-api-hhbp.onrender.com/posts"
+  );
+  return promise;
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
   signInUser,
-  signUpUser
+  signUpUser,
+  getPosts
 };
 
 export default api;
