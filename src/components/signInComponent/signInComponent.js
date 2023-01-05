@@ -1,12 +1,17 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { UserContext } from "../../contexts/UserContext.js";
+import { TokenContext } from "../../contexts/TokenContext.js";
 import LogoSignUpComponent from "../logoSignCOmponent";
 
 export default function SignInComponent() {
+  console.log(UserContext)
   const [loading, setLoading] = useState(false);
+  const {user, setUser} = useContext(UserContext);
+  const {token, setToken} = useContext(TokenContext);
   const navigate = useNavigate();
 
   async function signUp(e) {
@@ -20,9 +25,14 @@ export default function SignInComponent() {
       };
 
       const signin = await axios.post("https://linkr-api-hhbp.onrender.com/signin", config);
+      // const signin = await axios.post("http://localhost:4000/signin", config);
       document.cookie = signin.data.token;
+      console.log(signin.data.user)
+      setToken(signin.data.token)
+      setUser(signin.data.user)
       navigate("/timeline")
       setLoading(false);
+      
     } catch (err) {
       alert(err.response);
       setLoading(false);

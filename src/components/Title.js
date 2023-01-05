@@ -1,8 +1,8 @@
 import styled from "styled-components"
 
-export default function Title() {
+export default function Title({title}) {
     return(
-        <Header>timeline</Header>
+        <Header>{title}</Header>
     )
 }
 

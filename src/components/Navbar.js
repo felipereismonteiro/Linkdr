@@ -2,15 +2,19 @@ import styled from "styled-components";
 import { AiOutlineDown } from "react-icons/ai";
 import Logoimg from "../assets/images/linkr.svg"
 import "../assets/styles/icons.css"
+import { UserContext } from "../contexts/UserContext.js";
+import { useContext } from "react";
 
 export default function Navbar() {
+
+    const {user} = useContext(UserContext);
+
     return(
         <Container>
             <Logo src={Logoimg}/>
             <UserDiv>
                 <AiOutlineDown className="user-img"/>
-                {/* <UserPic src={userPic} alt="User picture"/> */}
-                <UserPic src="https://s1.r29static.com/bin/entry/b52/0,46,460,460/1200x1200,80/1471901/image.jpg" alt="User picture"/>
+                <UserPic src={user.profile_picture} alt="User picture"/>
             </UserDiv>
         </Container>
     )
