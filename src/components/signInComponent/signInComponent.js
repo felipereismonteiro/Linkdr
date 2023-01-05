@@ -24,8 +24,8 @@ export default function SignInComponent() {
         password: e.target.password.value,
       };
 
-      const signin = await axios.post("https://linkr-api-hhbp.onrender.com/signin", config);
-      // const signin = await axios.post("http://localhost:4000/signin", config);
+      // const signin = await axios.post("https://linkr-api-hhbp.onrender.com/signin", config);
+      const signin = await axios.post("http://localhost:4000/signin", config);
       document.cookie = signin.data.token;
       console.log(signin.data.user)
       setToken(signin.data.token)
