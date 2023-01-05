@@ -1,7 +1,7 @@
 import PageContainer from "../../components/PageContainer";
 import MainContent from "../../components/MainContent";
 import Title from "../../components/Title";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Post from "../../components/Post";
 import HashtagTable from "../../components/HashtagTable/HashtagTable";
@@ -9,14 +9,13 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 
 export default function PostsByHashtagPage() {
-  const [posts, setPosts] = useState(true);
+  const [posts, setPosts] = useState(null);
   const { hashtag } = useParams();
-  const { state } = useLocation();
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const resp = await api.getPostsByHashtagId(state);
+        const resp = await api.getPostsByHashtag(hashtag);
         setPosts(resp.data);
       } catch (err) {
         console.log(err);
@@ -35,7 +34,7 @@ export default function PostsByHashtagPage() {
       <Navbar />
       <PageContainer>
         <MainContent>
-          <Title title={hashtag} showHashtag={true}/>
+          <Title title={hashtag} showHashtag={true} />
           {posts.map((post) => (
             <Post key={post.id} post={post} />
           ))}
