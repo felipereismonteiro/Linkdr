@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import Navbar from "./Navbar.js";
-import Post from "./Post.js";
-import Title from "./Title.js";
+import Navbar from "../../components/NavBar/Navbar.js";
+import Post from "../../components/Post/Post.js";
+import Title from "../../components/Title/Title.js";
 import axios from "axios";
-import PageContainer from "./PageContainer.js";
-import MainContent from "./MainContent.js";
-import { PublishingForm } from "./PublishingForm.js";
-import HashtagTable from "./HashtagTable/HashtagTable.js";
+import PageContainer from "../../components/Container/Container.js";
+import MainContent from "../../components/MainContent/MainContent.js";
+import { PublishingForm } from "../../components/PublishForm/PublishingForm.js";
+import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);

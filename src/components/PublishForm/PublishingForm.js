@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useContext, useState } from "react";
-import { UserContext } from "../contexts/UserContext.js";
-import { TokenContext } from "../contexts/TokenContext.js";
+import { UserContext } from "../../contexts/UserContext.js";
+import { TokenContext } from "../../contexts/TokenContext.js";
 import axios from "axios"
 
 

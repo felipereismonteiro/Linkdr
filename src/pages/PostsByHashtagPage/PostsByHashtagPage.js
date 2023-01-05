@@ -1,9 +1,9 @@
-import PageContainer from "../../components/PageContainer";
-import MainContent from "../../components/MainContent";
-import Title from "../../components/Title";
+import PageContainer from "../../components/Container/Container";
+import MainContent from "../../components/MainContent/MainContent";
+import Title from "../../components/Title/Title";
 import { useParams } from "react-router-dom";
-import Navbar from "../../components/Navbar";
-import Post from "../../components/Post";
+import Navbar from "../../components/NavBar/Navbar";
+import Post from "../../components/Post/Post";
 import HashtagTable from "../../components/HashtagTable/HashtagTable";
 import { useEffect, useState } from "react";
 import api from "../../services/api";

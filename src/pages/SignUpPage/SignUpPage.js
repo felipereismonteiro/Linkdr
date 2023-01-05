@@ -3,9 +3,9 @@ import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
-import LogoSignUpComponent from "../logoSignCOmponent";
+import LogoSignUpComponent from "../../components/LogoSignComponent/LogoSignComponent";
 
-export default function SignUpComponent() {
+export default function SignUpPage() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
 
