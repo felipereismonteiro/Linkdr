@@ -1,8 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-export default function Hashtag({id,name}) {
-  
-  return <Container># {name}</Container>;
+export default function Hashtag({ id, name }) {
+  const navigate = useNavigate();
+
+  function goToPostsByHashtagPage() {
+    navigate(`/${name}`, { state: id });
+  }
+
+  return <Container onClick={goToPostsByHashtagPage}> # {name}</Container>;
 }
 
 const Container = styled.h3`
