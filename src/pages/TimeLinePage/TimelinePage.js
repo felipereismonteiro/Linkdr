@@ -5,9 +5,9 @@ import Post from "../../components/Post/Post.js";
 import Title from "../../components/Title/Title.js";
 import PageContainer from "../../components/Container/Container.js";
 import MainContent from "../../components/MainContent/MainContent.js";
-import { PublishingForm } from "../../components/PublishForm/PublishingForm.js";
 import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 import api from "../../services/api.js";
+import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
