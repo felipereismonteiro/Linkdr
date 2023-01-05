@@ -8,8 +8,8 @@ import HashtagTable from "../../components/HashtagTable/HashtagTable";
 
 export default function PostsByHashtagPage() {
   const { hashtag } = useParams();
-  const location = useLocation()
-  console.log(location)
+  const location = useLocation();
+
   const post = {
     profile_picture: "teste",
     user_name: "teste",
