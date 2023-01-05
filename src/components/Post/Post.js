@@ -46,7 +46,6 @@ const Container = styled.div`
   padding: 16px 18px;
   margin-bottom: 16px;
 `;
-
 const UserPic = styled.img`
   width: 53px;
   height: 53px;

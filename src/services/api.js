@@ -33,12 +33,19 @@ function getPosts() {
   return promise;
 }
 
+function publishForm(postInfo, token) {
+  const config = createConfig(token)
+  const promisse = axios.post("https://linkr-api-hhbp.onrender.com/posts", postInfo, config);
+  return promisse;
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
   signInUser,
   signUpUser,
-  getPosts
+  getPosts,
+  publishForm
 };
 
 export default api;

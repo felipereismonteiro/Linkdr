@@ -6,6 +6,7 @@ import { UserContext } from "../../contexts/UserContext.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
 import LogoSignUpComponent from "../../components/LogoSignComponent/LogoSignComponent";
 import api from "../../services/api.js";
+import Swal from 'sweetalert2'
 
 
 export default function SignInPage() {
@@ -32,7 +33,14 @@ export default function SignInPage() {
       navigate("/timeline")
       setLoading(false);
     } catch (err) {
-      alert(err.response);
+      Swal.fire({
+        title: err.response.data,
+        text: 'Modal with a custom image.',
+        imageUrl: 'https://unsplash.it/400/200',
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+      })
       setLoading(false);
     }
   }
@@ -65,7 +73,7 @@ export default function SignInPage() {
               </button>
             ) : (
               <button className="button" type="submit">
-                Sign Up
+                Sign In
               </button>
             )}
             <Link to="/signup" style={{ color: "gray", margin: "10px" }}>
