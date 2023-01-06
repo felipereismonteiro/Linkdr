@@ -97,7 +97,6 @@ const Description = styled.p`
   color: #b7b7b7;
   margin-bottom: 10px;
 `;
-
 const PostUrl = styled.p`
   font-family: "Lato";
   font-weight: 400;
@@ -130,4 +129,10 @@ const Url = styled.p`
     font-weight: 400;
     font-size: 11px;
     color: #CECECE;
+`
+
+const SnippetImage = styled.img`
+    width: 153.44px;
+    height: 155px;
+    border-radius: 0px 12px 13px 0px;
 `
