@@ -7,12 +7,12 @@ function createConfig(token) {
 }
 
 function signInUser(body) {
-  const promisse = axios.post(`${BASE_URL}/signin`, body)
+  const promisse = axios.post(`${BASE_URL}/signin`, body);
   return promisse;
 }
 
 function signUpUser(body) {
-  const promisse = axios.post(`${BASE_URL}/signup`, body); 
+  const promisse = axios.post(`${BASE_URL}/signup`, body);
   return promisse;
 }
 
@@ -27,9 +27,7 @@ function getPostsByHashtag(name) {
 }
 
 function getPosts() {
-  const promise = axios.get(
-    `${BASE_URL}/posts`
-  );
+  const promise = axios.get(`${BASE_URL}/posts`);
   return promise;
 }
 
@@ -39,13 +37,19 @@ function publishForm(postInfo, token) {
   return promisse;
 }
 
+function delelePostById(id, token) {
+  const config = createConfig(token);
+  return axios.delete(`${BASE_URL}/posts/delete/${id}`, config);
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
   signInUser,
   signUpUser,
   getPosts,
-  publishForm
+  publishForm,
+  delelePostById
 };
 
 export default api;
