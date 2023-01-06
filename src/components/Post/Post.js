@@ -1,8 +1,15 @@
 import styled from "styled-components";
 import { ReactTagify } from "react-tagify";
 import { useNavigate } from "react-router-dom";
+import { BsTrash } from "react-icons/bs";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext.js";
+import api from "../../services/api.js";
+import { TokenContext } from "../../contexts/TokenContext.js";
 
 export default function Post({ post }) {
+  const { user } = useContext(UserContext);
+  const { token } = useContext(TokenContext);
   const navigate = useNavigate();
   const tagStyle = {
     color: "white",
@@ -10,11 +17,20 @@ export default function Post({ post }) {
     cursor: "pointer",
   };
 
+  
+  async function deletePost() {
+    try {
+      const promisse = await api.delelePostById(post.id, token);
+      console.log(promisse);
+    } catch (err) {
+      console.log(err.response.data);
+    }
+  }
+
   function goToPostsByHashtagPage(tag) {
     const formattedTag = tag.replace("#", "");
     navigate(`/hashtag/${formattedTag}`);
   }
-
   return (
     <Container>
       <UserPic src={post.profile_picture} alt="User picture" />
@@ -26,9 +42,9 @@ export default function Post({ post }) {
         >
           <Description>{post.content}</Description>
         </ReactTagify>
-
         <PostUrl>{post.url}</PostUrl>
       </PostContent>
+      {post.user_id === user.id && <BsTrash onClick={deletePost} style={{color: "white", cursor: "pointer"}}/>}
     </Container>
   );
 }
@@ -73,7 +89,6 @@ const Description = styled.p`
   font-size: 17px;
   color: #b7b7b7;
 `;
-
 const PostUrl = styled.p`
   font-family: "Lato";
   font-weight: 400;

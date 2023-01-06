@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
-import axios from "axios"
 import api from '../../services/api.js';
 
 
@@ -17,13 +16,15 @@ export function PublishingForm({renderPosts}) {
         setIsPublishing(true);
 
         const postInfo = {
-            user_id: 17,
+            user_id: user.id,
             url: e.target.url.value,
             content: e.target.content.value
         }
+
+        console.log(postInfo);
+
         try {
-            await api.publishForm(postInfo);
-            // await axios.post("http://localhost:4000/posts", postInfo)
+            await api.publishForm(postInfo, token);
             setIsPublishing(false);
             e.target.url.value = "";
             e.target.content.value = "";

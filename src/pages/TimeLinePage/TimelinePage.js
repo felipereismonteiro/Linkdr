@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../../components/NavBar/Navbar.js";
 import Post from "../../components/Post/Post.js";

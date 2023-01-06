@@ -6,13 +6,12 @@ import { UserContext } from "../../contexts/UserContext.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
 import LogoSignUpComponent from "../../components/LogoSignComponent/LogoSignComponent";
 import api from "../../services/api.js";
-import Swal from 'sweetalert2'
-
+import Swal from "sweetalert2";
 
 export default function SignInPage() {
   const [loading, setLoading] = useState(false);
-  const {user, setUser} = useContext(UserContext);
-  const {token, setToken} = useContext(TokenContext);
+  const { user, setUser } = useContext(UserContext);
+  const { token, setToken } = useContext(TokenContext);
   const navigate = useNavigate();
 
   async function signUp(e) {
@@ -26,21 +25,21 @@ export default function SignInPage() {
       };
 
       const signin = await api.signInUser(body);
-      
-      document.cookie = signin.data.token;
-      setToken(signin.data.token)
-      setUser(signin.data.user)
-      navigate("/timeline")
+      document.cookie = `${signin.data.token},${signin.data.user.id},${signin.data.user.user_name},${signin.data.user.profile_picture}`;
+      setToken(signin.data.token);
+      setUser(signin.data.user);
+      navigate("/timeline");
       setLoading(false);
     } catch (err) {
+      console.log(err)
       Swal.fire({
-        title: err.response.data,
-        text: 'Modal with a custom image.',
-        imageUrl: 'https://unsplash.it/400/200',
+        title: err.response,
+        text: "Modal with a custom image.",
+        imageUrl: "https://unsplash.it/400/200",
         imageWidth: 400,
         imageHeight: 200,
-        imageAlt: 'Custom image',
-      })
+        imageAlt: "Custom image",
+      });
       setLoading(false);
     }
   }
