@@ -28,14 +28,14 @@ function getPostsByHashtag(name) {
 
 function getPosts() {
   const promise = axios.get(
-    "https://linkr-api-hhbp.onrender.com/posts"
+    `${BASE_URL}/posts`
   );
   return promise;
 }
 
 function publishForm(postInfo, token) {
   const config = createConfig(token)
-  const promisse = axios.post("https://linkr-api-hhbp.onrender.com/posts", postInfo, config);
+  const promisse = axios.post(`${BASE_URL}/posts`, postInfo, config);
   return promisse;
 }
 
