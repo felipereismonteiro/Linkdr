@@ -16,21 +16,18 @@ export function PublishingForm({renderPosts}) {
         setIsPublishing(true);
 
         const postInfo = {
-            user_id: user.id,
             url: e.target.url.value,
             content: e.target.content.value
         }
 
-        console.log(postInfo);
-
         try {
-            await api.publishForm(postInfo);
+            await api.publishForm(postInfo, token);
             setIsPublishing(false);
             e.target.url.value = "";
             e.target.content.value = "";
             renderPosts()
         } catch(err) {
-            console.log(err.message)
+            console.log(err.response.data)
             alert("Houve um erro ao publicar se link")
             setIsPublishing(false);
         }
@@ -66,7 +63,6 @@ const PublishingContainer = styled.div`
     padding: 16px 18px;
     margin-bottom: 29px;
 `
-
 const UserPic = styled.img`
     width: 53px;
     height: 53px;
@@ -104,7 +100,6 @@ const UrlInput = styled.input`
         color: #949494;
     }
 `
-
 const ContentInput = styled.textarea`
     font-family: 'Lato', sans-serif;
      width: 100%;
@@ -125,7 +120,6 @@ const ContentInput = styled.textarea`
         color: #949494;
     }
 `
-
 const ButtonDiv = styled.div`
     width: 100%;
     display: flex;

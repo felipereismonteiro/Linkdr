@@ -15,8 +15,7 @@ export default function TimelinePage() {
 
   useEffect(() => {
     renderPosts();
-
-  }, []);
+  }, [loading]);
 
   async function renderPosts() {
     try {
@@ -42,7 +41,7 @@ export default function TimelinePage() {
           ) : posts.length === 0 ? (
             <NoPostsMessage>There are no posts yet</NoPostsMessage>
           ) : (
-            posts.map((p) => <Post post={p} />)
+            posts.map((p) => <Post post={p} renderPosts={renderPosts}/>)
           )}
         </MainContent>
         <HashtagTable />

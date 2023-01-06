@@ -33,7 +33,7 @@ function getPosts() {
 
 function publishForm(postInfo, token) {
   const config = createConfig(token);
-  const promisse = axios.post(`${BASE_URL}/posts`,config, postInfo);
+  const promisse = axios.post(`${BASE_URL}/posts`, postInfo,config);
   return promisse;
 }
 
