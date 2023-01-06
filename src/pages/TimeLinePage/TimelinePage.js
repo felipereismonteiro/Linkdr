@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../../components/NavBar/Navbar.js";
 import Post from "../../components/Post/Post.js";
@@ -8,7 +8,6 @@ import MainContent from "../../components/MainContent/MainContent.js";
 import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 import api from "../../services/api.js";
 import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
-import axios from "axios";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
@@ -16,8 +15,7 @@ export default function TimelinePage() {
 
   useEffect(() => {
     renderPosts();
-
-  }, []);
+  }, [loading]);
 
   async function renderPosts() {
     try {
@@ -43,7 +41,7 @@ export default function TimelinePage() {
           ) : posts.length === 0 ? (
             <NoPostsMessage>There are no posts yet</NoPostsMessage>
           ) : (
-            posts.map((p) => <Post post={p} />)
+            posts.map((p) => <Post post={p} renderPosts={renderPosts}/>)
           )}
         </MainContent>
         <HashtagTable />
