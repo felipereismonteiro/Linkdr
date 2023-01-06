@@ -15,6 +15,7 @@ export default function TimelinePage() {
 
   useEffect(() => {
     renderPosts();
+
   }, []);
 
   async function renderPosts() {

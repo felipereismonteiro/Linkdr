@@ -24,7 +24,7 @@ export function PublishingForm({renderPosts}) {
         console.log(postInfo);
 
         try {
-            await api.publishForm(postInfo, token);
+            await api.publishForm(postInfo);
             setIsPublishing(false);
             e.target.url.value = "";
             e.target.content.value = "";
