@@ -5,7 +5,7 @@ export default function Hashtag({ id, name }) {
   const navigate = useNavigate();
 
   function goToPostsByHashtagPage() {
-    navigate(`/hashtag/${name}`, { state: id });
+    navigate(`/hashtag/${name}`);
   }
 
   return <Container onClick={goToPostsByHashtagPage}> # {name}</Container>;

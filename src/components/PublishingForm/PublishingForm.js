@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { useContext, useState } from "react";
-import { UserContext } from "../contexts/UserContext.js";
-import { TokenContext } from "../contexts/TokenContext.js";
+import { UserContext } from "../../contexts/UserContext.js";
+import { TokenContext } from "../../contexts/TokenContext.js";
 import axios from "axios"
+import api from '../../services/api.js';
 
 
 export function PublishingForm({renderPosts}) {
-
     const {user} = useContext(UserContext);
     const {token} = useContext(TokenContext); 
     const [isPublishing, setIsPublishing] = useState(false);
@@ -22,8 +22,8 @@ export function PublishingForm({renderPosts}) {
             content: e.target.content.value
         }
         try {
-            // await axios.post("https://linkr-api-hhbp.onrender.com/posts", postInfo)
-            await axios.post("http://localhost:4000/posts", postInfo)
+            await api.publishForm(postInfo);
+            // await axios.post("http://localhost:4000/posts", postInfo)
             setIsPublishing(false);
             e.target.url.value = "";
             e.target.content.value = "";

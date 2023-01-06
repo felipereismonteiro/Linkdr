@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import Navbar from "./Navbar.js";
-import Post from "./Post.js";
-import Title from "./Title.js";
-import axios from "axios";
-import PageContainer from "./PageContainer.js";
-import MainContent from "./MainContent.js";
-import { PublishingForm } from "./PublishingForm.js";
-import HashtagTable from "./HashtagTable/HashtagTable.js";
+import Navbar from "../../components/NavBar/Navbar.js";
+import Post from "../../components/Post/Post.js";
+import Title from "../../components/Title/Title.js";
+import PageContainer from "../../components/Container/Container.js";
+import MainContent from "../../components/MainContent/MainContent.js";
+import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
+import api from "../../services/api.js";
+import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
@@ -15,14 +15,12 @@ export default function TimelinePage() {
 
   useEffect(() => {
     renderPosts();
-    console.log("entrou no useEfect")
+
   }, []);
 
   async function renderPosts() {
     try {
-    //   const postsFound = await axios.get(
-    //     "https://linkr-api-hhbp.onrender.com/posts"
-    //   );
+      // const postsFound = await api.getPosts();
       const postsFound = await axios.get("http://localhost:4000/posts");
       setPosts(postsFound.data);
       setLoading(false);
@@ -53,7 +51,6 @@ export default function TimelinePage() {
     </>
   );
 }
-
 const Loading = styled.p`
   font-weight: 700;
   font-size: 24px;
@@ -61,7 +58,6 @@ const Loading = styled.p`
   text-align: center;
   margin-top: 75px;
 `;
-
 const NoPostsMessage = styled.p`
   font-weight: 700;
   font-size: 24px;

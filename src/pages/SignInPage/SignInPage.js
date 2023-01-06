@@ -1,14 +1,15 @@
-import axios from "axios";
 import { useContext, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { UserContext } from "../../contexts/UserContext.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
-import LogoSignUpComponent from "../logoSignCOmponent";
+import LogoSignUpComponent from "../../components/LogoSignComponent/LogoSignComponent";
+import api from "../../services/api.js";
+import Swal from 'sweetalert2'
 
-export default function SignInComponent() {
-  console.log(UserContext)
+
+export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const {user, setUser} = useContext(UserContext);
   const {token, setToken} = useContext(TokenContext);
@@ -19,22 +20,27 @@ export default function SignInComponent() {
       setLoading(true);
       e.preventDefault();
 
-      const config = {
+      const body = {
         email: e.target.email.value,
         password: e.target.password.value,
       };
 
-      // const signin = await axios.post("https://linkr-api-hhbp.onrender.com/signin", config);
-      const signin = await axios.post("http://localhost:4000/signin", config);
-      console.log(signin)
+      const signin = await api.signInUser(body);
+      
       document.cookie = signin.data.token;
       setToken(signin.data.token)
       setUser(signin.data.user)
       navigate("/timeline")
       setLoading(false);
-      
     } catch (err) {
-      alert(err.response);
+      Swal.fire({
+        title: err.response.data,
+        text: 'Modal with a custom image.',
+        imageUrl: 'https://unsplash.it/400/200',
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+      })
       setLoading(false);
     }
   }
@@ -67,7 +73,7 @@ export default function SignInComponent() {
               </button>
             ) : (
               <button className="button" type="submit">
-                Sign Up
+                Sign In
               </button>
             )}
             <Link to="/signup" style={{ color: "gray", margin: "10px" }}>

@@ -6,18 +6,46 @@ function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
 }
 
+function signInUser(body) {
+  const promisse = axios.post(`${BASE_URL}/signin`, body)
+  return promisse;
+}
+
+function signUpUser(body) {
+  const promisse = axios.post(`${BASE_URL}/signup`, body); 
+  return promisse;
+}
+
 function getHashtags() {
   const promise = axios.get(`${BASE_URL}/hashtags`);
   return promise;
 }
 
-function getPostsByHashtagId(id) {
-  const promise = axios.get(`${BASE_URL}/hashtags/${id}`);
+function getPostsByHashtag(name) {
+  const promise = axios.get(`${BASE_URL}/posts/${name}`);
   return promise;
 }
+
+function getPosts() {
+  const promise = axios.get(
+    "https://linkr-api-hhbp.onrender.com/posts"
+  );
+  return promise;
+}
+
+function publishForm(postInfo, token) {
+  const config = createConfig(token)
+  const promisse = axios.post("https://linkr-api-hhbp.onrender.com/posts", postInfo, config);
+  return promisse;
+}
+
 const api = {
   getHashtags,
-  getPostsByHashtagId,
+  getPostsByHashtag,
+  signInUser,
+  signUpUser,
+  getPosts,
+  publishForm
 };
 
 export default api;

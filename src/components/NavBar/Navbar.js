@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import { AiOutlineDown } from "react-icons/ai";
-import Logoimg from "../assets/images/linkr.svg"
-import "../assets/styles/icons.css"
-import { UserContext } from "../contexts/UserContext.js";
+import Logoimg from "../../assets/images/linkr.svg"
+import { UserContext } from "../../contexts/UserContext.js";
 import { useContext } from "react";
 
 export default function Navbar() {
-
     const {user} = useContext(UserContext);
 
     return(
@@ -41,8 +39,11 @@ const UserDiv = styled.div`
     justify-content: center;
     align-items: center;
     gap: 13px;
+    svg {
+        font-size: 23px;
+        color: white;
+    }
 `
-
 const UserPic = styled.img`
     width: 53px;
     height: 53px;
