@@ -8,6 +8,7 @@ import MainContent from "../../components/MainContent/MainContent.js";
 import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 import api from "../../services/api.js";
 import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
+import axios from "axios";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
@@ -20,8 +21,7 @@ export default function TimelinePage() {
 
   async function renderPosts() {
     try {
-      // const postsFound = await api.getPosts();
-      const postsFound = await axios.get("http://localhost:4000/posts");
+      const postsFound = await api.getPosts();
       setPosts(postsFound.data);
       setLoading(false);
     } catch (err) {

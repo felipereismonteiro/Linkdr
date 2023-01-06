@@ -11,7 +11,7 @@ export default function Post({ post }) {
   };
 
   function goToPostsByHashtagPage(tag) {
-    const formattedTag = tag.replace("#", "");
+    const formattedTag = tag.replace("#", ""); 
     navigate(`/hashtag/${formattedTag}`);
   }
 
@@ -27,7 +27,14 @@ export default function Post({ post }) {
           <Description>{post.content}</Description>
         </ReactTagify>
 
-        <PostUrl>{post.url}</PostUrl>
+        <PostSnippet href={post.url} target="_blank">
+               <SnippetInfo>
+                   <SnippetTitle>{post.url_title}</SnippetTitle>
+                   <SnippetDescription>{post.url_description}</SnippetDescription>
+                   <Url>{post.url}</Url>
+               </SnippetInfo> 
+               <SnippetImage src={post.url_image} />
+           </PostSnippet>
       </PostContent>
     </Container>
   );
@@ -72,11 +79,52 @@ const Description = styled.p`
   font-weight: 400;
   font-size: 17px;
   color: #b7b7b7;
+  margin-bottom: 10px;
 `;
 
-const PostUrl = styled.p`
-  font-family: "Lato";
-  font-weight: 400;
-  font-size: 17px;
-  color: #b7b7b7;
-`;
+const PostSnippet = styled.a`
+    width: 503px;
+    height: 155px;
+    border: 1px solid #4D4D4D;
+    border-radius: 11px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Lato';
+    font-weight: 400;
+    font-size: 17px;
+    color: #B7B7B7;
+    text-decoration: none;
+`
+const SnippetImage = styled.img`
+    width: 153.44px;
+    height: 155px;
+    border-radius: 0px 12px 13px 0px;
+`
+
+const SnippetInfo = styled.div`
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap:7px;
+    margin-left: 19px;
+`
+const SnippetTitle = styled.h2`
+    font-family: 'Lato';
+    font-weight: 400;
+    font-size: 16px;
+    color: #CECECE;
+`
+const SnippetDescription = styled.p`
+    font-family: 'Lato';
+    font-weight: 400;
+    font-size: 11px;
+    color: #9B9595;
+`
+const Url = styled.p`
+    font-family: 'Lato';
+    font-weight: 400;
+    font-size: 11px;
+    color: #CECECE;
+`
