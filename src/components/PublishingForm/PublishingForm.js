@@ -23,7 +23,6 @@ export function PublishingForm({renderPosts}) {
         }
         try {
             await api.publishForm(postInfo);
-            // await axios.post("http://localhost:4000/posts", postInfo)
             setIsPublishing(false);
             e.target.url.value = "";
             e.target.content.value = "";

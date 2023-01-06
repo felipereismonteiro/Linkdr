@@ -8,6 +8,7 @@ import MainContent from "../../components/MainContent/MainContent.js";
 import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 import api from "../../services/api.js";
 import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
+import axios from "axios";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
@@ -15,6 +16,7 @@ export default function TimelinePage() {
 
   useEffect(() => {
     renderPosts();
+
   }, []);
 
   async function renderPosts() {
