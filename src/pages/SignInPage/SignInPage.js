@@ -33,13 +33,11 @@ export default function SignInPage() {
     } catch (err) {
       console.log(err)
       Swal.fire({
-        title: err.response,
-        text: "Modal with a custom image.",
-        imageUrl: "https://unsplash.it/400/200",
-        imageWidth: 400,
-        imageHeight: 200,
-        imageAlt: "Custom image",
-      });
+        title: err.response.data,
+        background: "black",
+      })
+      e.target.password.value = ""
+      e.target.email.value = ""
       setLoading(false);
     }
   }

@@ -7,6 +7,7 @@ import { UserContext } from "../../contexts/UserContext.js";
 import api from "../../services/api.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function Post({ post, renderPosts }) {
   const { user } = useContext(UserContext);
@@ -39,12 +40,12 @@ export default function Post({ post, renderPosts }) {
       color: "white"
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await api.delelePostById(post.id, token);
+        const promisse = await api.delelePostById(post.id, token);
         renderPosts();
+        console.log(promisse);
         swalWithBootstrapButtons.fire({
           title: 'Deleted!',
           text: 'Your file has been deleted.',
-          success: 'success',
           background: "black",
           color: "white"
         })

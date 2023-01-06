@@ -39,7 +39,7 @@ function publishForm(postInfo, token) {
 
 function delelePostById(id, token) {
   const config = createConfig(token);
-  return axios.delete(`http://localhost:4000/posts/delete/${id}`, config);
+  return axios.delete(`${BASE_URL}/posts/delete/${id}`, config);
 }
 
 const api = {
