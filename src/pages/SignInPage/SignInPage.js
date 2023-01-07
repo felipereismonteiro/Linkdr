@@ -74,7 +74,7 @@ export default function SignInPage() {
               </button>
             )}
             <Link to="/signup" style={{ color: "gray", margin: "10px" }}>
-              Switch back to log in
+              First time? Create an account!
             </Link>
           </Form>
         </SignUp>
@@ -141,6 +141,7 @@ const Form = styled.form`
 
     background: #1877f2;
     border-radius: 6px;
+    border:none;
 
     font-family: "Oswald";
     font-style: normal;
