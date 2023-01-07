@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "https://linkr-api-hhbp.onrender.com";
+// const BASE_URL = "https://linkr-api-hhbp.onrender.com";
+const BASE_URL = "http://localhost:4000";
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -42,6 +43,10 @@ function delelePostById(id, token) {
   return axios.delete(`${BASE_URL}/posts/delete/${id}`, config);
 }
 
+function getUsersByName(queryString) {
+  return axios.get(`${BASE_URL}/users${queryString}`)
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -49,7 +54,8 @@ const api = {
   signUpUser,
   getPosts,
   publishForm,
-  delelePostById
+  delelePostById,
+  getUsersByName
 };
 
 export default api;
