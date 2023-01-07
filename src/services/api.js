@@ -45,7 +45,7 @@ function delelePostById(id, token) {
 
 function editPatchPost(id, body, token) {
     const config = createConfig(token);
-    const promisse = axios.patch(`${BASE_URL}/update/${id}`, body, config);
+    const promisse = axios.patch(`${BASE_URL}/posts/update/${id}`, body, config);
     return promisse;
 }
 

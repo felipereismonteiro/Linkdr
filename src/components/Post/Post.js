@@ -8,7 +8,6 @@ import { UserContext } from "../../contexts/UserContext.js";
 import api from "../../services/api.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
 import Swal from "sweetalert2";
-import swalWithBootstrapButtons from "sweetalert2";
 import { ThreeDots } from "react-loader-spinner";
 
 export default function Post({ post, renderPosts }) {
@@ -65,9 +64,9 @@ export default function Post({ post, renderPosts }) {
         .then(async (result) => {
           if (result.isConfirmed) {
             setLoadingDelete(true);
-            await api.delelePostById(post.id, token);
+            const promisse = await api.delelePostById(post.id, token);
+            await renderPosts();
             setLoadingDelete(false);
-            renderPosts();
             swalWithBootstrapButtons.fire({
               title: "Deleted!",
               text: "Your file has been deleted.",
