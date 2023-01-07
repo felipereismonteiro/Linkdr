@@ -1,11 +1,13 @@
 import styled from "styled-components";
-import { AiOutlineDown, AiOutlineSearch } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import { AiOutlineDown, AiOutlineSearch, AiFillHome } from "react-icons/ai";
 import Logoimg from "../../assets/images/linkr.svg"
 import { UserContext } from "../../contexts/UserContext.js";
 import { useContext, useState } from "react";
 import api from "../../services/api";
 import {DebounceInput} from 'react-debounce-input';
 import SearchResultItem from "./SearchResultItem.js"
+
 
 export default function Navbar() {
     const {user} = useContext(UserContext);
@@ -39,7 +41,9 @@ export default function Navbar() {
 
     return(
         <Container>
-            <Logo src={Logoimg}/>
+            <LogoContainer>
+                <Logo src={Logoimg}/>
+            </LogoContainer>
             <SearchBarContainer>
                 <SearchBar>
                     <DebounceInput
@@ -52,10 +56,17 @@ export default function Navbar() {
                     {queryResult.map((u) => <SearchResultItem user={u}/>)}
                 </ContainerQueryResult>
             </SearchBarContainer>
-            <UserDiv>
-                <AiOutlineDown/>
-                <UserPic src={user.profile_picture} alt="User picture"/>
-            </UserDiv>
+            <Menu>
+                <Link to="/timeline" >
+                    <HomeButton >
+                        <AiFillHome />
+                    </HomeButton>
+                </Link>
+                <UserDiv>
+                    <AiOutlineDown/>
+                    <UserPic src={user.profile_picture} alt="User picture"/>
+                </UserDiv>
+            </Menu>
             
         </Container>
     )
@@ -72,9 +83,33 @@ const Container = styled.div`
     z-index: 10;
     padding: 0 17px;
 `
+
+const LogoContainer = styled.div`
+    width: 160px;
+    display: flex;
+    align-items: center;
+
+`
 const Logo = styled.img`
     width: 78px;
     margin-left: 10px;
+`
+
+const Menu = styled.div`
+    width: 160px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+`
+const HomeButton = styled.div`
+    cursor: pointer;
+    svg {
+        font-size: 30px;
+        color: white;
+        margin-right: 0px;
+    }
+
 `
 const UserDiv = styled.div`
     width: 95px;
