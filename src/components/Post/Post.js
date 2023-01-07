@@ -10,7 +10,9 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 export default function Post({ post, renderPosts }) {
+  // console.log(post)
   const { user } = useContext(UserContext);
+  const { setUserPageInfo } = useContext(UserContext);
   const { token } = useContext(TokenContext);
   const navigate = useNavigate();
   const tagStyle = {
@@ -90,7 +92,10 @@ export default function Post({ post, renderPosts }) {
     <Container>
       <UserPic src={post.profile_picture} alt="User picture" />
       <PostContent>
-        <Username>{post.user_name}</Username>
+        <Username onClick={() => {
+          setUserPageInfo({user_name: post.user_name, profile_picture: post.profile_picture})
+          navigate(`/user/${post.user_id}`);
+        }}>{post.user_name}</Username>
         {deleteButton()}
         <ReactTagify
           tagStyle={tagStyle}
@@ -142,6 +147,7 @@ const Username = styled.h2`
   font-size: 19px;
   color: #ffffff;
   margin-bottom: 10px;
+  cursor: pointer;
 `;
 const Description = styled.p`
   font-family: "Lato";

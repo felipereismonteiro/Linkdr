@@ -50,12 +50,14 @@ export default function TimelinePage() {
   );
 }
 const Loading = styled.p`
+  font-family: 'Oswald';
   font-weight: 700;
   font-size: 24px;
   color: #ffffff;
   text-align: center;
   margin-top: 75px;
 `;
+
 const NoPostsMessage = styled.p`
   font-weight: 700;
   font-size: 24px;

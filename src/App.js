@@ -7,6 +7,7 @@ import { UserContextProvider } from "./contexts/UserContext";
 import PostsByHashtagPage from "./pages/PostsByHashtagPage/PostsByHashtagPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import SignInPage from "./pages/SignInPage/SignInPage";
+import UserPage from "./pages/UserPage/UserPage";
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
               <Route
                 path="/hashtag/:hashtag"
                 element={<PostsByHashtagPage />}
+              />
+              <Route
+                path="/user/:id"
+                element={<UserPage />}
               />
             </Routes>
           </TokenContextProvider>
