@@ -1,7 +1,6 @@
 import axios from "axios";
 
-// const BASE_URL = "https://linkr-api-hhbp.onrender.com";
-const BASE_URL = "http://localhost:4000";
+const BASE_URL = "https://linkr-api-hhbp.onrender.com";
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -47,6 +46,10 @@ function getUsersByName(queryString) {
   return axios.get(`${BASE_URL}/users${queryString}`)
 }
 
+function getPostsByUserId(id) {
+  return axios.get(`${BASE_URL}/user/${id}`)
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -55,7 +58,8 @@ const api = {
   getPosts,
   publishForm,
   delelePostById,
-  getUsersByName
+  getUsersByName,
+  getPostsByUserId
 };
 
 export default api;

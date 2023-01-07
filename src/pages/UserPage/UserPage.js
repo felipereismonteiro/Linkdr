@@ -11,13 +11,23 @@ import { UserContext } from "../../contexts/UserContext.js";
 import styled from "styled-components"
 
 export default function UserPage() {
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState([]);
   const { userPageInfo } = useContext(UserContext);
 
   const { id } = useParams();
 
-  useEffect(() => {
+  useEffect( () => {
+
+    const getPosts = async () => {
+      try {
+        const result = await api.getPostsByUserId(id);
+        setPosts(result.data)
+      } catch(err) {
+        console.log(err.message)
+      }
+    }
     
+    getPosts();
   }, []);
 
   return (
