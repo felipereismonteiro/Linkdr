@@ -241,7 +241,7 @@ export default function Post({ post, renderPosts }) {
     <Container>
       <UserPicAndLikes>
         <UserPic src={post.profile_picture} alt="User picture" />
-        <Likes post={post} />
+        <Likes post={post} renderPosts={renderPosts}/>
       </UserPicAndLikes>
       <PostContent>
         <Username

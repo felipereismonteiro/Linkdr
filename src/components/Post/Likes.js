@@ -3,21 +3,40 @@ import { IoHeartOutline } from "react-icons/io5";
 import { IoHeartSharp } from "react-icons/io5";
 import styled from "styled-components";
 import { TokenContext } from "../../contexts/TokenContext";
+import api from "../../services/api";
 
-export function Likes({ post }) {
+export function Likes({ post, renderPosts }) {
+  const { id, is_liked, liked_by, likes } = post;
   const [isLoading, setIsLoading] = useState(false);
-  const [isliked, setIsLiked] = useState(post.is_liked)
   const { token } = useContext(TokenContext);
 
-  async function handleLike(){
-       
+  async function handleLike() {
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
+    try {
+      if (is_liked) {
+        await api.unlikePost(id, token);
+        setIsLoading(false);
+        renderPosts();
+      } else {
+        await api.likePost(id, token);
+        setIsLoading(false);
+        renderPosts();
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
   }
-
 
   return (
     <Container>
-      {isliked ? (
-        <IoHeartSharp style={{ fontSize: "20px", color: " #AC0000" }} onClick={ handleLike}/>
+      {is_liked ? (
+        <IoHeartSharp
+          style={{ fontSize: "20px", color: " #AC0000" }}
+          onClick={handleLike}
+        />
       ) : (
         <IoHeartOutline
           IoHeartOutline
@@ -25,9 +44,7 @@ export function Likes({ post }) {
           onClick={handleLike}
         />
       )}
-      <LikesAmount>
-        {post.likes} likes
-      </LikesAmount>
+      <LikesAmount>{likes} likes</LikesAmount>
     </Container>
   );
 }
@@ -40,7 +57,7 @@ const Container = styled.div`
   width: 53px;
   height: 53px;
   margin-top: 20px;
-  cursor:pointer;
+  cursor: pointer;
 `;
 const LikesAmount = styled.div`
   font-family: "Lato";
@@ -49,5 +66,5 @@ const LikesAmount = styled.div`
   font-size: 11px;
   line-height: 13px;
   color: #ffffff;
-  margin-top:3px;
+  margin-top: 3px;
 `;
