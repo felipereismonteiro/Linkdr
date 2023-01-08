@@ -22,10 +22,10 @@ export function PublishingForm({renderPosts}) {
 
         try {
             await api.publishForm(postInfo, token);
+            await renderPosts()
             setIsPublishing(false);
             e.target.url.value = "";
             e.target.content.value = "";
-            renderPosts()
         } catch(err) {
             console.log(err.response.data)
             alert("Houve um erro ao publicar se link")

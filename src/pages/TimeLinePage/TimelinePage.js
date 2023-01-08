@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../../components/NavBar/Navbar.js";
 import Post from "../../components/Post/Post.js";
@@ -9,10 +9,12 @@ import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 import api from "../../services/api.js";
 import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
+import { TokenContext } from "../../contexts/TokenContext.js";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const { token } = useContext(TokenContext);
 
   useEffect(() => {
     renderPosts();
@@ -20,7 +22,7 @@ export default function TimelinePage() {
 
   async function renderPosts() {
     try {
-      const postsFound = await api.getPosts();
+      const postsFound = await api.getPosts(token);
       setPosts(postsFound.data);
       setLoading(false);
     } catch (err) {
