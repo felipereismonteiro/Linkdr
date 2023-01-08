@@ -1,32 +1,33 @@
 import PageContainer from "../../components/Container/Container";
+import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 import MainContent from "../../components/MainContent/MainContent";
 import Title from "../../components/Title/Title";
 import { useParams } from "react-router-dom";
 import Navbar from "../../components/NavBar/Navbar";
 import Post from "../../components/Post/Post";
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
-import HashtagTable from "../../components/HashtagTable/HashtagTable";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import styled from "styled-components";
+import styled from "styled-components"
 
-export default function PostsByHashtagPage() {
+export default function UserPage() {
   const [posts, setPosts] = useState(null);
-  const { hashtag } = useParams();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const resp = await api.getPostsByHashtag(hashtag);
-        setPosts(resp.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  const { id } = useParams();
 
-    fetchPosts();
-  }, []);
+  useEffect( () => {
+    
+    renderPosts();
+  }, [id]);
 
+  const renderPosts = async () => {
+    try {
+      const result = await api.getPostsByUserId(id);
+      setPosts(result.data)
+    } catch(err) {
+      console.log(err.message)
+    }
+  }
 
   return (
     <>
@@ -35,23 +36,46 @@ export default function PostsByHashtagPage() {
       <SearchBarContainer>
             <SearchBarComponent />
       </SearchBarContainer>
-      {!posts ? 
-          <Loading>Loading...</Loading>
-           :
+      {posts === null  ? (
+            <Loading>Loading...</Loading>
+          ) :
         <>
         <MainContent>
-          <Title title={hashtag} showHashtag={true} />
-           {posts.map((post) => (
-            <Post key={post.id} post={post} />
-          ))}
+        <TitleContainer>
+            <img src={posts[0].profile_picture}/>
+            <Title title={`${posts[0].user_name}'s posts`} />
+        </TitleContainer>
+            { 
+            posts.map((p) => <Post post={p} renderPosts={renderPosts}/>)
+          }
         </MainContent>
         <HashtagTable />
         </>
-      } 
+      }
       </PageContainer>
     </>
   );
 }
+
+const TitleContainer = styled.div`
+    display: flex;
+    gap: 18px;
+
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 26.5px;
+    }
+`
+
+const Loading = styled.p`
+  font-family: 'Oswald';
+  font-weight: 700;
+  font-size: 24px;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 75px;
+`;
 
 const SearchBarContainer = styled.div`
         width: 100vw;
@@ -69,11 +93,3 @@ const SearchBarContainer = styled.div`
             align-items: center;
         }
 `
-const Loading = styled.p`
-  font-family: 'Oswald';
-  font-weight: 700;
-  font-size: 24px;
-  color: #ffffff;
-  text-align: center;
-  margin-top: 75px;
-`;

@@ -119,6 +119,7 @@ const Form = styled.form`
 
     background: #ffffff;
     border-radius: 6px;
+    outline: none;
 
     font-family: "Oswald";
     font-style: normal;
@@ -126,11 +127,22 @@ const Form = styled.form`
     font-size: 27px;
     line-height: 40px;
 
+    &::placeholder {
+      font-family: "Oswald";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 27px;
+    line-height: 40px;
     color: #9f9f9f;
+    }
+
 
     @media (max-width: 1075px) {
       width: 330px;
       height: 55px;
+    }
+    @media (max-width: 350px) {
+      width: 90vw
     }
   }
   && .button {
@@ -144,6 +156,7 @@ const Form = styled.form`
     background: #1877f2;
     border-radius: 6px;
     border:none;
+    cursor: pointer;
 
     font-family: "Oswald";
     font-style: normal;
@@ -156,6 +169,9 @@ const Form = styled.form`
     @media (max-width: 1075px) {
       width: 330px;
       height: 55px;
+    }
+    @media (max-width: 350px) {
+      width: 90vw
     }
   }
   && p {

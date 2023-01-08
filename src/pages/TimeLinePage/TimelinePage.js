@@ -8,6 +8,7 @@ import MainContent from "../../components/MainContent/MainContent.js";
 import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 import api from "../../services/api.js";
 import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
+import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
 
 export default function TimelinePage() {
@@ -33,31 +34,59 @@ export default function TimelinePage() {
 
   return (
     <>
+      
       <Navbar />
       <PageContainer>
+      <SearchBarContainer>
+            <SearchBarComponent />
+      </SearchBarContainer>
+      {loading ? (
+            <Loading>Loading...</Loading>
+          ) :
+        <>
         <MainContent>
           <Title title={"timeline"} />
           <PublishingForm renderPosts={renderPosts} />
-          {loading ? (
-            <Loading>Loading...</Loading>
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <NoPostsMessage>There are no posts yet</NoPostsMessage>
           ) : (
             posts.map((p) => <Post post={p} renderPosts={renderPosts}/>)
           )}
         </MainContent>
         <HashtagTable />
+        </>
+          }
       </PageContainer>
     </>
   );
 }
+
+const SearchBarContainer = styled.div`
+        width: 100vw;
+        height: 82px;
+        position: relative;
+        margin-top: 10px;
+        display: none;
+        background-color: #333333;
+        position: fixed;
+        top: 45px;
+        z-index: 5;
+        @media (max-width: 950px) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+`
+
 const Loading = styled.p`
+  font-family: 'Oswald';
   font-weight: 700;
   font-size: 24px;
   color: #ffffff;
   text-align: center;
   margin-top: 75px;
 `;
+
 const NoPostsMessage = styled.p`
   font-weight: 700;
   font-size: 24px;

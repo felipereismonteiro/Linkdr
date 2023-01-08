@@ -9,8 +9,9 @@ export function UserContextProvider({children}) {
         profile_picture: document.cookie.split(",")[3]
     }
     const [user, setUser] = useState(userFromCookie);
+    const [userPageInfo, setUserPageInfo] = useState({})
     return(
-        <UserContext.Provider value={{user, setUser}}>
+        <UserContext.Provider value={{user, setUser, userPageInfo, setUserPageInfo}}>
             {children}
         </UserContext.Provider>
     )
