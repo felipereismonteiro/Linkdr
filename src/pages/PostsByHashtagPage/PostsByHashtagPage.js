@@ -27,9 +27,6 @@ export default function PostsByHashtagPage() {
     fetchPosts();
   }, []);
 
-  if (!posts) {
-    return <div>Loading</div>;
-  }
 
   return (
     <>
@@ -38,13 +35,19 @@ export default function PostsByHashtagPage() {
       <SearchBarContainer>
             <SearchBarComponent />
       </SearchBarContainer>
+      {!posts ? 
+          <Loading>Loading...</Loading>
+           :
+        <>
         <MainContent>
           <Title title={hashtag} showHashtag={true} />
-          {posts.map((post) => (
+           {posts.map((post) => (
             <Post key={post.id} post={post} />
           ))}
         </MainContent>
         <HashtagTable />
+        </>
+      } 
       </PageContainer>
     </>
   );
@@ -66,3 +69,11 @@ const SearchBarContainer = styled.div`
             align-items: center;
         }
 `
+const Loading = styled.p`
+  font-family: 'Oswald';
+  font-weight: 700;
+  font-size: 24px;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 75px;
+`;

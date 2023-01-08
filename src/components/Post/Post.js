@@ -11,7 +11,6 @@ import Swal from "sweetalert2";
 import { ThreeDots } from "react-loader-spinner";
 
 export default function Post({ post, renderPosts }) {
-  console.log(post.url_description)
   const { user } = useContext(UserContext);
   const { setUserPageInfo } = useContext(UserContext);
   const { token } = useContext(TokenContext);
@@ -202,7 +201,7 @@ export default function Post({ post, renderPosts }) {
       setLoadingEditing(false);
     } catch (err) {
       setLoadingEditing(false);
-      console.log(err.response.data);
+      console.log(err);
     }
   }
 

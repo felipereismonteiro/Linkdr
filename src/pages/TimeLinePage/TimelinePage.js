@@ -34,23 +34,28 @@ export default function TimelinePage() {
 
   return (
     <>
+      
       <Navbar />
       <PageContainer>
       <SearchBarContainer>
             <SearchBarComponent />
       </SearchBarContainer>
+      {loading ? (
+            <Loading>Loading...</Loading>
+          ) :
+        <>
         <MainContent>
           <Title title={"timeline"} />
           <PublishingForm renderPosts={renderPosts} />
-          {loading ? (
-            <Loading>Loading...</Loading>
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <NoPostsMessage>There are no posts yet</NoPostsMessage>
           ) : (
             posts.map((p) => <Post post={p} renderPosts={renderPosts}/>)
           )}
         </MainContent>
         <HashtagTable />
+        </>
+          }
       </PageContainer>
     </>
   );

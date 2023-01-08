@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "https://linkr-api-hhbp.onrender.com";
-// const BASE_URL = "http://localhost:4000"; 
+// const BASE_URL = "https://linkr-api-hhbp.onrender.com";
+const BASE_URL = "http://localhost:4000"; 
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -47,6 +47,17 @@ function delelePostById(id, token) {
 function getUsersByName(queryString) {
   return axios.get(`${BASE_URL}/users${queryString}`)
 }
+
+function editPatchPost(id, body, token) {
+  const config = createConfig(token);
+  const promisse = axios.patch(`${BASE_URL}/posts/update/${id}`, body, config);
+  return promisse;
+}
+
+function getPostsByUserId(id) {
+  return axios.get(`${BASE_URL}/user/${id}`)
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -54,8 +65,10 @@ const api = {
   signUpUser,
   getPosts,
   publishForm,
+  editPatchPost,
   delelePostById,
-  getUsersByName
+  getUsersByName,
+  getPostsByUserId,
 };
 
 export default api;

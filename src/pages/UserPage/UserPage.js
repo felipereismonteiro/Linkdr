@@ -36,21 +36,22 @@ export default function UserPage() {
       <SearchBarContainer>
             <SearchBarComponent />
       </SearchBarContainer>
+      {posts === null  ? (
+            <Loading>Loading...</Loading>
+          ) :
+        <>
         <MainContent>
         <TitleContainer>
-            {posts === null ? "" : 
-            <>
             <img src={posts[0].profile_picture}/>
             <Title title={`${posts[0].user_name}'s posts`} />
-            </>}
         </TitleContainer>
-            {posts === null ? (
-            <Loading>Loading...</Loading>
-          ) : (
+            { 
             posts.map((p) => <Post post={p} renderPosts={renderPosts}/>)
-          )}
+          }
         </MainContent>
         <HashtagTable />
+        </>
+      }
       </PageContainer>
     </>
   );
