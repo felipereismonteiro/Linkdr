@@ -6,21 +6,23 @@ import { TokenContext } from "../../contexts/TokenContext";
 
 export function Likes({ post }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isliked, setIsLiked] = useState(post.is_liked)
   const { token } = useContext(TokenContext);
 
-  async function likePost(){
-         
+  async function handleLike(){
+       
   }
 
 
   return (
     <Container>
-      {post.is_liked ? (
-        <IoHeartSharp style={{ fontSize: "20px", color: " #AC0000" }} />
+      {isliked ? (
+        <IoHeartSharp style={{ fontSize: "20px", color: " #AC0000" }} onClick={ handleLike}/>
       ) : (
         <IoHeartOutline
           IoHeartOutline
           style={{ fontSize: "20px", color: "#FFFFFF" }}
+          onClick={handleLike}
         />
       )}
       <LikesAmount>
