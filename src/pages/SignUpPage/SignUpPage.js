@@ -143,6 +143,7 @@ const Form = styled.form`
 
     background: #1877f2;
     border-radius: 6px;
+    border:none;
 
     font-family: "Oswald";
     font-style: normal;
