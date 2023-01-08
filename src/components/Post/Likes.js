@@ -18,8 +18,8 @@ export function Likes({ post, renderPosts }) {
     let content;
     const likesAmount = Number(likes);
     if (is_liked) {
-      const sortedUsers = liked_by.filter((obj) => obj.id !== user.id);
-      sortedUsers.splice(0, 0, { id: user.id, user_name: user.user_name });
+      const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
+      sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
 
       if (likesAmount === 1) {
         content = `You`;
