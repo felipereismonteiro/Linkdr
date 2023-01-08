@@ -1,8 +1,18 @@
+import { useContext, useState } from "react";
 import { IoHeartOutline } from "react-icons/io5";
 import { IoHeartSharp } from "react-icons/io5";
 import styled from "styled-components";
+import { TokenContext } from "../../contexts/TokenContext";
 
 export function Likes({ post }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const { token } = useContext(TokenContext);
+
+  async function likePost(){
+         
+  }
+
+
   return (
     <Container>
       {post.is_liked ? (
