@@ -19,7 +19,7 @@ export default function TimelinePage() {
   useEffect(() => {
     renderPosts();
   }, [loading]);
-
+console.log(posts)
   async function renderPosts() {
     try {
       const postsFound = await api.getPosts(token);

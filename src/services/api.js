@@ -58,6 +58,18 @@ function getPostsByUserId(id) {
   return axios.get(`${BASE_URL}/user/${id}`)
 }
 
+function likePost(id,token){
+  const config =  createConfig(token)
+  const promise =  axios.post(`${BASE_URL}/posts/like/${id}`,{}, config);
+  return promise;
+}
+
+function unlikePost(id,token){
+  const config =  createConfig(token)
+  const promise =  axios.delete(`${BASE_URL}/posts/unlike/${id}`, config);
+  return promise;
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -69,6 +81,8 @@ const api = {
   delelePostById,
   getUsersByName,
   getPostsByUserId,
+  likePost,
+  unlikePost
 };
 
 export default api;
