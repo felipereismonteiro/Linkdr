@@ -9,6 +9,7 @@ import api from "../../services/api.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
 import Swal from "sweetalert2";
 import { ThreeDots } from "react-loader-spinner";
+import { Likes } from "./Likes.js";
 
 export default function Post({ post, renderPosts }) {
   const { user } = useContext(UserContext);
@@ -21,6 +22,7 @@ export default function Post({ post, renderPosts }) {
   const [loadingEditing, setLoadingEditing] = useState(false);
   const inputEl = useRef(null);
   const navigate = useNavigate();
+
   const tagStyle = {
     color: "white",
     fontWeight: "bold",
@@ -128,65 +130,68 @@ export default function Post({ post, renderPosts }) {
     if (post.user_id === Number(user.id)) {
       return (
         <>
-        {loadingEditing 
-          ? <AiOutlineEdit
-          style={{
-            color: "gray",
-            position: "absolute",
-            fontSize: "18px",
-            right: "50px",
-            top: "20px"
-          }}
-        />
-          : <AiOutlineEdit
-          onClick={() => {
-            const swalWithBootstrapButtons = Swal.mixin({
-              customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-              },
-              buttonsStyling: true
-            })
-            
-            swalWithBootstrapButtons.fire({
-              title: 'You really want to edit this post?',
-              text: "You won't be able to revert this!",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Yes, edit!',
-              cancelButtonText: 'No, cancel!',
-              reverseButtons: true,
-              background: "black",
-              cancelButtonColor: "gray",
-              confirmButtonColor: "black",
-              color: "white"
-            }).then((result) => {
-              if (result.isConfirmed) {
-                setEditing(!editing);
-                setInputValue(post.content);
-              } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-              ) {
-                swalWithBootstrapButtons.fire({
-                  title: 'Cancelled',
-                  text: 'Your editing were canceled :)',
-                  background: "black",
-                  color: "white"
-                })
-              }
-            })
-          }}
-          style={{
-            color: "white",
-            position: "absolute",
-            fontSize: "18px",
-            right: "50px",
-            top: "20px",
-            cursor: "pointer",
-          }}
-        />
-        }
+          {loadingEditing ? (
+            <AiOutlineEdit
+              style={{
+                color: "gray",
+                position: "absolute",
+                fontSize: "18px",
+                right: "50px",
+                top: "20px",
+              }}
+            />
+          ) : (
+            <AiOutlineEdit
+              onClick={() => {
+                const swalWithBootstrapButtons = Swal.mixin({
+                  customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                  },
+                  buttonsStyling: true,
+                });
+
+                swalWithBootstrapButtons
+                  .fire({
+                    title: "You really want to edit this post?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, edit!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: true,
+                    background: "black",
+                    cancelButtonColor: "gray",
+                    confirmButtonColor: "black",
+                    color: "white",
+                  })
+                  .then((result) => {
+                    if (result.isConfirmed) {
+                      setEditing(!editing);
+                      setInputValue(post.content);
+                    } else if (
+                      /* Read more about handling dismissals below */
+                      result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                      swalWithBootstrapButtons.fire({
+                        title: "Cancelled",
+                        text: "Your editing were canceled :)",
+                        background: "black",
+                        color: "white",
+                      });
+                    }
+                  });
+              }}
+              style={{
+                color: "white",
+                position: "absolute",
+                fontSize: "18px",
+                right: "50px",
+                top: "20px",
+                cursor: "pointer",
+              }}
+            />
+          )}
         </>
       );
     }
@@ -196,7 +201,7 @@ export default function Post({ post, renderPosts }) {
     try {
       setEditing(false);
       setLoadingEditing(true);
-      await api.editPatchPost(post.id, {content: inputValue}, token);
+      await api.editPatchPost(post.id, { content: inputValue }, token);
       await renderPosts();
       setLoadingEditing(false);
     } catch (err) {
@@ -207,44 +212,60 @@ export default function Post({ post, renderPosts }) {
 
   function editingField() {
     if (editing) {
-      return <EditField
-                disabled={disabled}
-                ref={inputEl}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => detectKeyDown(e.key)}
-              ></EditField>
+      return (
+        <EditField
+          disabled={disabled}
+          ref={inputEl}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => detectKeyDown(e.key)}
+        ></EditField>
+      );
     } else if (loadingEditing) {
-      return <ThreeDots 
-                height="50" 
-                width="50" 
-                radius="9"
-                color="white" 
-                ariaLabel="three-dots-loading"
-                wrapperStyle={{}}
-                wrapperClassName=""
-                visible={true}
-                />
+      return (
+        <ThreeDots
+          height="50"
+          width="50"
+          radius="9"
+          color="white"
+          ariaLabel="three-dots-loading"
+          wrapperStyle={{}}
+          wrapperClassName=""
+          visible={true}
+        />
+      );
     }
   }
 
   return (
     <Container>
-      <UserPic src={post.profile_picture} alt="User picture" />
+      <UserPicAndLikes>
+        <UserPic src={post.profile_picture} alt="User picture" />
+        <Likes post={post} />
+      </UserPicAndLikes>
       <PostContent>
-        <Username onClick={() => {
-          setUserPageInfo({user_name: post.user_name, profile_picture: post.profile_picture})
-          navigate(`/user/${post.user_id}`);
-        }}>{post.user_name}</Username>
+        <Username
+          onClick={() => {
+            setUserPageInfo({
+              user_name: post.user_name,
+              profile_picture: post.profile_picture,
+            });
+            navigate(`/user/${post.user_id}`);
+          }}
+        >
+          {post.user_name}
+        </Username>
 
-        {editButton()} 
+        {editButton()}
         {deleteButton()}
         {editingField()}
         <ReactTagify
           tagStyle={tagStyle}
           tagClicked={(tag) => goToPostsByHashtagPage(tag)}
         >
-          {editing === false && loadingEditing === false && <Description>{post.content}</Description>}
+          {editing === false && loadingEditing === false && (
+            <Description>{post.content}</Description>
+          )}
         </ReactTagify>
 
         <PostSnippet href={post.url} target="_blank">
@@ -274,9 +295,8 @@ const Container = styled.div`
   margin-bottom: 16px;
   position: relative;
   @media (max-width: 634px) {
-          width: 98vw;
+    width: 98vw;
   }
-
 `;
 const UserPic = styled.img`
   width: 53px;
@@ -289,7 +309,7 @@ const PostContent = styled.div`
   justify-content: space-between;
   margin-top: 5px;
   @media (max-width: 634px) {
-          width: 100vw;
+    width: 100vw;
   }
 `;
 const Username = styled.h2`
@@ -300,6 +320,7 @@ const Username = styled.h2`
   margin-bottom: 10px;
   cursor: pointer;
 `;
+
 const Description = styled.p`
   font-family: "Lato";
   font-weight: 400;
@@ -320,7 +341,6 @@ const SnippetInfo = styled.div`
   @media (max-width: 420px) {
     margin-left: 11px;
   }
-  
 `;
 const SnippetTitle = styled.div`
   width: 100%;
@@ -333,7 +353,7 @@ const SnippetTitle = styled.div`
   font-size: 16px;
   color: #cecece;
   @media (max-width: 420px) {
-    font-size: 11px;  ;
+    font-size: 11px;
   }
 `;
 const SnippetDescription = styled.div`
@@ -344,9 +364,9 @@ const SnippetDescription = styled.div`
   font-family: "Lato";
   font-weight: 400;
   font-size: 11px;
-  color: #9B9595;
+  color: #9b9595;
   @media (max-width: 420px) {
-    font-size: 9px;  ;
+    font-size: 9px;
   }
 `;
 const Url = styled.div`
@@ -359,7 +379,7 @@ const Url = styled.div`
   font-size: 11px;
   color: #cecece;
   @media (max-width: 420px) {
-    font-size: 9px;  ;
+    font-size: 9px;
   }
 `;
 const SnippetImage = styled.img`
@@ -367,8 +387,8 @@ const SnippetImage = styled.img`
   height: 155px;
   border-radius: 0px 12px 13px 0px;
   @media (max-width: 634px) {
-        min-width: 32%;
-        max-width: 32%;
+    min-width: 32%;
+    max-width: 32%;
   }
 `;
 const PostSnippet = styled.a`
@@ -389,4 +409,11 @@ const EditField = styled.input`
   height: 44px;
   box-sizing: border-box;
   padding: 20px;
+`;
+
+const UserPicAndLikes = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
