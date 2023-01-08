@@ -4,11 +4,47 @@ import { IoHeartSharp } from "react-icons/io5";
 import styled from "styled-components";
 import { TokenContext } from "../../contexts/TokenContext";
 import api from "../../services/api";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+import { UserContext } from "../../contexts/UserContext";
 
 export function Likes({ post, renderPosts }) {
   const { id, is_liked, liked_by, likes } = post;
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useContext(TokenContext);
+  const { user } = useContext(UserContext);
+
+  function handleTooltipContent() {
+    let content;
+    const likesAmount = Number(likes);
+    if (is_liked) {
+      const sortedUsers = liked_by.filter((obj) => obj.id !== user.id);
+      sortedUsers.splice(0, 0, { id: user.id, user_name: user.user_name });
+
+      if (likesAmount === 1) {
+        content = `You`;
+      } else if (likesAmount === 2) {
+        content = `You and ${sortedUsers[1].user_name}`;
+      } else if (likesAmount > 2) {
+        content = `You, ${sortedUsers[1].user_name} and other ${
+          likesAmount - 2
+        } people`;
+      }
+    } else {
+      if (likesAmount === 0) {
+        content = `Be the first to like this post`;
+      } else if (likesAmount === 1) {
+        content = liked_by[0].user_name;
+      } else if (likesAmount === 2) {
+        content = `${liked_by[0].user_name} and ${liked_by[1].user_name}`;
+      } else if (likesAmount > 2) {
+        content = `${liked_by[0].user_name}, ${
+          liked_by[1]
+        }.user_name and other ${likesAmount - 2} people`;
+      }
+    }
+    return content;
+  }
 
   async function handleLike() {
     if (isLoading) {
@@ -44,7 +80,16 @@ export function Likes({ post, renderPosts }) {
           onClick={handleLike}
         />
       )}
-      <LikesAmount>{likes} likes</LikesAmount>
+      <LikesAmount id={id}>{likes} likes</LikesAmount>
+      <Tooltip
+        anchorId={id}
+        place="bottom"
+        content={handleTooltipContent()}
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          color: "#505050",
+        }}
+      />
     </Container>
   );
 }
