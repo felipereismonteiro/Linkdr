@@ -27,8 +27,9 @@ function getPostsByHashtag(name) {
   return promise;
 }
 
-function getPosts() {
-  const promise = axios.get(`${BASE_URL}/posts`);
+function getPosts(token) {
+  const config = createConfig(token)
+  const promise = axios.get(`${BASE_URL}/posts`, config);
   return promise;
 }
 
@@ -47,6 +48,12 @@ function getUsersByName(queryString) {
   return axios.get(`${BASE_URL}/users${queryString}`)
 }
 
+function editPatchPost(id, body, token) {
+    const config = createConfig(token);
+    const promisse = axios.patch(`${BASE_URL}/posts/update/${id}`, body, config);
+    return promisse;
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -54,8 +61,9 @@ const api = {
   signUpUser,
   getPosts,
   publishForm,
-  delelePostById,
-  getUsersByName
+  getUsersByName,
+  editPatchPost,
+  delelePostById
 };
 
 export default api;
