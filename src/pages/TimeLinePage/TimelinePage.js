@@ -8,6 +8,7 @@ import MainContent from "../../components/MainContent/MainContent.js";
 import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 import api from "../../services/api.js";
 import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
+import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,9 @@ export default function TimelinePage() {
     <>
       <Navbar />
       <PageContainer>
+      <SearchBarContainer>
+            <SearchBarComponent />
+      </SearchBarContainer>
         <MainContent>
           <Title title={"timeline"} />
           <PublishingForm renderPosts={renderPosts} />
@@ -49,6 +53,24 @@ export default function TimelinePage() {
     </>
   );
 }
+
+const SearchBarContainer = styled.div`
+        width: 100vw;
+        height: 82px;
+        position: relative;
+        margin-top: 10px;
+        display: none;
+        background-color: #333333;
+        position: fixed;
+        top: 45px;
+        z-index: 5;
+        @media (max-width: 950px) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+`
+
 const Loading = styled.p`
   font-family: 'Oswald';
   font-weight: 700;

@@ -4,40 +4,10 @@ import { AiOutlineDown, AiOutlineSearch, AiFillHome } from "react-icons/ai";
 import Logoimg from "../../assets/images/linkr.svg"
 import { UserContext } from "../../contexts/UserContext.js";
 import { useContext, useState } from "react";
-import api from "../../services/api";
-import {DebounceInput} from 'react-debounce-input';
-import SearchResultItem from "./SearchResultItem.js"
-
+import SearchBarComponent from "./SearchBarComponent.js";
 
 export default function Navbar() {
     const {user} = useContext(UserContext);
-    const [queryName, setQueryName] = useState("")
-    const [queryResult, setQueryResult] = useState([])
-    const [showResults, setShowResults] = useState(false)
-
-    async function searchUsers(e) {
-        const query = e.target.value;
-        setQueryName(e.target.value)
-  
-        if(e.target.value.length === 0) {
-            setShowResults(false)
-            return;
-        }
-
-        const queryString = `?name=${query.replace(" ", "+")}`
-        try {
-            const result = await api.getUsersByName(queryString)
-            console.log(result)
-            setQueryResult(result.data);
-            setShowResults(true)
-
-        } catch (err) {
-            console.log(err)
-            alert(err.message)
-            setQueryResult([])
-        }
-    }
-
 
     return(
         <Container>
@@ -45,16 +15,7 @@ export default function Navbar() {
                 <Logo src={Logoimg}/>
             </LogoContainer>
             <SearchBarContainer>
-                <SearchBar>
-                    <DebounceInput
-                        minLength={3}
-                        debounceTimeout={300}
-                        onChange={searchUsers} placeholder="Search for people"/>
-                    <AiOutlineSearch/>
-                </SearchBar>
-                <ContainerQueryResult showResults={showResults}>
-                    {queryResult.map((u) => <SearchResultItem user={u}/>)}
-                </ContainerQueryResult>
+                <SearchBarComponent />
             </SearchBarContainer>
             <Menu>
                 <Link to="/timeline" >
@@ -73,17 +34,16 @@ export default function Navbar() {
 }
 
 const Container = styled.div`
-    width: 100%;
+    width: 100vw;
     height: 68px;
     background-color: #151515;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    z-index: 10;
+    z-index: 20;
     padding: 0 17px;
 `
-
 const LogoContainer = styled.div`
     width: 160px;
     display: flex;
@@ -100,19 +60,20 @@ const Menu = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    @media (max-width: 950px) {
+            width: 140px;
+        }
 `
 const HomeButton = styled.div`
     cursor: pointer;
     svg {
         font-size: 30px;
         color: white;
-        margin-right: 0px;
     }
 
 `
 const UserDiv = styled.div`
-    width: 95px;
+    width: 98px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -132,65 +93,8 @@ const SearchBarContainer = styled.div`
         width: 563px;
         min-height: 45px;
         position: relative;
-`
 
-const SearchBar = styled.div`
-    width: 563px;
-    height: 45px;
-    background: #FFFFFF;
-    border-radius: 8px;
-    padding: 0 14px;
-    font-family: 'Lato';
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 10;
-    
-    svg {
-        font-size: 23px;
-        color: #C6C6C6;
-    }
-
-    input {
-        width: 500px;
-        height: 45px;
-        outline: none;
-
-        &::placeholder {
-        width: 146px;
-        height: 23px;
-        font-family: 'Lato';
-        font-weight: 400;
-        font-size: 19px;
-        color: #C6C6C6;
+        @media (max-width: 950px) {
+            display: none;
         }
-    }
-    
-`
-
-const ContainerQueryResult = styled.div`
-    width: 563px;
-    height: 155px;
-    padding: 24px 17px;
-    position: absolute;
-    left: 0;
-    top: 35px;
-    background: #E7E7E7;
-    border-radius: 8px;
-    z-index: 1;
-    display: ${props => props.showResults ? "flex" : "none"};
-    flex-direction: column;
-    gap: 15px;
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: #999898;
-        border-radius: 15px;
-    }
 `

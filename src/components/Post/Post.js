@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 export default function Post({ post, renderPosts }) {
-  // console.log(post)
+  console.log(post.url_description)
   const { user } = useContext(UserContext);
   const { setUserPageInfo } = useContext(UserContext);
   const { token } = useContext(TokenContext);
@@ -129,6 +129,10 @@ const Container = styled.div`
   padding: 16px 18px;
   margin-bottom: 16px;
   position: relative;
+  @media (max-width: 634px) {
+          width: 98vw;
+  }
+
 `;
 const UserPic = styled.img`
   width: 53px;
@@ -140,6 +144,9 @@ const PostContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-top: 5px;
+  @media (max-width: 634px) {
+          width: 100vw;
+  }
 `;
 const Username = styled.h2`
   font-family: "Lato";
@@ -164,33 +171,63 @@ const SnippetInfo = styled.div`
   justify-content: center;
   gap: 7px;
   margin-left: 19px;
+  margin-top: 8px;
+
+  @media (max-width: 420px) {
+    margin-left: 11px;
+  }
+  
 `;
-const SnippetTitle = styled.h2`
+const SnippetTitle = styled.div`
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+
   font-family: "Lato";
   font-weight: 400;
   font-size: 16px;
   color: #cecece;
+  @media (max-width: 420px) {
+    font-size: 11px;  ;
+  }
 `;
-const SnippetDescription = styled.p`
+const SnippetDescription = styled.div`
+  width: 100%;
+  min-height: 50px;
+  /* background-color: red; */
+
   font-family: "Lato";
   font-weight: 400;
   font-size: 11px;
-  color: #9b9595;
+  color: #9B9595;
+  @media (max-width: 420px) {
+    font-size: 9px;  ;
+  }
 `;
-const Url = styled.p`
+const Url = styled.div`
+  width: 100%;
+  min-height: 40px;
+  /* background-color: blue; */
+
   font-family: "Lato";
   font-weight: 400;
   font-size: 11px;
   color: #cecece;
+  @media (max-width: 420px) {
+    font-size: 9px;  ;
+  }
 `;
 const SnippetImage = styled.img`
   width: 153.44px;
   height: 155px;
   border-radius: 0px 12px 13px 0px;
+  @media (max-width: 634px) {
+        min-width: 32%;
+        max-width: 32%;
+  }
 `;
 const PostSnippet = styled.a`
-  width: 503px;
-  height: 155px;
   border: 1px solid #4d4d4d;
   border-radius: 11px;
   display: flex;

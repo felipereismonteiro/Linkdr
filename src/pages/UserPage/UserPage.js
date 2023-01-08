@@ -5,44 +5,49 @@ import Title from "../../components/Title/Title";
 import { useParams } from "react-router-dom";
 import Navbar from "../../components/NavBar/Navbar";
 import Post from "../../components/Post/Post";
-import { useEffect, useState, useContext } from "react";
+import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
+import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { UserContext } from "../../contexts/UserContext.js";
 import styled from "styled-components"
 
 export default function UserPage() {
-  const [posts, setPosts] = useState([]);
-  const { userPageInfo } = useContext(UserContext);
+  const [posts, setPosts] = useState(null);
 
   const { id } = useParams();
 
   useEffect( () => {
-
-    const getPosts = async () => {
-      try {
-        const result = await api.getPostsByUserId(id);
-        setPosts(result.data)
-      } catch(err) {
-        console.log(err.message)
-      }
-    }
     
-    getPosts();
-  }, []);
+    renderPosts();
+  }, [id]);
+
+  const renderPosts = async () => {
+    try {
+      const result = await api.getPostsByUserId(id);
+      setPosts(result.data)
+    } catch(err) {
+      console.log(err.message)
+    }
+  }
 
   return (
     <>
       <Navbar />
       <PageContainer>
+      <SearchBarContainer>
+            <SearchBarComponent />
+      </SearchBarContainer>
         <MainContent>
         <TitleContainer>
-            <img src={userPageInfo.profile_picture}/>
-            <Title title={`${userPageInfo.user_name}'s posts`} />
+            {posts === null ? "" : 
+            <>
+            <img src={posts[0].profile_picture}/>
+            <Title title={`${posts[0].user_name}'s posts`} />
+            </>}
         </TitleContainer>
             {posts === null ? (
             <Loading>Loading...</Loading>
           ) : (
-            posts.map((p) => <Post post={p}/>)
+            posts.map((p) => <Post post={p} renderPosts={renderPosts}/>)
           )}
         </MainContent>
         <HashtagTable />
@@ -70,3 +75,20 @@ const Loading = styled.p`
   text-align: center;
   margin-top: 75px;
 `;
+
+const SearchBarContainer = styled.div`
+        width: 100vw;
+        height: 82px;
+        position: relative;
+        margin-top: 10px;
+        display: none;
+        background-color: #333333;
+        position: fixed;
+        top: 45px;
+        z-index: 5;
+        @media (max-width: 950px) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+`

@@ -62,12 +62,17 @@ const PublishingContainer = styled.div`
     gap: 16px;
     padding: 16px 18px;
     margin-bottom: 29px;
+    @media (max-width: 634px) {
+          width: 98vw;
+    }
 `
 const UserPic = styled.img`
     width: 53px;
     height: 53px;
     border-radius: 26.5px;
-    
+    @media (max-width: 634px) {
+          display: none;
+    }
 `
 const Form = styled.form`
     width: 503px;
@@ -76,6 +81,9 @@ const Form = styled.form`
     flex-direction: column;
     justify-content: space-between;
     margin-top: 5px;
+    @media (max-width: 634px) {
+          width: 95%;
+  }
 `
 const FormTitle = styled.h2`
     font-family: 'Lato';

@@ -1,15 +1,12 @@
 import styled from "styled-components";
-import { useContext } from "react";
-import { UserContext } from "../../contexts/UserContext.js";
 import { useNavigate } from "react-router-dom";
 
-export default function SearchResultItem({ user }) {
-    const { setUserPageInfo } = useContext(UserContext);
+export default function SearchResultItem({ user, setShowResults }) {
     const navigate = useNavigate();
 
     return(
         <Container onClick={() => {
-            setUserPageInfo({user_name: user.user_name, profile_picture: user.profile_picture})
+            setShowResults(false)
             navigate(`/user/${user.id}`);
           }}>
             <img src={user.profile_picture} />

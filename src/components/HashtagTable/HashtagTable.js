@@ -40,6 +40,10 @@ const Container = styled.section`
   margin-top: 143px;
   margin-left: 25px;
   border-radius: 16px;
+
+  @media (max-width: 950px) {
+    display: none;
+  }
 `;
 const Title = styled.h2`
   height: 60px;
