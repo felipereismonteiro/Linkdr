@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BASE_URL = "https://linkr-api-hhbp.onrender.com";
-const BASE_URL = "http://localhost:4000"; 
+const BASE_URL = "https://linkr-api-hhbp.onrender.com";
+// const BASE_URL = "http://localhost:4000"; 
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
