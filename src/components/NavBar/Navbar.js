@@ -44,7 +44,7 @@ export default function Navbar({renderPosts}) {
                         <p onClick={() => {
                           localStorage.removeItem("userData")
                           navigate("/")
-                        }}>Logout</p>
+                        }} style={{cursor:"pointer", color:"white"}}>Logout</p>
                 </LogOutMenu>}
       </Menu>
             
