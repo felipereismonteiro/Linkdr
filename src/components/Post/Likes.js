@@ -22,7 +22,6 @@ export function Likes({ post, renderPosts }) {
       if (liked) {
       const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
       sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
-      console.log(sortedUsers)
 
       if (likesAmount === 1) {
         content = `You`;
@@ -36,7 +35,6 @@ export function Likes({ post, renderPosts }) {
     } else {
       const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
       sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
-      console.log(sortedUsers)
 
       if (likesAmount === 0) {
         content = `Be the first to like this post`;
