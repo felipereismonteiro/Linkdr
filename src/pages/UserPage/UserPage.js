@@ -6,12 +6,14 @@ import { useParams } from "react-router-dom";
 import Navbar from "../../components/NavBar/Navbar";
 import Post from "../../components/Post/Post";
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from "../../services/api";
 import styled from "styled-components"
+import { TokenContext } from "../../contexts/TokenContext.js";
 
 export default function UserPage() {
   const [posts, setPosts] = useState(null);
+  const { token } = useContext(TokenContext);
 
   const { id } = useParams();
 
@@ -22,7 +24,7 @@ export default function UserPage() {
 
   const renderPosts = async () => {
     try {
-      const result = await api.getPostsByUserId(id);
+      const result = await api.getPostsByUserId(id, token);
       setPosts(result.data)
     } catch(err) {
       console.log(err.message)

@@ -54,8 +54,9 @@ function editPatchPost(id, body, token) {
   return promisse;
 }
 
-function getPostsByUserId(id) {
-  return axios.get(`${BASE_URL}/user/${id}`)
+function getPostsByUserId(id, token) {
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/user/${id}`, config)
 }
 
 function likePost(id,token){
