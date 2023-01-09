@@ -19,8 +19,8 @@ export default function TimelinePage() {
   useEffect(() => {
     renderPosts();
   }, [loading]);
-console.log(posts)
   async function renderPosts() {
+    
     try {
       const postsFound = await api.getPosts(token);
       setPosts(postsFound.data);
@@ -35,7 +35,7 @@ console.log(posts)
   return (
     <>
       
-      <Navbar />
+      <Navbar renderPosts={renderPosts}/>
       <PageContainer>
       <SearchBarContainer>
             <SearchBarComponent />

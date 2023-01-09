@@ -282,7 +282,7 @@ export default function Post({ post, renderPosts }) {
 }
 const Container = styled.div`
   width: 100%;
-  height: 276px;
+  min-height: 276px;
   background: #171717;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
@@ -295,7 +295,8 @@ const Container = styled.div`
   margin-bottom: 16px;
   position: relative;
   @media (max-width: 634px) {
-    width: 98vw;
+    width: 99vw;
+    border-radius: 0;
   }
 `;
 const UserPic = styled.img`
@@ -303,22 +304,26 @@ const UserPic = styled.img`
   height: 53px;
   border-radius: 26.5px;
 `;
+
 const PostContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   margin-top: 5px;
   @media (max-width: 634px) {
     width: 100vw;
   }
 `;
-const Username = styled.h2`
+const Username = styled.p`
+  display: inline-block;
+  box-sizing: content-box;
   font-family: "Lato";
   font-weight: 400;
   font-size: 19px;
   color: #ffffff;
   margin-bottom: 10px;
   cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    }
 `;
 
 const Description = styled.p`

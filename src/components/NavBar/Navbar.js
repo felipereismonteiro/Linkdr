@@ -1,14 +1,15 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { AiOutlineDown, AiOutlineSearch, AiFillHome, AiOutlineUp } from "react-icons/ai";
+import { Link, useNavigate } from "react-router-dom";
+import { AiOutlineDown, AiFillHome, AiOutlineUp } from "react-icons/ai";
 import Logoimg from "../../assets/images/linkr.svg";
 import { UserContext } from "../../contexts/UserContext.js";
 import { useContext, useState } from "react";
 import SearchBarComponent from "./SearchBarComponent.js";
 
-export default function Navbar() {
+export default function Navbar({renderPosts}) {
     const {user} = useContext(UserContext);
     const [logoutOpen, setLogOutOpen] = useState(false);
+    const navigate = useNavigate();
 
     return(
         <Container>
@@ -19,11 +20,14 @@ export default function Navbar() {
                 <SearchBarComponent />
             </SearchBarContainer>
             <Menu>
-        <Link to="/timeline">
-          <HomeButton>
+          <HomeButton onClick={() => {
+            navigate("/timeline");
+            renderPosts();
+            window.scrollTo(0, 0);
+          }}>
             <AiFillHome />
+            {/* <div></div> */}
           </HomeButton>
-        </Link>
         <UserDiv>
           {logoutOpen 
             ? <AiOutlineUp onClick={() => setLogOutOpen(false)} style={{cursor: "pointer"}} /> 
@@ -76,10 +80,32 @@ const Menu = styled.div`
 `;
 
 const HomeButton = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-color: red; */
+    width: 45px;
+    height: 45px;
+    gap: 3px;
     cursor: pointer;
+
+    &:hover svg {
+      font-size: 31px;
+      filter: blur(0.5px);
+      filter: drop-shadow(0 0 5px grey);
+    }
+
     svg {
         font-size: 30px;
         color: white;
+    }
+
+    div {
+      width: 80%;
+      height: 2px;
+      background-color: white;
+      visibility: hidden;
     }
 
 `;
@@ -129,5 +155,8 @@ const LogOutMenu = styled.div`
         font-family: 'Lato', sans-serif;
         font-size: 20px;
         margin: 0px 20px 10px 0px;
+        &:hover {
+          font-size: 20.4px;
+        }
     }  
 `;

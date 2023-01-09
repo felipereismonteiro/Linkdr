@@ -60,8 +60,8 @@ export default function SignUpPage() {
             {loading ? (
               <button disabled className="button" type="submit">
                 <ThreeDots
-                  height="80"
-                  width="80"
+                  height="60"
+                  width="60"
                   radius="9"
                   color="black"
                   ariaLabel="three-dots-loading"
@@ -164,6 +164,9 @@ const Form = styled.form`
     font-size: 27px;
     line-height: 40px;
     /* identical to box height */
+    &:hover {
+        filter: brightness(0.95)
+    }
 
     color: #ffffff;
     @media (max-width: 1075px) {

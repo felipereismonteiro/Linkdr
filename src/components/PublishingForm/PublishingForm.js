@@ -144,4 +144,8 @@ const Button = styled.button`
     color: #FFFFFF;
     border: none;
     cursor: pointer;
+    
+    &:hover {
+        filter: brightness(0.95)
+    }
 `

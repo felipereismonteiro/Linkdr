@@ -21,4 +21,9 @@ const Container = styled.h3`
   color: #ffffff;
   margin-bottom: 3px;
   cursor: pointer;
+  
+  &:hover {
+    color: lightgrey;
+    }
+
 `;
