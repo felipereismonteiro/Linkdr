@@ -84,7 +84,6 @@ const HomeButton = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* background-color: red; */
     width: 45px;
     height: 45px;
     gap: 3px;

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IoHeartOutline } from "react-icons/io5";
 import { IoHeartSharp } from "react-icons/io5";
 import styled from "styled-components";
@@ -26,9 +26,9 @@ export function Likes({ post, renderPosts }) {
       if (likesAmount === 1) {
         content = `You`;
       } else if (likesAmount === 2) {
-        content = `You and ${sortedUsers[1].user_name}`;
+        content = `You and ${sortedUsers[1]?.user_name}`;
       } else if (likesAmount > 2) {
-        content = `You, ${sortedUsers[1].user_name} and other ${
+        content = `You, ${sortedUsers[1]?.user_name} and other ${
           likesAmount - 2
         } people`;
       }
@@ -41,6 +41,7 @@ export function Likes({ post, renderPosts }) {
       } else if (likesAmount === 1) {
         content = sortedUsers[1].user_name;
       } else if (likesAmount === 2) {
+        console.log(likesAmount)
         content = `${sortedUsers[1].user_name} and ${sortedUsers[2].user_name}`;
       } else if (likesAmount > 2) {
         content = `${sortedUsers[1].user_name}, ${
@@ -61,14 +62,14 @@ export function Likes({ post, renderPosts }) {
         setLiked(false)
         setLikesAmount(likesAmount - 1)
         await api.unlikePost(id, token);
-        renderPosts();
+        await renderPosts();
         setIsLoading(false);
       } else {
         setLiked(true)
         setLikesAmount(likesAmount + 1)
         await api.likePost(id, token);
+        await renderPosts();
         setIsLoading(false);
-        renderPosts();
       }
     } catch (err) {
       console.log(err.message);
