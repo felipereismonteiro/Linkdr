@@ -16,12 +16,20 @@ export default function SearchResultItem({ user, setShowResults }) {
 }
 
 const Container = styled.div`
-    height: 42px;
+    width: 100%;
+    height: 53px;
     display: flex;
     align-items: center;
     gap: 12px;
     cursor: pointer;
+    flex-shrink: 0;
+    padding-left: 8px;
+    border-radius: 3px;
 
+    &:hover {
+        background-color: #dddddd;
+    }
+    
     img {
         width: 39px;
         height: 39px;

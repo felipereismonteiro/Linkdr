@@ -282,7 +282,7 @@ export default function Post({ post, renderPosts }) {
 }
 const Container = styled.div`
   width: 100%;
-  height: 276px;
+  min-height: 276px;
   background: #171717;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
@@ -295,7 +295,8 @@ const Container = styled.div`
   margin-bottom: 16px;
   position: relative;
   @media (max-width: 634px) {
-    width: 98vw;
+    width: 99vw;
+    border-radius: 0;
   }
 `;
 const UserPic = styled.img`

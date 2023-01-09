@@ -23,7 +23,7 @@ const Container = styled.h3`
   cursor: pointer;
   
   &:hover {
-    text-decoration: underline;
+    color: lightgrey;
     }
 
 `;

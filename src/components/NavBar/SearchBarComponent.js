@@ -67,9 +67,6 @@ const SearchBarContainer = styled.div`
         min-height: 45px;
         position: relative;
 
-        &:hover * {
-            background-color: #f4f2f2;
-        }
         @media (max-width: 950px) {
             width: 90%;
         }
@@ -90,6 +87,10 @@ const SearchBar = styled.div`
     align-items: center;
     position: absolute;
     z-index: 10;
+
+    &:hover {
+            background-color: #f4f2f2;
+        }
     
     svg {
         font-size: 23px;
@@ -100,6 +101,9 @@ const SearchBar = styled.div`
         width: 500px;
         height: 45px;
         outline: none;
+        &:hover {
+            background-color: #f4f2f2;
+        }
 
         &::placeholder {
         width: 146px;
@@ -116,7 +120,7 @@ const SearchBar = styled.div`
 const ContainerQueryResult = styled.div`
     width: 100%;
     height: 155px;
-    padding: 24px 17px;
+    padding: 15px 12px;
     position: absolute;
     left: 0;
     top: 35px;
@@ -127,7 +131,7 @@ const ContainerQueryResult = styled.div`
     flex-direction: column;
     justify-content: ${props => props.loading === true ? "center" : "flex-start"};
     align-items: ${props => props.loading === true ? "center" : "flex-start"};
-    gap: 15px;
+    gap: 4px;
     overflow-y: scroll;
 
 
