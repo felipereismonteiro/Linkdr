@@ -1,12 +1,11 @@
 import { useContext, useState } from "react";
-import { IoHeartOutline } from "react-icons/io5";
-import { IoHeartSharp } from "react-icons/io5";
 import styled from "styled-components";
 import { TokenContext } from "../../contexts/TokenContext";
 import api from "../../services/api";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { UserContext } from "../../contexts/UserContext";
+import PostState from "./PostState";
 
 export function Likes({ post, renderPosts }) {
   const { id, is_liked, liked_by, likes } = post;
@@ -17,9 +16,13 @@ export function Likes({ post, renderPosts }) {
   function handleTooltipContent() {
     let content;
     const likesAmount = Number(likes);
+
     if (is_liked) {
       const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
-      sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
+      sortedUsers.splice(0, 0, {
+        id: Number(user.id),
+        user_name: user.user_name,
+      });
 
       if (likesAmount === 1) {
         content = `You`;
@@ -39,8 +42,8 @@ export function Likes({ post, renderPosts }) {
         content = `${liked_by[0].user_name} and ${liked_by[1].user_name}`;
       } else if (likesAmount > 2) {
         content = `${liked_by[0].user_name}, ${
-          liked_by[1]
-        }.user_name and other ${likesAmount - 2} people`;
+          liked_by[1].user_name
+        } and other ${likesAmount - 2} people`;
       }
     }
     return content;
@@ -54,12 +57,13 @@ export function Likes({ post, renderPosts }) {
     try {
       if (is_liked) {
         await api.unlikePost(id, token);
+        await renderPosts();
         setIsLoading(false);
-        renderPosts();
+        
       } else {
         await api.likePost(id, token);
+        await renderPosts();
         setIsLoading(false);
-        renderPosts();
       }
     } catch (err) {
       console.log(err.message);
@@ -68,18 +72,11 @@ export function Likes({ post, renderPosts }) {
 
   return (
     <Container>
-      {is_liked ? (
-        <IoHeartSharp
-          style={{ fontSize: "20px", color: " #AC0000" }}
-          onClick={handleLike}
-        />
-      ) : (
-        <IoHeartOutline
-          IoHeartOutline
-          style={{ fontSize: "20px", color: "#FFFFFF" }}
-          onClick={handleLike}
-        />
-      )}
+      <PostState
+        isLiked={is_liked}
+        isLoading={isLoading}
+        handleLike={handleLike}
+      />
       <LikesAmount id={id}>{likes} likes</LikesAmount>
       <Tooltip
         anchorId={id}
