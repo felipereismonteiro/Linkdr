@@ -13,13 +13,16 @@ export function Likes({ post, renderPosts }) {
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useContext(TokenContext);
   const { user } = useContext(UserContext);
+  const [liked, setLiked] = useState(is_liked)
+  const [likesAmount, setLikesAmount] = useState(Number(likes))
 
   function handleTooltipContent() {
     let content;
-    const likesAmount = Number(likes);
-    if (is_liked) {
+
+      if (liked) {
       const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
       sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
+      console.log(sortedUsers)
 
       if (likesAmount === 1) {
         content = `You`;
@@ -31,16 +34,20 @@ export function Likes({ post, renderPosts }) {
         } people`;
       }
     } else {
+      const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
+      sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
+      console.log(sortedUsers)
+
       if (likesAmount === 0) {
         content = `Be the first to like this post`;
       } else if (likesAmount === 1) {
-        content = liked_by[0].user_name;
+        content = sortedUsers[1].user_name;
       } else if (likesAmount === 2) {
-        content = `${liked_by[0].user_name} and ${liked_by[1].user_name}`;
+        content = `${sortedUsers[1].user_name} and ${sortedUsers[2].user_name}`;
       } else if (likesAmount > 2) {
-        content = `${liked_by[0].user_name}, ${
-          liked_by[1]
-        }.user_name and other ${likesAmount - 2} people`;
+        content = `${sortedUsers[1].user_name}, ${
+          sortedUsers[2].user_name
+        } and other ${likesAmount - 2} people`;
       }
     }
     return content;
@@ -52,11 +59,15 @@ export function Likes({ post, renderPosts }) {
     }
     setIsLoading(true);
     try {
-      if (is_liked) {
+        if (liked) {
+        setLiked(false)
+        setLikesAmount(likesAmount - 1)
         await api.unlikePost(id, token);
-        setIsLoading(false);
         renderPosts();
+        setIsLoading(false);
       } else {
+        setLiked(true)
+        setLikesAmount(likesAmount + 1)
         await api.likePost(id, token);
         setIsLoading(false);
         renderPosts();
@@ -68,7 +79,7 @@ export function Likes({ post, renderPosts }) {
 
   return (
     <Container>
-      {is_liked ? (
+      {liked ? (
         <IoHeartSharp
           style={{ fontSize: "20px", color: " #AC0000" }}
           onClick={handleLike}
@@ -80,7 +91,7 @@ export function Likes({ post, renderPosts }) {
           onClick={handleLike}
         />
       )}
-      <LikesAmount id={id}>{likes} likes</LikesAmount>
+      <LikesAmount id={id}>{likesAmount} likes</LikesAmount>
       <Tooltip
         anchorId={id}
         place="bottom"
