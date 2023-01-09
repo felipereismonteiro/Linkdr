@@ -27,7 +27,7 @@ export function PublishingForm({renderPosts}) {
             e.target.url.value = "";
             e.target.content.value = "";
         } catch(err) {
-            console.log(err.response.data)
+            console.log(err.message)
             alert("Houve um erro ao publicar se link")
             setIsPublishing(false);
         }
