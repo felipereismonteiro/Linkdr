@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -13,8 +13,19 @@ export default function SignInPage() {
   const { user, setUser } = useContext(UserContext);
   const { token, setToken } = useContext(TokenContext);
   const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem("userData"))
 
-  async function signUp(e) {
+  function setLocalStorage(obj){
+    localStorage.setItem("userData", JSON.stringify(obj))
+  }
+
+  useEffect(() => {
+    if(userData) {
+        navigate("/timeline")
+    }
+}, [])
+
+  async function signIn(e) {
     try {
       setLoading(true);
       e.preventDefault();
@@ -23,9 +34,11 @@ export default function SignInPage() {
         email: e.target.email.value,
         password: e.target.password.value,
       };
-
+      
       const signin = await api.signInUser(body);
-      document.cookie = `${signin.data.token},${signin.data.user.id},${signin.data.user.user_name},${signin.data.user.profile_picture}`;
+      setLocalStorage(signin.data)
+      console.log(signin.data)
+
       setToken(signin.data.token);
       setUser(signin.data.user);
       navigate("/timeline");
@@ -42,12 +55,16 @@ export default function SignInPage() {
     }
   }
 
+  if(userData) {
+    return;
+}
+
   return (
     <>
       <Container>
         <LogoSignUpComponent />
         <SignUp>
-          <Form onSubmit={signUp}>
+          <Form onSubmit={signIn}>
             <input type="email" name="email" placeholder="e-mail" required />
             <input
               type="password"

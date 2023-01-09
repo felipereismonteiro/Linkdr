@@ -1,10 +1,17 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const TokenContext = createContext();
 
 export function TokenContextProvider({children}) {
-    const tokenFromCookie =  document.cookie.split(",")[0];
-    const [token, setToken] = useState(tokenFromCookie);
+    const [token, setToken] = useState();
+    
+    useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem("userData"))
+        if(userData) {
+            setToken(userData.token)
+        }
+    }, [])
+    
     return(
         <TokenContext.Provider value={{token, setToken}}>
             {children}

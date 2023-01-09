@@ -1,32 +1,47 @@
 import PageContainer from "../../components/Container/Container";
 import MainContent from "../../components/MainContent/MainContent";
 import Title from "../../components/Title/Title";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/NavBar/Navbar";
 import Post from "../../components/Post/Post";
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
 import HashtagTable from "../../components/HashtagTable/HashtagTable";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from "../../services/api";
 import styled from "styled-components";
+import { TokenContext } from "../../contexts/TokenContext.js";
 
 export default function PostsByHashtagPage() {
   const [posts, setPosts] = useState(null);
   const { hashtag } = useParams();
+  const { token } = useContext(TokenContext);
+  const userData = JSON.parse(localStorage.getItem("userData"))
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    if(!userData) {
+        navigate("/")
+    }
+}, [])
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const resp = await api.getPostsByHashtag(hashtag);
+        const resp = await api.getPostsByHashtag(hashtag, token);
         setPosts(resp.data);
       } catch (err) {
         console.log(err);
       }
     };
+    if(token) {
+      fetchPosts();
+    } 
+    
+  }, [hashtag, token]);
 
-    fetchPosts();
-  }, [hashtag]);
-
+  if(!userData) {
+    return
+  }
 
   return (
     <>

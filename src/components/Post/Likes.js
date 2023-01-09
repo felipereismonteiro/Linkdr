@@ -41,7 +41,6 @@ export function Likes({ post, renderPosts }) {
       } else if (likesAmount === 1) {
         content = sortedUsers[1].user_name;
       } else if (likesAmount === 2) {
-        console.log(likesAmount)
         content = `${sortedUsers[1].user_name} and ${sortedUsers[2].user_name}`;
       } else if (likesAmount > 2) {
         content = `${sortedUsers[1].user_name}, ${

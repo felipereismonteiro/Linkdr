@@ -22,8 +22,9 @@ function getHashtags() {
   return promise;
 }
 
-function getPostsByHashtag(name) {
-  const promise = axios.get(`${BASE_URL}/posts/${name}`);
+function getPostsByHashtag(name, token) {
+  const config = createConfig(token)
+  const promise = axios.get(`${BASE_URL}/posts/${name}`, config);
   return promise;
 }
 

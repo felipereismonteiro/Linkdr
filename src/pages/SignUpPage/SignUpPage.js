@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -9,6 +9,13 @@ import Swal from "sweetalert2";
 export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem("userData"))
+
+  useEffect(() => {
+    if(userData) {
+        navigate("/timeline")
+    }
+}, [])
 
   async function signUp(e) {
     setLoading(true);
@@ -35,6 +42,10 @@ export default function SignUpPage() {
       console.log(err.response.data);
       setLoading(false);
     }
+  }
+
+  if(userData) {
+    return;
   }
 
   return (
