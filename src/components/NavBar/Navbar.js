@@ -3,13 +3,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineDown, AiFillHome, AiOutlineUp } from "react-icons/ai";
 import Logoimg from "../../assets/images/linkr.svg";
 import { UserContext } from "../../contexts/UserContext.js";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import SearchBarComponent from "./SearchBarComponent.js";
+const userData = JSON.parse(localStorage.getItem("userData"))
 
 export default function Navbar({renderPosts}) {
     const {user} = useContext(UserContext);
     const [logoutOpen, setLogOutOpen] = useState(false);
     const navigate = useNavigate();
+
+  if(!user) {
+    return
+  }
 
     return(
         <Container>
@@ -36,9 +41,10 @@ export default function Navbar({renderPosts}) {
         </UserDiv>
         {logoutOpen
             &&  <LogOutMenu>
-                    <Link to={"/"} style={{textDecoration: "none", color: "white"}}>
-                        <p style={{cursor:"pointer"}}>Logout</p>
-                    </Link>
+                        <p onClick={() => {
+                          localStorage.removeItem("userData")
+                          navigate("/")
+                        }} style={{cursor:"pointer", color:"white"}}>Logout</p>
                 </LogOutMenu>}
       </Menu>
             

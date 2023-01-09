@@ -10,15 +10,26 @@ import api from "../../services/api.js";
 import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
+import { useNavigate } from "react-router-dom";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const { token } = useContext(TokenContext);
+  const userData = JSON.parse(localStorage.getItem("userData"))
+  const navigate = useNavigate()
 
   useEffect(() => {
-    renderPosts();
-  }, [loading]);
+    if(!userData) {
+        navigate("/")
+    }
+}, [])
+
+  useEffect(() => {
+    if(token) {
+      renderPosts();
+    } 
+  }, [loading, token]);
   async function renderPosts() {
     
     try {
@@ -30,6 +41,10 @@ export default function TimelinePage() {
         "An error occured while trying to fetch the posts, please refresh the page"
       );
     }
+  }
+
+  if(!userData) {
+    return
   }
 
   return (
@@ -50,7 +65,7 @@ export default function TimelinePage() {
           {posts.length === 0 ? (
             <NoPostsMessage>There are no posts yet</NoPostsMessage>
           ) : (
-            posts.map((p) => <Post post={p} renderPosts={renderPosts}/>)
+            posts.map((p) => <Post post={p} key={p.id} renderPosts={renderPosts}/>)
           )}
         </MainContent>
         <HashtagTable />

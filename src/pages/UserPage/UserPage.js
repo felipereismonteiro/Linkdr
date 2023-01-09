@@ -2,7 +2,7 @@ import PageContainer from "../../components/Container/Container";
 import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
 import MainContent from "../../components/MainContent/MainContent";
 import Title from "../../components/Title/Title";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/NavBar/Navbar";
 import Post from "../../components/Post/Post";
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
@@ -14,13 +14,22 @@ import { TokenContext } from "../../contexts/TokenContext.js";
 export default function UserPage() {
   const [posts, setPosts] = useState(null);
   const { token } = useContext(TokenContext);
+  const userData = JSON.parse(localStorage.getItem("userData"))
+  const navigate = useNavigate()
 
   const { id } = useParams();
 
+  useEffect(() => {
+    if(!userData) {
+        navigate("/")
+    }
+}, [])
+
   useEffect( () => {
-    
-    renderPosts();
-  }, [id]);
+    if(token) {
+      renderPosts();
+    } 
+  }, [id, token]);
 
   const renderPosts = async () => {
     try {
@@ -29,6 +38,10 @@ export default function UserPage() {
     } catch(err) {
       console.log(err.message)
     }
+  }
+
+  if(!userData) {
+    return
   }
 
   return (
