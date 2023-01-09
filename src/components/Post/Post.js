@@ -283,22 +283,26 @@ const UserPic = styled.img`
   height: 53px;
   border-radius: 26.5px;
 `;
+
 const PostContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   margin-top: 5px;
   @media (max-width: 634px) {
           width: 100vw;
   }
 `;
-const Username = styled.h2`
+const Username = styled.p`
+  display: inline-block;
+  box-sizing: content-box;
   font-family: "Lato";
   font-weight: 400;
   font-size: 19px;
   color: #ffffff;
   margin-bottom: 10px;
   cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    }
 `;
 const Description = styled.p`
   font-family: "Lato";

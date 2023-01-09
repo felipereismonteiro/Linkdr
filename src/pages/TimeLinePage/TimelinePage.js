@@ -21,6 +21,7 @@ export default function TimelinePage() {
   }, [loading]);
 
   async function renderPosts() {
+    
     try {
       const postsFound = await api.getPosts(token);
       setPosts(postsFound.data);
@@ -35,7 +36,7 @@ export default function TimelinePage() {
   return (
     <>
       
-      <Navbar />
+      <Navbar renderPosts={renderPosts}/>
       <PageContainer>
       <SearchBarContainer>
             <SearchBarComponent />

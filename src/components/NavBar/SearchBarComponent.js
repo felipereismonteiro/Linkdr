@@ -38,7 +38,7 @@ export default function SearchBarComponent() {
     return(
         <SearchBarContainer>
                 <SearchBar>
-                    <DebounceInput
+                    <DebounceInput 
                         minLength={3}
                         debounceTimeout={300}
                         onChange={searchUsers} placeholder="Search for people"/>
@@ -66,6 +66,10 @@ const SearchBarContainer = styled.div`
         width: 100%;
         min-height: 45px;
         position: relative;
+
+        &:hover * {
+            background-color: #f4f2f2;
+        }
         @media (max-width: 950px) {
             width: 90%;
         }
