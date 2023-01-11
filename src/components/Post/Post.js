@@ -10,6 +10,8 @@ import { TokenContext } from "../../contexts/TokenContext.js";
 import Swal from "sweetalert2";
 import { ThreeDots } from "react-loader-spinner";
 import { Likes } from "./Likes.js";
+import ShareButton from "./ShareButton.js";
+import RepostImg from "../../assets/images/repost.svg"
 
 export default function Post({ post, renderPosts }) {
   const { user } = useContext(UserContext);
@@ -238,11 +240,21 @@ export default function Post({ post, renderPosts }) {
   }
 
   return (
-    <Container>
-      <UserPicAndLikes>
+    <Container type = {post.type}>
+      {post.type === "share" ? post.post_share_user === user.id ?
+      <SharedByMessage>
+        <RepostIcon src={RepostImg}/>
+        <p>Re-posted by <span>you</span></p>
+      </SharedByMessage> : 
+      <SharedByMessage>
+        <RepostIcon src={RepostImg}/>
+        <p>Re-posted by <span>{post.shared_by}</span></p>
+      </SharedByMessage> : ""}
+      <UserPicAndButtons>
         <UserPic src={post.profile_picture} alt="User picture" />
         <Likes post={post} renderPosts={renderPosts}/>
-      </UserPicAndLikes>
+        <ShareButton post={post}/>
+      </UserPicAndButtons>
       <PostContent>
         <Username
           onClick={() => {
@@ -282,7 +294,7 @@ export default function Post({ post, renderPosts }) {
 }
 const Container = styled.div`
   width: 100%;
-  min-height: 276px;
+  min-height: 260px;
   background: #171717;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
@@ -291,7 +303,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 16px;
-  padding: 16px 18px;
+  padding: ${props => props.type === "share" ? "45px 18px 26px 18px" : "16px 18px 20px 18px"};
   margin-bottom: 16px;
   position: relative;
   @media (max-width: 634px) {
@@ -334,7 +346,7 @@ const Description = styled.p`
   margin-bottom: 10px;
 `;
 const SnippetInfo = styled.div`
-  width: 60%;
+  min-width: 330px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -343,7 +355,14 @@ const SnippetInfo = styled.div`
   margin-left: 19px;
   margin-top: 8px;
 
+  @media (max-width: 940px) {
+    min-width: 60%;
+    width: 60%;
+  }
+
   @media (max-width: 420px) {
+    /* min-width: 60%;
+    width: 60%; */
     margin-left: 11px;
   }
 `;
@@ -416,9 +435,32 @@ const EditField = styled.input`
   padding: 20px;
 `;
 
-const UserPicAndLikes = styled.div`
+const UserPicAndButtons = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
+
+const SharedByMessage = styled.div`
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Lato';
+  font-weight: 400;
+  font-size: 12px;
+  color: #FFFFFF;
+  position: absolute;
+  top: 11px;
+  left: 15px;
+
+  & span {
+    font-weight: 700;
+  }
+`
+
+const RepostIcon = styled.img`
+  width: 20px;
+`
