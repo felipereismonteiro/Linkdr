@@ -1,12 +1,38 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Oval } from "react-loader-spinner";
 import styled from "styled-components";
+import { TokenContext } from "../../contexts/TokenContext";
+import api from "../../services/api";
 
-export default function FollowStatusButton({ isFollowed }) {
+export default function FollowStatusButton({
+  isFollowed,
+  setUpdate,
+  id,
+  update,
+}) {
   const [isLoading, setIsLoading] = useState(false);
+  const { token } = useContext(TokenContext);
+ console.log(token)
+  async function handleFollowStatus() {
+    setIsLoading(true);
+    try {
+      if (!isFollowed) {
+        await api.followUser(id, token);
+        setUpdate(!update);
+        setIsLoading(false);
+      }
+    } catch (err) {
+      setIsLoading(false);
+      alert("something went wrong");
+    }
+  }
 
   return (
-    <Container>
+    <Container
+      onClick={handleFollowStatus}
+      isLoading={isLoading}
+      isFollowed={isFollowed}
+    >
       {isLoading && (
         <Oval
           height={20}
@@ -40,9 +66,11 @@ const Container = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  position:absolute;
-  left:820px;
+  position: absolute;
+  left: 820px;
   cursor: pointer;
+  pointer-events: ${(props) => (props.isLoading ? "none" : "")};
+  opacity: ${(props) => (props.isLoading ? "0.6" : "1")};
   color: ${(props) => (props.isFollowed ? "#1877F2" : "#FFFFFF")};
   background: ${(props) => (props.isFollowed ? "#FFFFFF" : " #1877F2")};
 `;

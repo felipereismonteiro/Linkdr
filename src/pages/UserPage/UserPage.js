@@ -11,13 +11,16 @@ import api from "../../services/api";
 import styled from "styled-components";
 import { TokenContext } from "../../contexts/TokenContext.js";
 import FollowStatusButton from "../../components/FollowStatusButton/FollowStatusButton";
+import { UserContext } from "../../contexts/UserContext";
 
 export default function UserPage() {
-  const [posts, setPosts] = useState(null);
+  const [data, setData] = useState(null);
+  const [update, setUpdate]=useState(false);
   const { token } = useContext(TokenContext);
+  const { user } = useContext(UserContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
-  console.log(posts);
+  console.log(user);
   const { id } = useParams();
 
   useEffect(() => {
@@ -30,12 +33,12 @@ export default function UserPage() {
     if (token) {
       renderPosts();
     }
-  }, [id, token]);
+  }, [id, token, update]);
 
   const renderPosts = async () => {
     try {
       const result = await api.getPostsByUserId(id, token);
-      setPosts(result.data.posts);
+      setData(result.data);
     } catch (err) {
       console.log(err.message);
     }
@@ -52,17 +55,19 @@ export default function UserPage() {
         <SearchBarContainer>
           <SearchBarComponent />
         </SearchBarContainer>
-        {posts === null ? (
+        {data === null ? (
           <Loading>Loading...</Loading>
         ) : (
           <>
             <MainContent>
               <TitleContainer>
-                <img src={posts[0].profile_picture} alt="profile picture" />
-                <Title title={`${posts[0].user_name}'s posts`} />
-                <FollowStatusButton />
+                <img src={data.posts[0].profile_picture} alt="profile" />
+                <Title title={`${data.posts[0].user_name}'s posts`} />
+                {user.id !== Number(id) && (
+                  <FollowStatusButton isFollowed={data.is_followed} setUpdate={setUpdate} id={id} update={update}/>
+                )}
               </TitleContainer>
-              {posts.map((p) => (
+              {data.posts.map((p) => (
                 <Post post={p} renderPosts={renderPosts} />
               ))}
             </MainContent>
@@ -77,7 +82,7 @@ export default function UserPage() {
 const TitleContainer = styled.div`
   display: flex;
   gap: 18px;
-  position:relative;
+  position: relative;
 
   img {
     width: 50px;
