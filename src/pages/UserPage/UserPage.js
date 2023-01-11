@@ -8,83 +8,86 @@ import Post from "../../components/Post/Post";
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
 import { useEffect, useState, useContext } from "react";
 import api from "../../services/api";
-import styled from "styled-components"
+import styled from "styled-components";
 import { TokenContext } from "../../contexts/TokenContext.js";
+import FollowStatusButton from "../../components/FollowStatusButton/FollowStatusButton";
 
 export default function UserPage() {
   const [posts, setPosts] = useState(null);
   const { token } = useContext(TokenContext);
-  const userData = JSON.parse(localStorage.getItem("userData"))
-  const navigate = useNavigate()
-
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const navigate = useNavigate();
+  console.log(posts);
   const { id } = useParams();
 
   useEffect(() => {
-    if(!userData) {
-        navigate("/")
+    if (!userData) {
+      navigate("/");
     }
-}, [])
+  }, []);
 
-  useEffect( () => {
-    if(token) {
+  useEffect(() => {
+    if (token) {
       renderPosts();
-    } 
+    }
   }, [id, token]);
 
   const renderPosts = async () => {
     try {
       const result = await api.getPostsByUserId(id, token);
-      setPosts(result.data)
-    } catch(err) {
-      console.log(err.message)
+      setPosts(result.data.posts);
+    } catch (err) {
+      console.log(err.message);
     }
-  }
+  };
 
-  if(!userData) {
-    return
+  if (!userData) {
+    return;
   }
 
   return (
     <>
       <Navbar />
       <PageContainer>
-      <SearchBarContainer>
-            <SearchBarComponent />
-      </SearchBarContainer>
-      {posts === null  ? (
-            <Loading>Loading...</Loading>
-          ) :
-        <>
-        <MainContent>
-        <TitleContainer>
-            <img src={posts[0].profile_picture}/>
-            <Title title={`${posts[0].user_name}'s posts`} />
-        </TitleContainer>
-            { 
-            posts.map((p) => <Post post={p} renderPosts={renderPosts}/>)
-          }
-        </MainContent>
-        <HashtagTable />
-        </>
-      }
+        <SearchBarContainer>
+          <SearchBarComponent />
+        </SearchBarContainer>
+        {posts === null ? (
+          <Loading>Loading...</Loading>
+        ) : (
+          <>
+            <MainContent>
+              <TitleContainer>
+                <img src={posts[0].profile_picture} alt="profile picture" />
+                <Title title={`${posts[0].user_name}'s posts`} />
+                <FollowStatusButton />
+              </TitleContainer>
+              {posts.map((p) => (
+                <Post post={p} renderPosts={renderPosts} />
+              ))}
+            </MainContent>
+            <HashtagTable />
+          </>
+        )}
       </PageContainer>
     </>
   );
 }
 
 const TitleContainer = styled.div`
-    display: flex;
-    gap: 18px;
+  display: flex;
+  gap: 18px;
+  position:relative;
 
-    img {
-        width: 50px;
-        height: 50px;
-        border-radius: 26.5px;
-    }
-`
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 26.5px;
+  }
+`;
 
 const Loading = styled.p`
-  font-family: 'Oswald';
+  font-family: "Oswald";
   font-weight: 700;
   font-size: 24px;
   color: #ffffff;
@@ -93,18 +96,18 @@ const Loading = styled.p`
 `;
 
 const SearchBarContainer = styled.div`
-        width: 100vw;
-        height: 82px;
-        position: relative;
-        margin-top: 10px;
-        display: none;
-        background-color: #333333;
-        position: fixed;
-        top: 45px;
-        z-index: 5;
-        @media (max-width: 950px) {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-`
+  width: 100vw;
+  height: 82px;
+  position: relative;
+  margin-top: 10px;
+  display: none;
+  background-color: #333333;
+  position: fixed;
+  top: 45px;
+  z-index: 5;
+  @media (max-width: 950px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
