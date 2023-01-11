@@ -4,22 +4,23 @@ import styled from "styled-components";
 import { TokenContext } from "../../contexts/TokenContext";
 import api from "../../services/api";
 
-export default function FollowStatusButton({
-  isFollowed,
-  setUpdate,
-  id,
-  update,
-}) {
+export default function FollowStatusButton({ isFollowed, id }) {
+  const [status, setStatus] = useState(isFollowed);
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useContext(TokenContext);
- console.log(token)
+
   async function handleFollowStatus() {
     setIsLoading(true);
+
     try {
-      if (!isFollowed) {
-        await api.followUser(id, token);
-        setUpdate(!update);
+      if (status) {
+        const resp = await api.unfollowUser(id, token);
         setIsLoading(false);
+        setStatus(resp.data);
+      } else {
+        const resp = await api.followUser(id, token);
+        setIsLoading(false);
+        setStatus(resp.data);
       }
     } catch (err) {
       setIsLoading(false);
@@ -31,7 +32,7 @@ export default function FollowStatusButton({
     <Container
       onClick={handleFollowStatus}
       isLoading={isLoading}
-      isFollowed={isFollowed}
+      status={status}
     >
       {isLoading && (
         <Oval
@@ -47,8 +48,8 @@ export default function FollowStatusButton({
           strokeWidthSecondary={2}
         />
       )}
-      {isFollowed && !isLoading && "Unfollow"}
-      {!isFollowed && !isLoading && "Follow"}
+      {status && !isLoading && "Unfollow"}
+      {!status && !isLoading && "Follow"}
     </Container>
   );
 }
@@ -71,6 +72,6 @@ const Container = styled.button`
   cursor: pointer;
   pointer-events: ${(props) => (props.isLoading ? "none" : "")};
   opacity: ${(props) => (props.isLoading ? "0.6" : "1")};
-  color: ${(props) => (props.isFollowed ? "#1877F2" : "#FFFFFF")};
-  background: ${(props) => (props.isFollowed ? "#FFFFFF" : " #1877F2")};
+  color: ${(props) => (props.status ? "#1877F2" : "#FFFFFF")};
+  background: ${(props) => (props.status ? "#FFFFFF" : " #1877F2")};
 `;

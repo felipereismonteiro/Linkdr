@@ -78,6 +78,12 @@ function followUser(id, token) {
   return promise;
 }
 
+function unfollowUser(id, token) {
+  const config = createConfig(token);
+  const promise = axios.delete(`${BASE_URL}/follow/${id}`, config);
+  return promise;
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -92,6 +98,7 @@ const api = {
   likePost,
   unlikePost,
   followUser,
+  unfollowUser,
 };
 
 export default api;
