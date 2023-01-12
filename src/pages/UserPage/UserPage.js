@@ -40,6 +40,7 @@ export default function UserPage() {
     try {
       const result = await api.getPostsByUserId(id, token);
       setData(result.data);
+      console.log(result.data)
     } catch (err) {
       console.log(err.message);
     }
