@@ -20,24 +20,23 @@ export function Likes({ post, renderPosts }) {
     let content;
 
       if (liked) {
-      const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
-      sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
+
+         const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
+         sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
 
       if (likesAmount === 1) {
         content = `You`;
       } else if (likesAmount === 2) {
-        content = `You and "${sortedUsers[1]?.user_name}`;
+        content = `You and ${sortedUsers[1]?.user_name}`;
       } else if (likesAmount > 2) {
         content = `You, ${sortedUsers[1]?.user_name} and other ${
           likesAmount - 2
         } people`;
       }
     } else {
-        let sortedUsers = [];
-        if(liked_by) {
-          sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
-          sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
-        }
+
+        const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
+        sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
 
       if (likesAmount === 0) {
         content = `Be the first to like this post`; 
