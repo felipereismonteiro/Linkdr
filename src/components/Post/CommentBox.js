@@ -151,20 +151,28 @@ const UserCommentInput = styled.div`
   top: 0;
   && input {
     font-family: "Lato";
-    font-style: italic;
     font-weight: 400;
     font-size: 14px;
-    color: #575757;
+    color: #bababa;
 
     width: 85%;
     height: 39px;
     background: #252525;
     border-radius: 8px;
+    border: none;
 
     margin: 20px 0px;
 
     box-sizing: border-box;
     padding: 20px;
+
+    &::placeholder {
+    font-family: "Lato";
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    color: #575757;
+    }
   }
 `;
 const ImgVector = styled.img`

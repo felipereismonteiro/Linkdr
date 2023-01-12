@@ -267,19 +267,15 @@ export default function Post({ post, renderPosts }) {
         <UserPicAndButtons>
           <UserPic src={post.profile_picture} alt="User picture" />
           <Likes post={post} renderPosts={renderPosts} />
-          <ContainerCommentButton>
-              <AiOutlineComment onClick={() => setCommentBoxOpen(!commentBoxOpen)} style={{color: "white", fontSize: "20px", cursor: "pointer"}}/>
+          <ContainerCommentButton onClick={() => setCommentBoxOpen(!commentBoxOpen)}>
+              <AiOutlineComment style={{color: "white", fontSize: "20px", cursor: "pointer"}}/>
               <p>{post.comments_amount} comments</p>
           </ContainerCommentButton>
-          <ShareButton post={post} />
+          <ShareButton post={post} renderPosts={renderPosts}/>
         </UserPicAndButtons>
         <PostContent>
           <Username
             onClick={() => {
-              setUserPageInfo({
-                user_name: post.user_name,
-                profile_picture: post.profile_picture,
-              });
               navigate(`/user/${post.user_id}`);
             }}
           >
@@ -327,7 +323,6 @@ const Container = styled.div`
   padding: ${(props) =>
     props.type === "share" ? "45px 18px 26px 18px" : "16px 18px 20px 18px"};
   margin-bottom: 16px;
-  position: relative;
   z-index: 1;
   @media (max-width: 634px) {
     width: 99vw;
@@ -342,6 +337,8 @@ const UserPic = styled.img`
 `;
 const PostContent = styled.div`
   margin-top: 5px;
+  display: flex;
+  flex-direction: column;
   @media (max-width: 634px) {
     width: 100vw;
   }
@@ -496,5 +493,10 @@ const ContainerCommentButton = styled.div`
         font-weight: 400;
         font-size: 11px;
         color: #FFFFFF;
+    }
+
+    &:hover svg {
+      filter: blur(0.5px);
+      filter: drop-shadow(0 0 5px grey);
     }
 `

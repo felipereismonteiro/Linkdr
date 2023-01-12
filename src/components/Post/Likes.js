@@ -114,6 +114,7 @@ const Container = styled.div`
   height: 53px;
   margin-top: 20px;
   cursor: pointer;
+
 `;
 const LikesAmount = styled.div`
   font-family: "Lato";
