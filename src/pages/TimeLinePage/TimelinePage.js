@@ -25,8 +25,6 @@ export default function TimelinePage() {
     }
   }, [])
 
-  console.log(posts);
-
   useEffect(() => {
     if(token) {
       renderPosts();
