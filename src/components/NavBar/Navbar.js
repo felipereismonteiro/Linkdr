@@ -31,13 +31,12 @@ export default function Navbar({renderPosts}) {
             window.scrollTo(0, 0);
           }}>
             <AiFillHome />
-            {/* <div></div> */}
           </HomeButton>
         <UserDiv>
           {logoutOpen 
             ? <AiOutlineUp onClick={() => setLogOutOpen(false)} style={{cursor: "pointer"}} /> 
             : <AiOutlineDown onClick={() => setLogOutOpen(true)} style={{cursor: "pointer"}} />}
-          <UserPic src={user.profile_picture} alt="User picture" />
+          <UserPic src={user.profile_picture} alt="User picture" onClick={() => navigate(`/user/${user.id}`)}/>
         </UserDiv>
         {logoutOpen
             &&  <LogOutMenu>
@@ -96,7 +95,6 @@ const HomeButton = styled.div`
     cursor: pointer;
 
     &:hover svg {
-      font-size: 31px;
       filter: blur(0.5px);
       filter: drop-shadow(0 0 5px grey);
     }
@@ -131,6 +129,7 @@ const UserPic = styled.img`
   width: 53px;
   height: 53px;
   border-radius: 26.5px;
+  cursor: pointer;
 `;
 
 const SearchBarContainer = styled.div`

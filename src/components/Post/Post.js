@@ -11,17 +11,20 @@ import Swal from "sweetalert2";
 import { ThreeDots } from "react-loader-spinner";
 import { Likes } from "./Likes.js";
 import ShareButton from "./ShareButton.js";
-import RepostImg from "../../assets/images/repost.svg"
+import RepostImg from "../../assets/images/repost.svg";
+import 'simplebar/dist/simplebar.min.css';
+import { AiOutlineComment } from "react-icons/ai";
+import CommentBox from "./CommentBox.js";
 
 export default function Post({ post, renderPosts }) {
   const { user } = useContext(UserContext);
-  const { setUserPageInfo } = useContext(UserContext);
   const { token } = useContext(TokenContext);
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState();
   const [disabled, setDisabled] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [loadingEditing, setLoadingEditing] = useState(false);
+  const [commentBoxOpen, setCommentBoxOpen] = useState(false);
   const inputEl = useRef(null);
   const navigate = useNavigate();
 
@@ -99,7 +102,7 @@ export default function Post({ post, renderPosts }) {
   }
 
   function deleteButton() {
-    if (post.user_id === Number(user.id)) {
+    if (post.user_id === Number(user.id) && post.type === "post") {
       return (
         <>
           {loadingDelete ? (
@@ -129,7 +132,7 @@ export default function Post({ post, renderPosts }) {
   }
 
   function editButton() {
-    if (post.user_id === Number(user.id)) {
+    if (post.user_id === Number(user.id) && post.type === "post") {
       return (
         <>
           {loadingEditing ? (
@@ -238,58 +241,72 @@ export default function Post({ post, renderPosts }) {
       );
     }
   }
-
+  
   return (
-    <Container type = {post.type}>
-      {post.type === "share" ? post.post_share_user === user.id ?
-      <SharedByMessage>
-        <RepostIcon src={RepostImg}/>
-        <p>Re-posted by <span>you</span></p>
-      </SharedByMessage> : 
-      <SharedByMessage>
-        <RepostIcon src={RepostImg}/>
-        <p>Re-posted by <span>{post.shared_by}</span></p>
-      </SharedByMessage> : ""}
-      <UserPicAndButtons>
-        <UserPic src={post.profile_picture} alt="User picture" />
-        <Likes post={post} renderPosts={renderPosts}/>
-        <ShareButton post={post}/>
-      </UserPicAndButtons>
-      <PostContent>
-        <Username
-          onClick={() => {
-            setUserPageInfo({
-              user_name: post.user_name,
-              profile_picture: post.profile_picture,
-            });
-            navigate(`/user/${post.user_id}`);
-          }}
-        >
-          {post.user_name}
-        </Username>
+    <>
+      <Container type={post.type}>
+        {post.type === "share" ? (
+          post.post_share_user === user.id ? (
+            <SharedByMessage>
+              <RepostIcon src={RepostImg} />
+              <p>
+                Re-posted by <span>you</span>
+              </p>
+            </SharedByMessage>
+          ) : (
+            <SharedByMessage>
+              <RepostIcon src={RepostImg} />
+              <p>
+                Re-posted by <span>{post.shared_by}</span>
+              </p>
+            </SharedByMessage>
+          )
+        ) : (
+          ""
+        )}
+        <UserPicAndButtons>
+          <UserPic src={post.profile_picture} alt="User picture" />
+          <Likes post={post} renderPosts={renderPosts} />
+          <ContainerCommentButton onClick={() => setCommentBoxOpen(!commentBoxOpen)}>
+              <AiOutlineComment style={{color: "white", fontSize: "20px", cursor: "pointer"}}/>
+              <p>{post.comments_amount} comments</p>
+          </ContainerCommentButton>
+          <ShareButton post={post} renderPosts={renderPosts}/>
+        </UserPicAndButtons>
+        <PostContent>
+          <Username
+            onClick={() => {
+              navigate(`/user/${post.user_id}`);
+            }}
+          >
+            {post.user_name}
+          </Username>
 
-        {editButton()}
-        {deleteButton()}
-        {editingField()}
-        <ReactTagify
-          tagStyle={tagStyle}
-          tagClicked={(tag) => goToPostsByHashtagPage(tag)}
-        >
-          {editing === false && loadingEditing === false && (
-            <Description>{post.content}</Description>
-          )}
-        </ReactTagify>
+          {editButton()}
+          {deleteButton()}
+          {editingField()}
+          <ReactTagify
+            tagStyle={tagStyle}
+            tagClicked={(tag) => goToPostsByHashtagPage(tag)}
+          >
+            {editing === false && loadingEditing === false && (
+              <Description>{post.content}</Description>
+            )}
+          </ReactTagify>
 
-        <PostSnippet href={post.url} target="_blank">
-          <SnippetInfo>
-            <SnippetTitle>{post.url_title}</SnippetTitle>
-            <SnippetDescription>{post.url_description}</SnippetDescription>
-            <Url>{post.url}</Url>
-          </SnippetInfo>
-          <SnippetImage src={post.url_image} />
-        </PostSnippet>
-      </PostContent>
-    </Container>
+          <PostSnippet href={post.url} target="_blank">
+            <SnippetInfo>
+              <SnippetTitle>{post.url_title}</SnippetTitle>
+              <SnippetDescription>{post.url_description}</SnippetDescription>
+              <Url>{post.url}</Url>
+            </SnippetInfo>
+            <SnippetImage src={post.url_image} />
+          </PostSnippet>
+        </PostContent>
+      </Container>
+
+      {commentBoxOpen &&  <CommentBox post={post} renderPost={renderPosts} />}
+    </>
   );
 }
 const Container = styled.div`
@@ -303,9 +320,10 @@ const Container = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 16px;
-  padding: ${props => props.type === "share" ? "45px 18px 26px 18px" : "16px 18px 20px 18px"};
+  padding: ${(props) =>
+    props.type === "share" ? "45px 18px 26px 18px" : "16px 18px 20px 18px"};
   margin-bottom: 16px;
-  position: relative;
+  z-index: 1;
   @media (max-width: 634px) {
     width: 99vw;
     border-radius: 0;
@@ -315,10 +333,12 @@ const UserPic = styled.img`
   width: 53px;
   height: 53px;
   border-radius: 26.5px;
+  cursor: pointer;
 `;
-
 const PostContent = styled.div`
   margin-top: 5px;
+  display: flex;
+  flex-direction: column;
   @media (max-width: 634px) {
     width: 100vw;
   }
@@ -335,9 +355,8 @@ const Username = styled.p`
 
   &:hover {
     text-decoration: underline;
-    }
+  }
 `;
-
 const Description = styled.p`
   font-family: "Lato";
   font-weight: 400;
@@ -434,24 +453,22 @@ const EditField = styled.input`
   box-sizing: border-box;
   padding: 20px;
 `;
-
 const UserPicAndButtons = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
-
 const SharedByMessage = styled.div`
   height: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 6px;
-  font-family: 'Lato';
+  font-family: "Lato";
   font-weight: 400;
   font-size: 12px;
-  color: #FFFFFF;
+  color: #ffffff;
   position: absolute;
   top: 11px;
   left: 15px;
@@ -459,8 +476,27 @@ const SharedByMessage = styled.div`
   & span {
     font-weight: 700;
   }
-`
-
+`;
 const RepostIcon = styled.img`
   width: 20px;
+`;
+const ContainerCommentButton = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 70px;
+    & p {
+        font-family: 'Lato';
+        font-weight: 400;
+        font-size: 11px;
+        color: #FFFFFF;
+    }
+
+    &:hover svg {
+      filter: blur(0.5px);
+      filter: drop-shadow(0 0 5px grey);
+    }
 `

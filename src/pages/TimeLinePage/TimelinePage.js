@@ -17,21 +17,21 @@ export default function TimelinePage() {
   const [posts, setPosts] = useState([]);
   const { token } = useContext(TokenContext);
   const userData = JSON.parse(localStorage.getItem("userData"))
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if(!userData) {
         navigate("/")
     }
-}, [])
+  }, [])
 
   useEffect(() => {
     if(token) {
       renderPosts();
     } 
   }, [loading, token]);
+  
   async function renderPosts() {
-    
     try {
       const postsFound = await api.getPosts(token);
       setPosts(postsFound.data);
@@ -65,7 +65,7 @@ export default function TimelinePage() {
           {posts.length === 0 ? (
             <NoPostsMessage>There are no posts yet</NoPostsMessage>
           ) : (
-            posts.map((p) => <Post post={p} key={p.id} renderPosts={renderPosts}/>)
+            posts.map((p, i) => <Post post={p} key={p.post_share_id} renderPosts={renderPosts}/>)
           )}
         </MainContent>
         <HashtagTable />
