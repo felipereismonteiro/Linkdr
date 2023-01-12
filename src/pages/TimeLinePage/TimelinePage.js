@@ -70,9 +70,11 @@ export default function TimelinePage() {
                   You don't follow anyone yet. Search for new friends!
                 </NoAccountsFollowedMessage>
               )}
+
               {followedAccounts.length !== 0 && posts.length === 0 && (
                 <NoPostsMessage>There are no posts yet</NoPostsMessage>
               )}
+
               {posts.length !== 0 &&
                 posts.map((p, i) => (
                   <Post
@@ -81,6 +83,7 @@ export default function TimelinePage() {
                     renderPosts={renderPosts}
                   />
                 ))}
+                
             </MainContent>
             <HashtagTable />
           </>

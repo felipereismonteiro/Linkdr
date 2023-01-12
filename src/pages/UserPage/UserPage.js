@@ -63,8 +63,8 @@ export default function UserPage() {
           <>
             <MainContent>
               <TitleContainer>
-                <img src={data.posts[0].profile_picture} alt="profile" />
-                <Title title={`${data.posts[0].user_name}'s posts`} />
+                <img src={data.userInfo.profile_picture} alt="profile" />
+                <Title title={`${data.userInfo.user_name}'s posts`} />
                 {user.id !== Number(id) && (
                   <FollowStatusButton isFollowed={data.is_followed} setUpdate={setUpdate} id={id} update={update}/>
                 )}
