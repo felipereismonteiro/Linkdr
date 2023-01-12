@@ -91,7 +91,13 @@ function sharePost(id, token) {
   const promise =  axios.post(`${BASE_URL}/posts/share/${id}`,{}, config); 
   return promise;
 }
- 
+
+function commentPost(token, id, body) {
+  const config = createConfig(token);
+  const promise = axios.post(`${BASE_URL}/posts/comment/${id}`,body,  config);
+  return promise;
+} 
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -108,6 +114,7 @@ const api = {
   followUser,
   unfollowUser,
   sharePost,
+  commentPost,
 };
 
 export default api;
