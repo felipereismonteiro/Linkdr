@@ -15,26 +15,29 @@ import { useNavigate } from "react-router-dom";
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const [followedAccounts, setFollowedAccounts] = useState();
   const { token } = useContext(TokenContext);
-  const userData = JSON.parse(localStorage.getItem("userData"))
+  const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!userData) {
-        navigate("/")
+    if (!userData) {
+      navigate("/");
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if(token) {
+    if (token) {
       renderPosts();
-    } 
+    }
   }, [loading, token]);
-  
+
   async function renderPosts() {
     try {
       const postsFound = await api.getPosts(token);
-      setPosts(postsFound.data);
+      setPosts(postsFound.data.posts);
+      console.log(postsFound.data);
+      setFollowedAccounts(postsFound.data.accounts_you_follow);
       setLoading(false);
     } catch (err) {
       alert(
@@ -43,58 +46,72 @@ export default function TimelinePage() {
     }
   }
 
-  if(!userData) {
-    return
+  if (!userData) {
+    return;
   }
 
   return (
     <>
-      
-      <Navbar renderPosts={renderPosts}/>
+      <Navbar renderPosts={renderPosts} />
       <PageContainer>
-      <SearchBarContainer>
-            <SearchBarComponent />
-      </SearchBarContainer>
-      {loading ? (
-            <Loading>Loading...</Loading>
-          ) :
-        <>
-        <MainContent>
-          <Title title={"timeline"} />
-          <PublishingForm renderPosts={renderPosts} />
-          {posts.length === 0 ? (
-            <NoPostsMessage>There are no posts yet</NoPostsMessage>
-          ) : (
-            posts.map((p, i) => <Post post={p} key={p.post_share_id} renderPosts={renderPosts}/>)
-          )}
-        </MainContent>
-        <HashtagTable />
-        </>
-          }
+        <SearchBarContainer>
+          <SearchBarComponent />
+        </SearchBarContainer>
+        {loading ? (
+          <Loading>Loading...</Loading>
+        ) : (
+          <>
+            <MainContent>
+              <Title title={"timeline"} />
+              <PublishingForm renderPosts={renderPosts} />
+
+              {followedAccounts.length === 0 && (
+                <NoAccountsFollowedMessage>
+                  You don't follow anyone yet. Search for new friends!
+                </NoAccountsFollowedMessage>
+              )}
+
+              {followedAccounts.length !== 0 && posts.length === 0 && (
+                <NoPostsMessage>There are no posts yet</NoPostsMessage>
+              )}
+
+              {posts.length !== 0 &&
+                posts.map((p, i) => (
+                  <Post
+                    post={p}
+                    key={p.post_share_id}
+                    renderPosts={renderPosts}
+                  />
+                ))}
+                
+            </MainContent>
+            <HashtagTable />
+          </>
+        )}
       </PageContainer>
     </>
   );
 }
 
 const SearchBarContainer = styled.div`
-        width: 100vw;
-        height: 82px;
-        position: relative;
-        margin-top: 10px;
-        display: none;
-        background-color: #333333;
-        position: fixed;
-        top: 45px;
-        z-index: 5;
-        @media (max-width: 950px) {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-`
+  width: 100vw;
+  height: 82px;
+  position: relative;
+  margin-top: 10px;
+  display: none;
+  background-color: #333333;
+  position: fixed;
+  top: 45px;
+  z-index: 5;
+  @media (max-width: 950px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
 
 const Loading = styled.p`
-  font-family: 'Oswald';
+  font-family: "Oswald";
   font-weight: 700;
   font-size: 24px;
   color: #ffffff;
@@ -103,6 +120,14 @@ const Loading = styled.p`
 `;
 
 const NoPostsMessage = styled.p`
+  font-weight: 700;
+  font-size: 24px;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 75px;
+`;
+
+const NoAccountsFollowedMessage = styled.p`
   font-weight: 700;
   font-size: 24px;
   color: #ffffff;
