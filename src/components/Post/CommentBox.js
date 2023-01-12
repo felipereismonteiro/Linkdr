@@ -17,7 +17,7 @@ export default function CommentBox({ post, renderPost }) {
     }
   }
 
-  
+  console.log(user);
 
   async function sendComment() {
     try {
@@ -37,10 +37,6 @@ export default function CommentBox({ post, renderPost }) {
       console.log(err.response.data);
     }
   }
-  
-  function poster() {
-    
-  }
 
   return (
     <>
@@ -52,16 +48,24 @@ export default function CommentBox({ post, renderPost }) {
           paddingTop: "10px",
           zIndex: "0",
           paddingBottom: "20px",
+          bottom: "0px"
         }}
       >
         {post.comments.map((c) => {
+
+          function author() {
+            if (c.user_id === post.user_id) {
+              return "• post’s author"
+            }
+          }
+
           if (c.comment !== null) {
             
             return <UserComment>
               <UserPicture src={c.user_picture} />
               <Infos>
                 <UserName>
-                  {c.user_name} <p>{poster()}</p>
+                  {c.user_name} <p>{author()}</p>
                 </UserName>
                 <UserCommentText>{c.comment}</UserCommentText>
               </Infos>

@@ -23,7 +23,9 @@ export default function TimelinePage() {
     if(!userData) {
         navigate("/")
     }
-}, [])
+  }, [])
+
+  console.log(posts);
 
   useEffect(() => {
     if(token) {
