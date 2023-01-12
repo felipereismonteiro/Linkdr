@@ -77,12 +77,18 @@ function unlikePost(id, token) {
 function followUser(id, token) {
   const config = createConfig(token);
   const promise = axios.post(`${BASE_URL}/follow/${id}`, {}, config);
-  return promise;
+  return promise; 
 }
 
 function unfollowUser(id, token) {
   const config = createConfig(token);
-  const promise = axios.delete(`${BASE_URL}/follow/${id}`, config);
+  const promise = axios.delete(`${BASE_URL}/follow/${id}`, config); 
+  return promise;
+}
+
+function sharePost(id, token) {
+  const config =  createConfig(token)
+  const promise =  axios.post(`${BASE_URL}/posts/share/${id}`,{}, config); 
   return promise;
 }
 
@@ -90,7 +96,7 @@ function commentPost(token, id, body) {
   const config = createConfig(token);
   const promise = axios.post(`${BASE_URL}/posts/comment/${id}`,body,  config);
   return promise;
-}
+} 
 
 const api = {
   getHashtags,
@@ -107,6 +113,7 @@ const api = {
   unlikePost,
   followUser,
   unfollowUser,
+  sharePost,
   commentPost,
 };
 

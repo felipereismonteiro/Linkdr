@@ -20,8 +20,9 @@ export function Likes({ post, renderPosts }) {
     let content;
 
       if (liked) {
-      const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
-      sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
+
+         const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
+         sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
 
       if (likesAmount === 1) {
         content = `You`;
@@ -33,18 +34,19 @@ export function Likes({ post, renderPosts }) {
         } people`;
       }
     } else {
-      const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
-      sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
+
+        const sortedUsers = liked_by.filter((obj) => obj.id !== Number(user.id));
+        sortedUsers.splice(0, 0, { id: Number(user.id), user_name: user.user_name });
 
       if (likesAmount === 0) {
-        content = `Be the first to like this post`;
+        content = `Be the first to like this post`; 
       } else if (likesAmount === 1) {
-        content = sortedUsers[1].user_name;
+        content = sortedUsers[1]?.user_name;
       } else if (likesAmount === 2) {
-        content = `${sortedUsers[1].user_name} and ${sortedUsers[2].user_name}`;
+        content = `${sortedUsers[1]?.user_name} and ${sortedUsers[2]?.user_name}`;
       } else if (likesAmount > 2) {
-        content = `${sortedUsers[1].user_name}, ${
-          sortedUsers[2].user_name
+        content = `${sortedUsers[1]?.user_name}, ${
+          sortedUsers[2]?.user_name
         } and other ${likesAmount - 2} people`;
       }
     }
@@ -112,6 +114,7 @@ const Container = styled.div`
   height: 53px;
   margin-top: 20px;
   cursor: pointer;
+
 `;
 const LikesAmount = styled.div`
   font-family: "Lato";

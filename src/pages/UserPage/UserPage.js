@@ -36,6 +36,7 @@ export default function UserPage() {
   }, [id, token, update]);
 
   const renderPosts = async () => {
+ 
     try {
       const result = await api.getPostsByUserId(id, token);
       setData(result.data);
@@ -68,7 +69,7 @@ export default function UserPage() {
                 )}
               </TitleContainer>
               {data.posts.map((p) => (
-                <Post post={p} renderPosts={renderPosts} />
+                <Post key={p.post_share_id} post={p} renderPosts={renderPosts} />
               ))}
             </MainContent>
             <HashtagTable />

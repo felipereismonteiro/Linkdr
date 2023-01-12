@@ -65,7 +65,7 @@ export default function TimelinePage() {
           {posts.length === 0 ? (
             <NoPostsMessage>There are no posts yet</NoPostsMessage>
           ) : (
-            posts.map((p) => <Post post={p} key={p.id} renderPosts={renderPosts}/>)
+            posts.map((p, i) => <Post post={p} key={p.post_share_id} renderPosts={renderPosts}/>)
           )}
         </MainContent>
         <HashtagTable />
