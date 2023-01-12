@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "https://linkr-api-hhbp.onrender.com";
-// const BASE_URL = "http://localhost:4000"; 
+/*  const BASE_URL = "https://linkr-api-hhbp.onrender.com"; */
+const BASE_URL = "http://localhost:4000"; 
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -23,19 +23,19 @@ function getHashtags() {
 }
 
 function getPostsByHashtag(name, token) {
-  const config = createConfig(token)
+  const config = createConfig(token);
   const promise = axios.get(`${BASE_URL}/posts/${name}`, config);
   return promise;
 }
 
 function getPosts(token) {
-  const config = createConfig(token)
+  const config = createConfig(token);
   const promise = axios.get(`${BASE_URL}/posts`, config);
   return promise;
 }
 
 function publishForm(postInfo, token) {
-  const config = createConfig(token)
+  const config = createConfig(token);
   const promisse = axios.post(`${BASE_URL}/posts`, postInfo, config);
   return promisse;
 }
@@ -45,8 +45,10 @@ function delelePostById(id, token) {
   return axios.delete(`${BASE_URL}/posts/delete/${id}`, config);
 }
 
-function getUsersByName(queryString) {
-  return axios.get(`${BASE_URL}/users${queryString}`)
+function getUsersByName(queryString, token) {
+  const config = createConfig(token);
+  const promisse = axios.get(`${BASE_URL}/users${queryString}`, config);
+  return promisse;
 }
 
 function editPatchPost(id, body, token) {
@@ -57,27 +59,39 @@ function editPatchPost(id, body, token) {
 
 function getPostsByUserId(id, token) {
   const config = createConfig(token);
-  return axios.get(`${BASE_URL}/user/${id}`, config)
+  return axios.get(`${BASE_URL}/user/${id}`, config);
 }
 
-function likePost(id,token){
-  const config =  createConfig(token)
-  const promise =  axios.post(`${BASE_URL}/posts/like/${id}`,{}, config);
+function likePost(id, token) {
+  const config = createConfig(token);
+  const promise = axios.post(`${BASE_URL}/posts/like/${id}`, {}, config);
   return promise;
 }
 
-function unlikePost(id,token){
-  const config =  createConfig(token)
-  const promise =  axios.delete(`${BASE_URL}/posts/unlike/${id}`, config);
+function unlikePost(id, token) {
+  const config = createConfig(token);
+  const promise = axios.delete(`${BASE_URL}/posts/unlike/${id}`, config);
+  return promise;
+}
+
+function followUser(id, token) {
+  const config = createConfig(token);
+  const promise = axios.post(`${BASE_URL}/follow/${id}`, {}, config);
+  return promise; 
+}
+
+function unfollowUser(id, token) {
+  const config = createConfig(token);
+  const promise = axios.delete(`${BASE_URL}/follow/${id}`, config); 
   return promise;
 }
 
 function sharePost(id, token) {
   const config =  createConfig(token)
-  const promise =  axios.post(`${BASE_URL}/posts/share/${id}`,{}, config);
+  const promise =  axios.post(`${BASE_URL}/posts/share/${id}`,{}, config); 
   return promise;
 }
-
+ 
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -91,6 +105,8 @@ const api = {
   getPostsByUserId,
   likePost,
   unlikePost,
+  followUser,
+  unfollowUser,
   sharePost,
 };
 

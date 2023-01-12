@@ -49,7 +49,10 @@ table {
 textarea {
     resize: none;
 }
-`
+
+*{
+	box-sizing: border-box;
+ }
+`;
 
 export default GlobalStyle;
-
