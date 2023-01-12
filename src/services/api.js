@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BASE_URL = "https://linkr-api-hhbp.onrender.com";
-const BASE_URL = "http://localhost:4000";
+/*  const BASE_URL = "https://linkr-api-hhbp.onrender.com"; */
+const BASE_URL = "http://localhost:4000"; 
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -45,8 +45,10 @@ function delelePostById(id, token) {
   return axios.delete(`${BASE_URL}/posts/delete/${id}`, config);
 }
 
-function getUsersByName(queryString) {
-  return axios.get(`${BASE_URL}/users${queryString}`);
+function getUsersByName(queryString, token) {
+  const config = createConfig(token);
+  const promisse = axios.get(`${BASE_URL}/users${queryString}`, config);
+  return promisse;
 }
 
 function editPatchPost(id, body, token) {
