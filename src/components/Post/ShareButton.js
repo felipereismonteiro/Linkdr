@@ -3,27 +3,58 @@ import RepostImg from "../../assets/images/repost.svg";
 import styled from "styled-components";
 import { TokenContext } from "../../contexts/TokenContext";
 import api from "../../services/api";
-import { UserContext } from "../../contexts/UserContext";
+import Swal from "sweetalert2";
 
 export default function ShareButton({ post, renderPosts }) {
-    const { shares } = post
+    const { shares, id } = post
     const { token } = useContext(TokenContext);
-    // const { user } = useContext(UserContext);
     const [sharesAmount, setSharesAmount] = useState(Number(shares))
 
   
     async function handleShare() {
+
       try {
-          
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-light",
+          },
+          buttonsStyling: true,
+        });
+  
+        swalWithBootstrapButtons
+          .fire({
+            title: "Do you really want to share this post?",
+            showCancelButton: true,
+            confirmButtonText: "Yes, share!",
+            confirmButtonColor: "blue",
+            cancelButtonText: "No, cancel",
+            reverseButtons: true,
+            background: "black",
+            color: "white",
+          })
+          .then(async (result) => {
+            if (result.isConfirmed) {
+              await api.sharePost(id, token)
+              setSharesAmount(sharesAmount + 1);
+              swalWithBootstrapButtons.fire({
+                title: "Shared!",
+                text: "Successfully shared!.",
+                background: "black",
+                color: "white",
+              });
+              await renderPosts();
+            }
+        });
       } catch (err) {
         console.log(err.message);
       }
     }
   
     return (
-      <Container>
+      <Container onClick={handleShare}>
         <RepostIcon src={RepostImg} />
-        <p>{post.shares} re-posts</p>
+        <p>{sharesAmount} re-posts</p>
       </Container>
     );
   }
@@ -41,6 +72,11 @@ export default function ShareButton({ post, renderPosts }) {
         font-weight: 400;
         font-size: 11px;
         color: #FFFFFF;
+    }
+
+    &:hover img {
+      filter: blur(0.5px);
+      filter: drop-shadow(0 0 5px grey);
     }
   `
 

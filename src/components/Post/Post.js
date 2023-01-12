@@ -15,7 +15,6 @@ import RepostImg from "../../assets/images/repost.svg"
 
 export default function Post({ post, renderPosts }) {
   const { user } = useContext(UserContext);
-  const { setUserPageInfo } = useContext(UserContext);
   const { token } = useContext(TokenContext);
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState();
@@ -99,7 +98,7 @@ export default function Post({ post, renderPosts }) {
   }
 
   function deleteButton() {
-    if (post.user_id === Number(user.id)) {
+    if (post.user_id === Number(user.id) && post.type === "post") {
       return (
         <>
           {loadingDelete ? (
@@ -129,7 +128,7 @@ export default function Post({ post, renderPosts }) {
   }
 
   function editButton() {
-    if (post.user_id === Number(user.id)) {
+    if (post.user_id === Number(user.id) && post.type === "post") {
       return (
         <>
           {loadingEditing ? (
@@ -251,17 +250,13 @@ export default function Post({ post, renderPosts }) {
         <p>Re-posted by <span>{post.shared_by}</span></p>
       </SharedByMessage> : ""}
       <UserPicAndButtons>
-        <UserPic src={post.profile_picture} alt="User picture" />
+        <UserPic src={post.profile_picture} alt="User picture" onClick={() => navigate(`/user/${post.user_id}`)}/>
         <Likes post={post} renderPosts={renderPosts}/>
-        <ShareButton post={post}/>
+        <ShareButton post={post} renderPosts={renderPosts}/>
       </UserPicAndButtons>
       <PostContent>
         <Username
           onClick={() => {
-            setUserPageInfo({
-              user_name: post.user_name,
-              profile_picture: post.profile_picture,
-            });
             navigate(`/user/${post.user_id}`);
           }}
         >
@@ -315,6 +310,7 @@ const UserPic = styled.img`
   width: 53px;
   height: 53px;
   border-radius: 26.5px;
+  cursor: pointer;
 `;
 
 const PostContent = styled.div`

@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BASE_URL = "https://linkr-api-hhbp.onrender.com";
-const BASE_URL = "http://localhost:4000"; 
+const BASE_URL = "https://linkr-api-hhbp.onrender.com";
+// const BASE_URL = "http://localhost:4000"; 
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -72,6 +72,12 @@ function unlikePost(id,token){
   return promise;
 }
 
+function sharePost(id, token) {
+  const config =  createConfig(token)
+  const promise =  axios.post(`${BASE_URL}/posts/share/${id}`,{}, config);
+  return promise;
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -84,7 +90,8 @@ const api = {
   getUsersByName,
   getPostsByUserId,
   likePost,
-  unlikePost
+  unlikePost,
+  sharePost,
 };
 
 export default api;
