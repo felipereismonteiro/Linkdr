@@ -35,7 +35,6 @@ export default function ShareButton({ post, renderPosts }) {
     gap: 5px;
     margin-top: 20px;
     cursor: pointer;
-
     & p {
         font-family: 'Lato';
         font-weight: 400;

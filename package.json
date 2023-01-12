@@ -17,6 +17,7 @@
     "react-scripts": "5.0.1",
     "react-tagify": "^0.1.4",
     "react-tooltip": "^5.4.0",
+    "simplebar-react": "^2.4.3",
     "styled-components": "^5.3.6",
     "sweetalert2": "^11.6.16",
     "web-vitals": "^2.1.4"

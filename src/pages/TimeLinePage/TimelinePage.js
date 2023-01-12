@@ -17,21 +17,21 @@ export default function TimelinePage() {
   const [posts, setPosts] = useState([]);
   const { token } = useContext(TokenContext);
   const userData = JSON.parse(localStorage.getItem("userData"))
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if(!userData) {
         navigate("/")
     }
-}, [])
+  }, [])
 
   useEffect(() => {
     if(token) {
       renderPosts();
     } 
   }, [loading, token]);
+  
   async function renderPosts() {
-    
     try {
       const postsFound = await api.getPosts(token);
       setPosts(postsFound.data);
