@@ -84,6 +84,12 @@ function unfollowUser(id, token) {
   return promise;
 }
 
+function commentPost(token, id, body) {
+  const config = createConfig(token);
+  const promise = axios.post(`${BASE_URL}/posts/comment/${id}`,body,  config);
+  return promise;
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -99,6 +105,7 @@ const api = {
   unlikePost,
   followUser,
   unfollowUser,
+  commentPost,
 };
 
 export default api;
