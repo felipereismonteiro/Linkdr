@@ -1,6 +1,6 @@
 import axios from "axios";
 
-/* const BASE_URL = "https://linkr-api-hhbp.onrender.com"; */
+// const BASE_URL = "https://linkr-api-hhbp.onrender.com"; 
  const BASE_URL = "http://localhost:4000"; 
 
 function createConfig(token) {
@@ -98,6 +98,12 @@ function commentPost(token, id, body) {
   return promise;
 } 
 
+function countNewPosts(token, timestampPostgre) {
+  const config = createConfig(token);
+  const promise = axios.get(`${BASE_URL}/posts/newafter/${timestampPostgre}`, config);
+  return promise;
+}
+
 const api = {
   getHashtags,
   getPostsByHashtag,
@@ -115,6 +121,7 @@ const api = {
   unfollowUser,
   sharePost,
   commentPost,
+  countNewPosts
 };
 
 export default api;

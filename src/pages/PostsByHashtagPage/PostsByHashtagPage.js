@@ -25,19 +25,21 @@ export default function PostsByHashtagPage() {
 }, [])
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const resp = await api.getPostsByHashtag(hashtag, token);
-        setPosts(resp.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    
     if(token) {
-      fetchPosts();
+      renderPosts();
     } 
     
   }, [hashtag, token]);
+
+  const renderPosts = async () => {
+    try {
+      const resp = await api.getPostsByHashtag(hashtag, token);
+      setPosts(resp.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   if(!userData) {
     return
@@ -57,7 +59,7 @@ export default function PostsByHashtagPage() {
         <MainContent>
           <Title title={hashtag} showHashtag={true} />
            {posts.map((post) => (
-            <Post key={post.id} post={post} />
+            <Post key={post.id} post={post} renderPosts={renderPosts} />
           ))}
         </MainContent>
         <HashtagTable />

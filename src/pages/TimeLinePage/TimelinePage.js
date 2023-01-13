@@ -11,20 +11,30 @@ import { PublishingForm } from "../../components/PublishingForm/PublishingForm.j
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
 import { useNavigate } from "react-router-dom";
+import TimelineUpdateButton from "../../components/TimelineUpdateButton/TimelineUpdateButton.js";
+import moment from "moment";
+
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [followedAccounts, setFollowedAccounts] = useState();
   const { token } = useContext(TokenContext);
+  const [timestampPostgre, setTimestampPostgre] = useState((moment(Date.now()).utc().format('YYYY-MM-DDTHH:mm:ss.SSSZ')));
+  const [newPostsCounter, setNewPostsCounter] = useState(0);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
+
 
   useEffect(() => {
     if (!userData) {
       navigate("/");
     }
-  }, []);
+      const interval = setInterval(countNewPosts, 25000)
+      return () => clearInterval(interval);
+
+  }, [timestampPostgre, token]);
+
 
   useEffect(() => {
     if (token) {
@@ -32,11 +42,21 @@ export default function TimelinePage() {
     }
   }, [loading, token]);
 
+  async function countNewPosts () {
+    try {
+      const newPosts  = await api.countNewPosts(token, timestampPostgre);
+      setNewPostsCounter(Number(newPosts.data.new_posts))
+    } catch(err) {
+      console.log(err.message)
+    }
+    
+  }
+  
   async function renderPosts() {
     try {
       const postsFound = await api.getPosts(token);
       setPosts(postsFound.data.posts);
-      console.log(postsFound.data);
+      // console.log(postsFound.data);
       setFollowedAccounts(postsFound.data.accounts_you_follow);
       setLoading(false);
     } catch (err) {
@@ -64,7 +84,7 @@ export default function TimelinePage() {
             <MainContent>
               <Title title={"timeline"} />
               <PublishingForm renderPosts={renderPosts} />
-
+              {newPostsCounter !== 0 && <TimelineUpdateButton newPostsCounter={newPostsCounter} setNewPostsCounter={setNewPostsCounter} setTimestampPostgre={setTimestampPostgre} renderPosts={renderPosts}/>}
               {followedAccounts.length === 0 && (
                 <NoAccountsFollowedMessage>
                   You don't follow anyone yet. Search for new friends!
