@@ -23,28 +23,22 @@ export default function HashtagTable() {
     <Container>
       <Title>trending</Title>
       <HashtagContainer loading={hashtags ? false : true}>
-        {!hashtags ? (
-          <Oval
-            height={40}
-            width={40}
-            color="grey"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-            ariaLabel="oval-loading"
-            secondaryColor="black"
-            strokeWidth={2}
-            strokeWidthSecondary={2}
-          />
-        ) : (
-          hashtags.map((hashtag, index) => (
-            <Hashtag
-              key={hashtag.id}
-              id={hashtag.id}
-              name={hashtag.name}
-            />
-          ))
-        )}
+        {!hashtags ? 
+        <Oval
+        height={40}
+        width={40}
+        color="grey"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+        ariaLabel='oval-loading'
+        secondaryColor="black"
+        strokeWidth={2}
+        strokeWidthSecondary={2}
+      
+      /> : hashtags.map((hashtag, index) => (
+          <Hashtag key={hashtag.id} id={hashtag.id} name={hashtag.name} />
+        ))}
       </HashtagContainer>
     </Container>
   );
@@ -83,7 +77,7 @@ const HashtagContainer = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: ${(props) =>
-    props.loading === true ? "center" : "flex-start"};
-  align-items: ${(props) => (props.loading === true ? "center" : "flex-start")};
+  justify-content: ${props => props.loading === true ? "center" : "flex-start"};
+  align-items: ${props => props.loading === true ? "center" : "flex-start"};
 `;
+

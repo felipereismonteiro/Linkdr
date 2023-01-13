@@ -6,122 +6,86 @@ import Navbar from "../../components/NavBar/Navbar";
 import Post from "../../components/Post/Post";
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
 import HashtagTable from "../../components/HashtagTable/HashtagTable";
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from "../../services/api";
 import styled from "styled-components";
 import { TokenContext } from "../../contexts/TokenContext.js";
-import InfiniteScroll from "react-infinite-scroller";
-import { ScrollLoading } from "../../components/ScrollLoading/ScrollLoading";
 
 export default function PostsByHashtagPage() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
+  const [posts, setPosts] = useState(null);
   const { hashtag } = useParams();
   const { token } = useContext(TokenContext);
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  const navigate = useNavigate();
-  const initialPage = useRef(1);
+  const userData = JSON.parse(localStorage.getItem("userData"))
+  const navigate = useNavigate()
   
-  useEffect(()=>{
-    setPosts([]);
-    setHasMore(true);
-    setLoading(true);
-  },[hashtag])
+  useEffect(() => {
+    if(!userData) {
+        navigate("/")
+    }
+}, [])
 
   useEffect(() => {
-    if (!userData) {
-      navigate("/");
-    }
-  }, []);
-
-  const fetchPosts = async (page) => {
-    try {
-      const resp = await api.getPostsByHashtag(hashtag, page, token);
-
-      setLoading(false);
-      setPosts([...posts, ...resp.data]);
-      console.log(resp.data);
-      if (resp.data.length < 10) {
-        setHasMore(false);
+    const fetchPosts = async () => {
+      try {
+        const resp = await api.getPostsByHashtag(hashtag, token);
+        setPosts(resp.data);
+      } catch (err) {
+        console.log(err);
       }
+    };
+    if(token) {
+      fetchPosts();
+    } 
+    
+  }, [hashtag, token]);
 
-      console.log(resp.data.length);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    if (token) {
-      fetchPosts(initialPage.current);
-    }
-  }, [hashtag]);
-
-  if (!userData) {
-    return;
+  if(!userData) {
+    return
   }
 
   return (
     <>
       <Navbar />
       <PageContainer>
-        <SearchBarContainer>
-          <SearchBarComponent />
-        </SearchBarContainer>
-        {loading ? (
+      <SearchBarContainer>
+            <SearchBarComponent />
+      </SearchBarContainer>
+      {!posts ? 
           <Loading>Loading...</Loading>
-        ) : (
-          <>
-            <MainContent>
-              <Title title={hashtag} showHashtag={true} />
-              <InfiniteScroll
-                pageStart={1}
-                hasMore={hasMore}
-                loadMore={fetchPosts}
-                loader={<ScrollLoading />}
-              >
-                {posts.map((post) => (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    setPosts={setPosts}
-                    setLoading={setLoading}
-                    setHasMore={setHasMore}
-                  />
-                ))}
-              </InfiniteScroll>
-            </MainContent>
-            <HashtagTable
-              setPosts={setPosts}
-              setLoading={setLoading}
-              setHasMore={setHasMore}
-            />
-          </>
-        )}
+           :
+        <>
+        <MainContent>
+          <Title title={hashtag} showHashtag={true} />
+           {posts.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
+        </MainContent>
+        <HashtagTable />
+        </>
+      } 
       </PageContainer>
     </>
   );
 }
 
 const SearchBarContainer = styled.div`
-  width: 100vw;
-  height: 82px;
-  position: relative;
-  margin-top: 10px;
-  display: none;
-  background-color: #333333;
-  position: fixed;
-  top: 45px;
-  z-index: 5;
-  @media (max-width: 950px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
+        width: 100vw;
+        height: 82px;
+        position: relative;
+        margin-top: 10px;
+        display: none;
+        background-color: #333333;
+        position: fixed;
+        top: 45px;
+        z-index: 5;
+        @media (max-width: 950px) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+`
 const Loading = styled.p`
-  font-family: "Oswald";
+  font-family: 'Oswald';
   font-weight: 700;
   font-size: 24px;
   color: #ffffff;
