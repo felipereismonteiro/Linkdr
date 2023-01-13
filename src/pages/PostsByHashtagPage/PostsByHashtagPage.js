@@ -76,11 +76,21 @@ export default function PostsByHashtagPage() {
                 loader={<ScrollLoading />}
               >
                 {posts.map((post) => (
-                  <Post key={post.id} post={post} />
+                  <Post
+                    key={post.id}
+                    post={post}
+                    setPosts={setPosts}
+                    setLoading={setLoading}
+                    setHasMore={setHasMore}
+                  />
                 ))}
               </InfiniteScroll>
             </MainContent>
-            <HashtagTable setPosts={setPosts} setLoading={setLoading} setHasMore={setHasMore}/>
+            <HashtagTable
+              setPosts={setPosts}
+              setLoading={setLoading}
+              setHasMore={setHasMore}
+            />
           </>
         )}
       </PageContainer>
