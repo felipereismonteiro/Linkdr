@@ -1,7 +1,7 @@
 import axios from "axios";
 
 /* const BASE_URL = "https://linkr-api-hhbp.onrender.com"; */
- const BASE_URL = "http://localhost:4000"; 
+const BASE_URL = "http://localhost:4000";
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -22,9 +22,9 @@ function getHashtags() {
   return promise;
 }
 
-function getPostsByHashtag(name, token) {
+function getPostsByHashtag(name, page, token) {
   const config = createConfig(token);
-  const promise = axios.get(`${BASE_URL}/posts/${name}`, config);
+  const promise = axios.get(`${BASE_URL}/posts/${name}?page=${page}`, config);
   return promise;
 }
 
@@ -57,7 +57,7 @@ function editPatchPost(id, body, token) {
   return promisse;
 }
 
-function getPostsByUserId(id, page,token) {
+function getPostsByUserId(id, page, token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/user/${id}?page=${page}`, config);
 }
@@ -77,26 +77,26 @@ function unlikePost(id, token) {
 function followUser(id, token) {
   const config = createConfig(token);
   const promise = axios.post(`${BASE_URL}/follow/${id}`, {}, config);
-  return promise; 
+  return promise;
 }
 
 function unfollowUser(id, token) {
   const config = createConfig(token);
-  const promise = axios.delete(`${BASE_URL}/follow/${id}`, config); 
+  const promise = axios.delete(`${BASE_URL}/follow/${id}`, config);
   return promise;
 }
 
 function sharePost(id, token) {
-  const config =  createConfig(token)
-  const promise =  axios.post(`${BASE_URL}/posts/share/${id}`,{}, config); 
+  const config = createConfig(token);
+  const promise = axios.post(`${BASE_URL}/posts/share/${id}`, {}, config);
   return promise;
 }
 
 function commentPost(token, id, body) {
   const config = createConfig(token);
-  const promise = axios.post(`${BASE_URL}/posts/comment/${id}`,body,  config);
+  const promise = axios.post(`${BASE_URL}/posts/comment/${id}`, body, config);
   return promise;
-} 
+}
 
 const api = {
   getHashtags,

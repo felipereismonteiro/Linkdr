@@ -13,6 +13,7 @@ import { TokenContext } from "../../contexts/TokenContext.js";
 import FollowStatusButton from "../../components/FollowStatusButton/FollowStatusButton";
 import { UserContext } from "../../contexts/UserContext";
 import InfiniteScroll from "react-infinite-scroller";
+import { ScrollLoading } from "../../components/ScrollLoading/ScrollLoading";
 
 export default function UserPage() {
   const [personalData, setPersonalData] = useState(null);
@@ -47,8 +48,8 @@ export default function UserPage() {
       setPersonalData(result.data.userInfo);
       setFollowStatus(result.data.is_followed);
       setPosts([...posts, ...result.data.posts]);
-
-      if (result.data.posts.length !== 10) {
+      console.log(result.data.posts.length, result.data.posts);
+      if (result.data.posts.length < 10) {
         setHasMore(false);
       }
     } catch (err) {
@@ -85,11 +86,10 @@ export default function UserPage() {
                 )}
               </TitleContainer>
               <InfiniteScroll
-                threshold={0}
                 pageStart={1}
-                loadMore={renderPosts}
+                loadMore={renderPosts} // load more pass the next page to the function as a parameter when the scroll hits the viewport
                 hasMore={hasMore}
-                loader={<div>teste</div>}
+                loader={<ScrollLoading />}
               >
                 {posts.map((p) => (
                   <Post

@@ -1,11 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-export default function Hashtag({ id, name }) {
+export default function Hashtag({
+  id,
+  name,
+  setPosts,
+  setLoading,
+  setHasMore,
+}) {
   const navigate = useNavigate();
 
   function goToPostsByHashtagPage() {
     navigate(`/hashtag/${name}`);
+    setPosts([]);
+    setHasMore(true);
+    setLoading(true);
   }
 
   return <Container onClick={goToPostsByHashtagPage}> # {name}</Container>;
@@ -21,9 +30,8 @@ const Container = styled.h3`
   color: #ffffff;
   margin-bottom: 3px;
   cursor: pointer;
-  
+
   &:hover {
     color: lightgrey;
-    }
-
+  }
 `;
