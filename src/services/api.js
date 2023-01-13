@@ -62,6 +62,11 @@ function getPostsByUserId(id, page, token) {
   return axios.get(`${BASE_URL}/user/${id}?page=${page}`, config);
 }
 
+function getOlderPostsByUserId(id, page, token) {
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/user/${id}?page=${page}&timestamp=${timestampPostgre}`, config);
+}
+
 function likePost(id, token) {
   const config = createConfig(token);
   const promise = axios.post(`${BASE_URL}/posts/like/${id}`, {}, config);
