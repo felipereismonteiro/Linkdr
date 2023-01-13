@@ -28,8 +28,6 @@ export default function Post({ post, renderPosts }) {
   const inputEl = useRef(null);
   const navigate = useNavigate();
 
-  console.log(post.comments);
-
   const tagStyle = {
     color: "white",
     fontWeight: "bold",
@@ -286,6 +284,7 @@ export default function Post({ post, renderPosts }) {
           {editButton()}
           {deleteButton()}
           {editingField()}
+
           <ReactTagify
             tagStyle={tagStyle}
             tagClicked={(tag) => goToPostsByHashtagPage(tag)}
