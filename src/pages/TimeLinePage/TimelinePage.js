@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../../components/NavBar/Navbar.js";
 import Post from "../../components/Post/Post.js";
@@ -19,6 +19,8 @@ export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [followedAccounts, setFollowedAccounts] = useState();
+  const initialPage = useRef(1);
+  const [hasMore, setHasMore] = useState(true);
   const { token } = useContext(TokenContext);
   const [timestampPostgre, setTimestampPostgre] = useState((moment(Date.now()).utc().format('YYYY-MM-DDTHH:mm:ss.SSSZ')));
   const [newPostsCounter, setNewPostsCounter] = useState(0);
@@ -103,7 +105,6 @@ export default function TimelinePage() {
                     renderPosts={renderPosts}
                   />
                 ))}
-                
             </MainContent>
             <HashtagTable />
           </>
