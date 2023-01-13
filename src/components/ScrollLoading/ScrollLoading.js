@@ -31,6 +31,7 @@ const Container = styled.div`
 `;
 
 const LoadingMessage = styled.div`
+  margin-top: 16px;
   font-family: "Lato";
   font-style: normal;
   font-weight: 400;

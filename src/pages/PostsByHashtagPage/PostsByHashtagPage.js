@@ -22,6 +22,12 @@ export default function PostsByHashtagPage() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
   const initialPage = useRef(1);
+  
+  useEffect(()=>{
+    setPosts([]);
+    setHasMore(true);
+    setLoading(true);
+  },[hashtag])
 
   useEffect(() => {
     if (!userData) {
@@ -35,7 +41,7 @@ export default function PostsByHashtagPage() {
 
       setLoading(false);
       setPosts([...posts, ...resp.data]);
-
+      console.log(resp.data);
       if (resp.data.length < 10) {
         setHasMore(false);
       }
@@ -50,7 +56,7 @@ export default function PostsByHashtagPage() {
     if (token) {
       fetchPosts(initialPage.current);
     }
-  }, [hashtag, token]);
+  }, [hashtag]);
 
   if (!userData) {
     return;

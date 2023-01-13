@@ -4,7 +4,7 @@ import api from "../../services/api";
 import Hashtag from "./Hashtag";
 import { Oval } from "react-loader-spinner";
 
-export default function HashtagTable({ setPosts, setHasMore, setLoading }) {
+export default function HashtagTable() {
   const [hashtags, setHashtags] = useState(null);
 
   useEffect(() => {
@@ -42,9 +42,6 @@ export default function HashtagTable({ setPosts, setHasMore, setLoading }) {
               key={hashtag.id}
               id={hashtag.id}
               name={hashtag.name}
-              setPosts={setPosts}
-              setHasMore={setHasMore}
-              setLoading={setLoading}
             />
           ))
         )}

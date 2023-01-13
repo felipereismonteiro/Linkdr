@@ -18,10 +18,7 @@ import CommentBox from "./CommentBox.js";
 
 export default function Post({
   post,
-  renderPosts,
-  setPosts,
-  setHasMore,
-  setLoading,
+  renderPosts
 }) {
   const { user } = useContext(UserContext);
   const { token } = useContext(TokenContext);
@@ -104,9 +101,6 @@ export default function Post({
 
   function goToPostsByHashtagPage(tag) {
     const formattedTag = tag.replace("#", "");
-    setPosts([]);
-    setHasMore(true);
-    setLoading(true);
     navigate(`/hashtag/${formattedTag}`);
   }
 

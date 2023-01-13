@@ -3,18 +3,12 @@ import styled from "styled-components";
 
 export default function Hashtag({
   id,
-  name,
-  setPosts,
-  setLoading,
-  setHasMore,
+  name
 }) {
   const navigate = useNavigate();
 
   function goToPostsByHashtagPage() {
     navigate(`/hashtag/${name}`);
-    setPosts([]);
-    setHasMore(true);
-    setLoading(true);
   }
 
   return <Container onClick={goToPostsByHashtagPage}> # {name}</Container>;
