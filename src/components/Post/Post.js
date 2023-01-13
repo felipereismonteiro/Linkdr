@@ -16,7 +16,7 @@ import 'simplebar/dist/simplebar.min.css';
 import { AiOutlineComment } from "react-icons/ai";
 import CommentBox from "./CommentBox.js";
 
-export default function Post({ post, renderPosts }) {
+export default function Post({ post, update, setUpdate, renderPosts }) {
   const { user } = useContext(UserContext);
   const { token } = useContext(TokenContext);
   const [editing, setEditing] = useState(false);
@@ -305,7 +305,8 @@ export default function Post({ post, renderPosts }) {
         </PostContent>
       </Container>
 
-      {commentBoxOpen &&  <CommentBox post={post} renderPost={renderPosts} />}
+      {commentBoxOpen &&  <CommentBox post={post}  update={update}
+                    setUpdate={setUpdate} />}
     </>
   );
 }

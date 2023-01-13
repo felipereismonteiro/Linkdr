@@ -22,6 +22,7 @@ export default function PostsByHashtagPage() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
   const initialPage = useRef(1);
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     setPosts([]);
@@ -35,17 +36,20 @@ export default function PostsByHashtagPage() {
     }
   }, []);
 
+  
   const renderPosts = async (page) => {
+    console.log(page)
+    console.log("fui chamada aaaaaa", hashtag);
     try {
       const resp = await api.getPostsByHashtag(hashtag, page, token);
-
+      console.log(resp.data)
       setLoading(false);
-      setPosts((prevPosts) => [...prevPosts, ...resp.data]);
-
-      if (resp.data.length < 10) {
+      setPosts(resp.data);
+ 
+      if (resp.data.length%10!==0) {
         setHasMore(false);
       }
-
+      console.log()
       console.log(resp.data.length);
     } catch (err) {
       console.log(err);
@@ -56,7 +60,7 @@ export default function PostsByHashtagPage() {
     if (token) {
       renderPosts(initialPage.current);
     }
-  }, [hashtag, token]);
+  }, [hashtag, token, update]);
 
   if (!userData) {
     return;
@@ -82,7 +86,12 @@ export default function PostsByHashtagPage() {
                 loader={<ScrollLoading />}
               >
                 {posts.map((post) => (
-                  <Post key={post.id} post={post} renderPosts={renderPosts} />
+                  <Post
+                    key={post.post_share_id}
+                    post={post}
+                    update={update}
+                    setUpdate={setUpdate}
+                  />
                 ))}
               </InfiniteScroll>
             </MainContent>

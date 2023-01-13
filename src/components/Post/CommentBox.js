@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import vector from "../../assets/images/vector.png";
 import SimpleBar from "simplebar-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import api from "../../services/api";
 import { ColorRing } from "react-loader-spinner";
 
-export default function CommentBox({ post, renderPost }) {
+export default function CommentBox({ post, renderPosts,update, setUpdate, }) {
   const { user } = JSON.parse(localStorage.getItem("userData"));
   const { token } = JSON.parse(localStorage.getItem("userData"));
   const [inputValue, setInputValue] = useState();
   const [loading, setLoading] = useState(false);
+  const initialPage = useRef(1);
 
   function handleKeyPressed(e) {
     if (e.code === "Enter") {
@@ -25,11 +26,10 @@ export default function CommentBox({ post, renderPost }) {
         comment: inputValue,
       };
       setLoading(true);
-      const promisse = await api.commentPost(token, post.id, body);
-
+      const promisse = await api.commentPost(token, post.id, body)
       setLoading(false);
       setInputValue("");
-      renderPost();
+      setUpdate(!update)
       console.log(promisse);
     } catch (err) {
       setLoading(false);
