@@ -56,6 +56,10 @@ export default function CommentBox({ post, renderPost }) {
           function author() {
             if (c.user_id === post.user_id) {
               return "• post’s author"
+            } else if(c.is_followed) {
+              return "• following"
+            } else {
+              return ""
             }
           }
 

@@ -28,6 +28,8 @@ export default function Post({ post, renderPosts }) {
   const inputEl = useRef(null);
   const navigate = useNavigate();
 
+  console.log(post.comments);
+
   const tagStyle = {
     color: "white",
     fontWeight: "bold",
@@ -175,7 +177,6 @@ export default function Post({ post, renderPosts }) {
                       setEditing(!editing);
                       setInputValue(post.content);
                     } else if (
-                      /* Read more about handling dismissals below */
                       result.dismiss === Swal.DismissReason.cancel
                     ) {
                       swalWithBootstrapButtons.fire({
