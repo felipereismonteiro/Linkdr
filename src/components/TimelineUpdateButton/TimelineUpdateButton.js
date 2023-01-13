@@ -2,10 +2,10 @@ import styled from "styled-components";
 import updateIcon from "../../assets/images/update.svg"
 import moment from "moment";
 
-export default function TimelineUpdateButton({newPostsCounter, setNewPostsCounter, setTimestampPostgre, renderPosts}) {
+export default function TimelineUpdateButton({newPostsCounter, setNewPostsCounter, setTimestampPostgre, update, setUpdate}) {
     return(
         <Button onClick={() => {
-            renderPosts();
+            setUpdate(!update)
             setTimestampPostgre(moment(Date.now()).utc().format('YYYY-MM-DDTHH:mm:ss.SSSZ'));
             setNewPostsCounter(0);
         }}>

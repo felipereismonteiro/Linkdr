@@ -76,6 +76,26 @@ export default function TimelinePage() {
     }
   }
 
+  async function renderOlderPosts(page) {
+
+    try {
+      const postsFound = await api.getOlderPosts(timestampPostgre, page, token);
+      setPosts(postsFound.data.posts);
+      // console.log(postsFound.data);
+      setFollowedAccounts(postsFound.data.accounts_you_follow);
+      setLoading(false);
+
+      if (postsFound.data.posts.length % 10 !== 0) {
+        setHasMore(false);
+      }
+    } catch (err) {
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+      );
+    }
+  }
+
+
   if (!userData) {
     return;
   }
@@ -94,7 +114,7 @@ export default function TimelinePage() {
             <MainContent>
               <Title title={"timeline"} />
               <PublishingForm renderPosts={renderPosts} />
-              {newPostsCounter !== 0 && <TimelineUpdateButton newPostsCounter={newPostsCounter} setNewPostsCounter={setNewPostsCounter} setTimestampPostgre={setTimestampPostgre} renderPosts={renderPosts}/>}
+              {newPostsCounter !== 0 && <TimelineUpdateButton newPostsCounter={newPostsCounter} setNewPostsCounter={setNewPostsCounter} setTimestampPostgre={setTimestampPostgre} update={update} setUpdate={setUpdate}/>}
               {followedAccounts.length === 0 && (
                 <NoAccountsFollowedMessage>
                   You don't follow anyone yet. Search for new friends!
@@ -109,7 +129,7 @@ export default function TimelinePage() {
                 <InfiniteScroll
                   pageStart={1}
                   hasMore={hasMore}
-                  loadMore={renderPosts}
+                  loadMore={renderOlderPosts}
                   loader={<ScrollLoading />}
                 >
                   {posts.map((p, i) => (
