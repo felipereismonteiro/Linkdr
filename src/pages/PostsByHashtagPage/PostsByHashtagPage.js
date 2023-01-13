@@ -18,11 +18,11 @@ export default function PostsByHashtagPage() {
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const { hashtag } = useParams();
+  const [update, setUpdate] = useState(false);
   const { token } = useContext(TokenContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
   const initialPage = useRef(1);
-  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     setPosts([]);
@@ -36,20 +36,18 @@ export default function PostsByHashtagPage() {
     }
   }, []);
 
-  
   const renderPosts = async (page) => {
-    console.log(page)
-    console.log("fui chamada aaaaaa", hashtag);
+    console.log('fui chamada')
     try {
       const resp = await api.getPostsByHashtag(hashtag, page, token);
-      console.log(resp.data)
+      console.log(resp.data);
       setLoading(false);
       setPosts(resp.data);
- 
-      if (resp.data.length%10!==0) {
+
+      if (resp.data.length % 10 !== 0) {
         setHasMore(false);
       }
-      console.log()
+      console.log();
       console.log(resp.data.length);
     } catch (err) {
       console.log(err);

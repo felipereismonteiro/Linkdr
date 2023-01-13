@@ -11,6 +11,8 @@ import { PublishingForm } from "../../components/PublishingForm/PublishingForm.j
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
 import { useNavigate } from "react-router-dom";
+import { ScrollLoading } from "../../components/ScrollLoading/ScrollLoading";
+import InfiniteScroll from "react-infinite-scroller";
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
@@ -21,6 +23,7 @@ export default function TimelinePage() {
   const { token } = useContext(TokenContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     if (!userData) {
@@ -30,17 +33,21 @@ export default function TimelinePage() {
 
   useEffect(() => {
     if (token) {
-      renderPosts();
+      renderPosts(initialPage.current);
     }
-  }, [loading, token]);
+  }, [loading, token, update]);
 
-  async function renderPosts() {
+  async function renderPosts(page) {
     try {
-      const postsFound = await api.getPosts(token);
+      const postsFound = await api.getPosts(page, token);
       setPosts(postsFound.data.posts);
       console.log(postsFound.data);
       setFollowedAccounts(postsFound.data.accounts_you_follow);
       setLoading(false);
+
+      if (postsFound.data.posts.length % 10 !== 0) {
+        setHasMore(false);
+      }
     } catch (err) {
       alert(
         "An error occured while trying to fetch the posts, please refresh the page"
@@ -77,14 +84,24 @@ export default function TimelinePage() {
                 <NoPostsMessage>There are no posts yet</NoPostsMessage>
               )}
 
-              {posts.length !== 0 &&
-                posts.map((p, i) => (
-                  <Post
-                    post={p}
-                    key={p.post_share_id}
-                    renderPosts={renderPosts}
-                  />
-                ))}
+              {posts.length !== 0 && (
+                <InfiniteScroll
+                  pageStart={1}
+                  hasMore={hasMore}
+                  loadMore={renderPosts}
+                  loader={<ScrollLoading />}
+                >
+                  {posts.map((p, i) => (
+                    <Post
+                      post={p}
+                      key={p.post_share_id}
+                      renderPosts={renderPosts}
+                      update={update}
+                      setUpdate={setUpdate}
+                    />
+                  ))}
+                </InfiniteScroll>
+              )}
             </MainContent>
             <HashtagTable />
           </>

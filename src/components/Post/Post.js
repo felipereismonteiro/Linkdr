@@ -12,11 +12,11 @@ import { ThreeDots } from "react-loader-spinner";
 import { Likes } from "./Likes.js";
 import ShareButton from "./ShareButton.js";
 import RepostImg from "../../assets/images/repost.svg";
-import 'simplebar/dist/simplebar.min.css';
+import "simplebar/dist/simplebar.min.css";
 import { AiOutlineComment } from "react-icons/ai";
 import CommentBox from "./CommentBox.js";
 
-export default function Post({ post, update, setUpdate, renderPosts }) {
+export default function Post({ post, renderPosts, update, setUpdate }) {
   const { user } = useContext(UserContext);
   const { token } = useContext(TokenContext);
   const [editing, setEditing] = useState(false);
@@ -73,7 +73,7 @@ export default function Post({ post, update, setUpdate, renderPosts }) {
           if (result.isConfirmed) {
             setLoadingDelete(true);
             const promisse = await api.delelePostById(post.id, token);
-            await renderPosts();
+            setUpdate(!update);;
             setLoadingDelete(false);
             swalWithBootstrapButtons.fire({
               title: "Deleted!",
@@ -174,9 +174,7 @@ export default function Post({ post, update, setUpdate, renderPosts }) {
                     if (result.isConfirmed) {
                       setEditing(!editing);
                       setInputValue(post.content);
-                    } else if (
-                      result.dismiss === Swal.DismissReason.cancel
-                    ) {
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
                       swalWithBootstrapButtons.fire({
                         title: "Cancelled",
                         text: "Your editing were canceled :)",
@@ -206,7 +204,7 @@ export default function Post({ post, update, setUpdate, renderPosts }) {
       setEditing(false);
       setLoadingEditing(true);
       await api.editPatchPost(post.id, { content: inputValue }, token);
-      await renderPosts();
+      setUpdate(!update);;
       setLoadingEditing(false);
     } catch (err) {
       setLoadingEditing(false);
@@ -240,7 +238,7 @@ export default function Post({ post, update, setUpdate, renderPosts }) {
       );
     }
   }
-  
+
   return (
     <>
       <Container type={post.type}>
@@ -265,12 +263,16 @@ export default function Post({ post, update, setUpdate, renderPosts }) {
         )}
         <UserPicAndButtons>
           <UserPic src={post.profile_picture} alt="User picture" />
-          <Likes post={post} renderPosts={renderPosts} />
-          <ContainerCommentButton onClick={() => setCommentBoxOpen(!commentBoxOpen)}>
-              <AiOutlineComment style={{color: "white", fontSize: "20px", cursor: "pointer"}}/>
-              <p>{post.comments_amount} comments</p>
+          <Likes post={post} setUpdate={setUpdate} update={update} />
+          <ContainerCommentButton
+            onClick={() => setCommentBoxOpen(!commentBoxOpen)}
+          >
+            <AiOutlineComment
+              style={{ color: "white", fontSize: "20px", cursor: "pointer" }}
+            />
+            <p>{post.comments_amount} comments</p>
           </ContainerCommentButton>
-          <ShareButton post={post} renderPosts={renderPosts}/>
+          <ShareButton post={post} setUpdate={setUpdate} update={update} />
         </UserPicAndButtons>
         <PostContent>
           <Username
@@ -305,8 +307,7 @@ export default function Post({ post, update, setUpdate, renderPosts }) {
         </PostContent>
       </Container>
 
-      {commentBoxOpen &&  <CommentBox post={post}  update={update}
-                    setUpdate={setUpdate} />}
+      {commentBoxOpen && <CommentBox post={post}  setUpdate={setUpdate} update={update}/>}
     </>
   );
 }
@@ -482,22 +483,22 @@ const RepostIcon = styled.img`
   width: 20px;
 `;
 const ContainerCommentButton = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    margin-top: 10px;
-    cursor: pointer;
-    width: 70px;
-    & p {
-        font-family: 'Lato';
-        font-weight: 400;
-        font-size: 11px;
-        color: #FFFFFF;
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  width: 70px;
+  & p {
+    font-family: "Lato";
+    font-weight: 400;
+    font-size: 11px;
+    color: #ffffff;
+  }
 
-    &:hover svg {
-      filter: blur(0.5px);
-      filter: drop-shadow(0 0 5px grey);
-    }
-`
+  &:hover svg {
+    filter: blur(0.5px);
+    filter: drop-shadow(0 0 5px grey);
+  }
+`;
