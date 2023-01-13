@@ -18,16 +18,17 @@ export default function PostsByHashtagPage() {
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const { hashtag } = useParams();
+  const [update, setUpdate] = useState(false);
   const { token } = useContext(TokenContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
   const initialPage = useRef(1);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     setPosts([]);
     setHasMore(true);
     setLoading(true);
-  },[hashtag])
+  }, [hashtag]);
 
   useEffect(() => {
     if (!userData) {
@@ -35,17 +36,18 @@ export default function PostsByHashtagPage() {
     }
   }, []);
 
-  const fetchPosts = async (page) => {
+  const renderPosts = async (page) => {
+    console.log('fui chamada')
     try {
       const resp = await api.getPostsByHashtag(hashtag, page, token);
-
-      setLoading(false);
-      setPosts([...posts, ...resp.data]);
       console.log(resp.data);
-      if (resp.data.length < 10) {
+      setLoading(false);
+      setPosts(resp.data);
+
+      if (resp.data.length % 10 !== 0) {
         setHasMore(false);
       }
-
+      console.log();
       console.log(resp.data.length);
     } catch (err) {
       console.log(err);
@@ -54,9 +56,9 @@ export default function PostsByHashtagPage() {
 
   useEffect(() => {
     if (token) {
-      fetchPosts(initialPage.current);
+      renderPosts(initialPage.current);
     }
-  }, [hashtag]);
+  }, [hashtag, token, update]);
 
   if (!userData) {
     return;
@@ -78,25 +80,20 @@ export default function PostsByHashtagPage() {
               <InfiniteScroll
                 pageStart={1}
                 hasMore={hasMore}
-                loadMore={fetchPosts}
+                loadMore={renderPosts}
                 loader={<ScrollLoading />}
               >
                 {posts.map((post) => (
                   <Post
-                    key={post.id}
+                    key={post.post_share_id}
                     post={post}
-                    setPosts={setPosts}
-                    setLoading={setLoading}
-                    setHasMore={setHasMore}
+                    update={update}
+                    setUpdate={setUpdate}
                   />
                 ))}
               </InfiniteScroll>
             </MainContent>
-            <HashtagTable
-              setPosts={setPosts}
-              setLoading={setLoading}
-              setHasMore={setHasMore}
-            />
+            <HashtagTable />
           </>
         )}
       </PageContainer>

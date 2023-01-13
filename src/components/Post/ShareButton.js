@@ -5,7 +5,7 @@ import { TokenContext } from "../../contexts/TokenContext";
 import api from "../../services/api";
 import Swal from "sweetalert2";
 
-export default function ShareButton({ post, renderPosts }) {
+export default function ShareButton({ post, update, setUpdate }) {
     const { shares, id } = post
     const { token } = useContext(TokenContext);
     const [sharesAmount, setSharesAmount] = useState(Number(shares))
@@ -43,7 +43,7 @@ export default function ShareButton({ post, renderPosts }) {
                 background: "black",
                 color: "white",
               });
-              await renderPosts();
+              setUpdate(!update);
             }
         });
       } catch (err) {

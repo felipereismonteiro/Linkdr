@@ -8,7 +8,7 @@ import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { UserContext } from "../../contexts/UserContext";
 
-export function Likes({ post, renderPosts }) {
+export function Likes({ post,  update, setUpdate}) {
   const { id, is_liked, liked_by, likes } = post;
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useContext(TokenContext);
@@ -63,13 +63,13 @@ export function Likes({ post, renderPosts }) {
         setLiked(false)
         setLikesAmount(likesAmount - 1)
         await api.unlikePost(id, token);
-        await renderPosts();
+       setUpdate(!update);
         setIsLoading(false);
       } else {
         setLiked(true)
         setLikesAmount(likesAmount + 1)
         await api.likePost(id, token);
-        await renderPosts();
+       setUpdate(!update);
         setIsLoading(false);
       }
     } catch (err) {

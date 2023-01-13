@@ -16,10 +16,7 @@ import "simplebar/dist/simplebar.min.css";
 import { AiOutlineComment } from "react-icons/ai";
 import CommentBox from "./CommentBox.js";
 
-export default function Post({
-  post,
-  renderPosts
-}) {
+export default function Post({ post, renderPosts, update, setUpdate }) {
   const { user } = useContext(UserContext);
   const { token } = useContext(TokenContext);
   const [editing, setEditing] = useState(false);
@@ -76,7 +73,7 @@ export default function Post({
           if (result.isConfirmed) {
             setLoadingDelete(true);
             const promisse = await api.delelePostById(post.id, token);
-            await renderPosts();
+            setUpdate(!update);;
             setLoadingDelete(false);
             swalWithBootstrapButtons.fire({
               title: "Deleted!",
@@ -177,9 +174,7 @@ export default function Post({
                     if (result.isConfirmed) {
                       setEditing(!editing);
                       setInputValue(post.content);
-                    } else if (
-                      result.dismiss === Swal.DismissReason.cancel
-                    ) {
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
                       swalWithBootstrapButtons.fire({
                         title: "Cancelled",
                         text: "Your editing were canceled :)",
@@ -209,7 +204,7 @@ export default function Post({
       setEditing(false);
       setLoadingEditing(true);
       await api.editPatchPost(post.id, { content: inputValue }, token);
-      await renderPosts();
+      setUpdate(!update);;
       setLoadingEditing(false);
     } catch (err) {
       setLoadingEditing(false);
@@ -268,7 +263,7 @@ export default function Post({
         )}
         <UserPicAndButtons>
           <UserPic src={post.profile_picture} alt="User picture" />
-          <Likes post={post} renderPosts={renderPosts} />
+          <Likes post={post} setUpdate={setUpdate} update={update} />
           <ContainerCommentButton
             onClick={() => setCommentBoxOpen(!commentBoxOpen)}
           >
@@ -277,7 +272,7 @@ export default function Post({
             />
             <p>{post.comments_amount} comments</p>
           </ContainerCommentButton>
-          <ShareButton post={post} renderPosts={renderPosts} />
+          <ShareButton post={post} setUpdate={setUpdate} update={update} />
         </UserPicAndButtons>
         <PostContent>
           <Username
@@ -312,7 +307,7 @@ export default function Post({
         </PostContent>
       </Container>
 
-      {commentBoxOpen && <CommentBox post={post} renderPost={renderPosts} />}
+      {commentBoxOpen && <CommentBox post={post}  setUpdate={setUpdate} update={update}/>}
     </>
   );
 }

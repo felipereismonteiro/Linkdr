@@ -27,7 +27,7 @@ export default function UserPage() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
   const { id } = useParams();
-
+  
   useEffect(() => {
     if (!userData) {
       navigate("/");
@@ -38,18 +38,18 @@ export default function UserPage() {
     if (token) {
       renderPosts(initialPage.current);
     }
-  }, [id, token]);
+  }, [id, token, update]);
 
   const renderPosts = async (page) => {
-    console.log(page);
+  
     try {
       const result = await api.getPostsByUserId(id, page, token);
-
+      console.log(result);
       setPersonalData(result.data.userInfo);
       setFollowStatus(result.data.is_followed);
-      setPosts([...posts, ...result.data.posts]);
-      console.log(result.data.posts.length, result.data.posts);
-      if (result.data.posts.length < 10) {
+      setPosts(result.data.posts);
+
+      if (result.data.posts.length !== 10) {
         setHasMore(false);
       }
     } catch (err) {
@@ -78,12 +78,7 @@ export default function UserPage() {
                 <img src={personalData.profile_picture} alt="profile" />
                 <Title title={`${personalData.user_name}'s posts`} />
                 {user.id !== Number(id) && (
-                  <FollowStatusButton
-                    isFollowed={followStatus.is_followed}
-                    setUpdate={setUpdate}
-                    id={id}
-                    update={update}
-                  />
+                  <FollowStatusButton isFollowed={followStatus} id={id} />
                 )}
               </TitleContainer>
               <InfiniteScroll
@@ -96,7 +91,8 @@ export default function UserPage() {
                   <Post
                     key={p.post_share_id}
                     post={p}
-                    renderPosts={renderPosts}
+                    setUpdate={setUpdate}
+                    update={update}
                   />
                 ))}
               </InfiniteScroll>
