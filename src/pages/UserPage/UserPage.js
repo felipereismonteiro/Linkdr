@@ -47,8 +47,8 @@ export default function UserPage() {
 
       setPersonalData(result.data.userInfo);
       setFollowStatus(result.data.is_followed);
-      setPosts([...posts, ...result.data.posts]);
-      console.log(result.data.posts.length, result.data.posts);
+      setPosts((prevPosts) => [...prevPosts, ...result.data.posts]);
+
       if (result.data.posts.length < 10) {
         setHasMore(false);
       }
@@ -78,7 +78,7 @@ export default function UserPage() {
                 <Title title={`${personalData.user_name}'s posts`} />
                 {user.id !== Number(id) && (
                   <FollowStatusButton
-                    isFollowed={followStatus.is_followed}
+                    isFollowed={followStatus}
                     setUpdate={setUpdate}
                     id={id}
                     update={update}

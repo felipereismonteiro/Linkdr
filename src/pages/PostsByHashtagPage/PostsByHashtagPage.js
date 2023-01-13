@@ -22,12 +22,12 @@ export default function PostsByHashtagPage() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
   const initialPage = useRef(1);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     setPosts([]);
     setHasMore(true);
     setLoading(true);
-  },[hashtag])
+  }, [hashtag]);
 
   useEffect(() => {
     if (!userData) {
@@ -35,13 +35,13 @@ export default function PostsByHashtagPage() {
     }
   }, []);
 
-  const fetchPosts = async (page) => {
+  const renderPosts = async (page) => {
     try {
       const resp = await api.getPostsByHashtag(hashtag, page, token);
 
       setLoading(false);
-      setPosts([...posts, ...resp.data]);
-      console.log(resp.data);
+      setPosts((prevPosts) => [...prevPosts, ...resp.data]);
+
       if (resp.data.length < 10) {
         setHasMore(false);
       }
@@ -54,9 +54,9 @@ export default function PostsByHashtagPage() {
 
   useEffect(() => {
     if (token) {
-      fetchPosts(initialPage.current);
+      renderPosts(initialPage.current);
     }
-  }, [hashtag]);
+  }, [hashtag, token]);
 
   if (!userData) {
     return;
@@ -78,25 +78,15 @@ export default function PostsByHashtagPage() {
               <InfiniteScroll
                 pageStart={1}
                 hasMore={hasMore}
-                loadMore={fetchPosts}
+                loadMore={renderPosts}
                 loader={<ScrollLoading />}
               >
                 {posts.map((post) => (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    setPosts={setPosts}
-                    setLoading={setLoading}
-                    setHasMore={setHasMore}
-                  />
+                  <Post key={post.id} post={post} renderPosts={renderPosts} />
                 ))}
               </InfiniteScroll>
             </MainContent>
-            <HashtagTable
-              setPosts={setPosts}
-              setLoading={setLoading}
-              setHasMore={setHasMore}
-            />
+            <HashtagTable />
           </>
         )}
       </PageContainer>

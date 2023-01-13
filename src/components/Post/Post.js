@@ -12,14 +12,11 @@ import { ThreeDots } from "react-loader-spinner";
 import { Likes } from "./Likes.js";
 import ShareButton from "./ShareButton.js";
 import RepostImg from "../../assets/images/repost.svg";
-import "simplebar/dist/simplebar.min.css";
+import 'simplebar/dist/simplebar.min.css';
 import { AiOutlineComment } from "react-icons/ai";
 import CommentBox from "./CommentBox.js";
 
-export default function Post({
-  post,
-  renderPosts
-}) {
+export default function Post({ post, renderPosts }) {
   const { user } = useContext(UserContext);
   const { token } = useContext(TokenContext);
   const [editing, setEditing] = useState(false);
@@ -243,7 +240,7 @@ export default function Post({
       );
     }
   }
-
+  
   return (
     <>
       <Container type={post.type}>
@@ -269,15 +266,11 @@ export default function Post({
         <UserPicAndButtons>
           <UserPic src={post.profile_picture} alt="User picture" />
           <Likes post={post} renderPosts={renderPosts} />
-          <ContainerCommentButton
-            onClick={() => setCommentBoxOpen(!commentBoxOpen)}
-          >
-            <AiOutlineComment
-              style={{ color: "white", fontSize: "20px", cursor: "pointer" }}
-            />
-            <p>{post.comments_amount} comments</p>
+          <ContainerCommentButton onClick={() => setCommentBoxOpen(!commentBoxOpen)}>
+              <AiOutlineComment style={{color: "white", fontSize: "20px", cursor: "pointer"}}/>
+              <p>{post.comments_amount} comments</p>
           </ContainerCommentButton>
-          <ShareButton post={post} renderPosts={renderPosts} />
+          <ShareButton post={post} renderPosts={renderPosts}/>
         </UserPicAndButtons>
         <PostContent>
           <Username
@@ -312,7 +305,7 @@ export default function Post({
         </PostContent>
       </Container>
 
-      {commentBoxOpen && <CommentBox post={post} renderPost={renderPosts} />}
+      {commentBoxOpen &&  <CommentBox post={post} renderPost={renderPosts} />}
     </>
   );
 }
@@ -488,22 +481,22 @@ const RepostIcon = styled.img`
   width: 20px;
 `;
 const ContainerCommentButton = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  margin-top: 10px;
-  cursor: pointer;
-  width: 70px;
-  & p {
-    font-family: "Lato";
-    font-weight: 400;
-    font-size: 11px;
-    color: #ffffff;
-  }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 70px;
+    & p {
+        font-family: 'Lato';
+        font-weight: 400;
+        font-size: 11px;
+        color: #FFFFFF;
+    }
 
-  &:hover svg {
-    filter: blur(0.5px);
-    filter: drop-shadow(0 0 5px grey);
-  }
-`;
+    &:hover svg {
+      filter: blur(0.5px);
+      filter: drop-shadow(0 0 5px grey);
+    }
+`
