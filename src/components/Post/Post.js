@@ -175,7 +175,6 @@ export default function Post({ post, renderPosts }) {
                       setEditing(!editing);
                       setInputValue(post.content);
                     } else if (
-                      /* Read more about handling dismissals below */
                       result.dismiss === Swal.DismissReason.cancel
                     ) {
                       swalWithBootstrapButtons.fire({
@@ -285,6 +284,7 @@ export default function Post({ post, renderPosts }) {
           {editButton()}
           {deleteButton()}
           {editingField()}
+
           <ReactTagify
             tagStyle={tagStyle}
             tagClicked={(tag) => goToPostsByHashtagPage(tag)}

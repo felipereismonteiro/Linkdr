@@ -1,15 +1,18 @@
 import styled from "styled-components";
 import vector from "../../assets/images/vector.png";
 import SimpleBar from "simplebar-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "../../services/api";
 import { ColorRing } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 
 export default function CommentBox({ post, renderPost }) {
   const { user } = JSON.parse(localStorage.getItem("userData"));
   const { token } = JSON.parse(localStorage.getItem("userData"));
   const [inputValue, setInputValue] = useState();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const ref = useRef(null);
 
   function handleKeyPressed(e) {
     if (e.code === "Enter") {
@@ -17,7 +20,11 @@ export default function CommentBox({ post, renderPost }) {
     }
   }
 
-  console.log(user);
+  useEffect(() => {
+    setTimeout(() => {
+      handleScroll();
+    }, 1000)
+  }, [])
 
   async function sendComment() {
     try {
@@ -29,13 +36,23 @@ export default function CommentBox({ post, renderPost }) {
 
       setLoading(false);
       setInputValue("");
-      renderPost();
+      await renderPost();
+      setTimeout(() => {
+        handleScroll();
+      }, 1000)
       console.log(promisse);
     } catch (err) {
       setLoading(false);
       setInputValue("");
       console.log(err.response.data);
     }
+  }
+
+  function handleScroll() {
+    ref.current.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
   }
 
   return (
@@ -47,29 +64,36 @@ export default function CommentBox({ post, renderPost }) {
           marginTop: "-30px",
           paddingTop: "10px",
           zIndex: "0",
-          paddingBottom: "20px",
-          bottom: "0px"
+          bottom: "0px",
         }}
       >
-        {post.comments.map((c) => {
-
+        {post.comments.map((c, index) => {
           function author() {
             if (c.user_id === post.user_id) {
-              return "• post’s author"
+              return "• post’s author";
+            } else if (c.is_followed) {
+              return "• following";
+            } else {
+              return "";
             }
           }
 
           if (c.comment !== null) {
             
-            return <UserComment>
-              <UserPicture src={c.user_picture} />
-              <Infos>
-                <UserName>
-                  {c.user_name} <p>{author()}</p>
-                </UserName>
-                <UserCommentText>{c.comment}</UserCommentText>
-              </Infos>
-            </UserComment>;
+            return (
+              <UserComment ref={index === post.comments.length - 1 ? ref : null} >
+                <UserPicture src={c.user_picture} />
+                <Infos>
+                  <UserName onClick={() => navigate(`/user/${post.user_id}`)}>
+                    {c.user_name} <p>{author()}</p>
+                  </UserName>
+                  <UserCommentText
+                  >
+                    {c.comment}
+                  </UserCommentText>
+                </Infos>
+              </UserComment>
+            );
           }
         })}
       </SimpleBar>
@@ -96,7 +120,7 @@ export default function CommentBox({ post, renderPost }) {
               colors={["white", "white", "white", "white", "white"]}
             />
           ) : (
-            <ImgVector onClick={sendComment} src={vector} alt="" />
+            <ImgVector onClick={() => sendComment()} src={vector} alt="" />
           )}
         </>
       </UserCommentInput>
@@ -121,6 +145,10 @@ const UserName = styled.p`
   font-style: normal;
   font-size: 14px;
   display: flex;
+  cursor: pointer;
+  &&:hover {
+    text-decoration: underline;
+  }
   && p {
     margin: 0px 10px;
     color: #565656;
@@ -145,7 +173,6 @@ const UserCommentInput = styled.div`
   display: flex;
   background: #1e1e1e;
   border-radius: 0px 0px 16px 16px;
-  margin-top: -20px;
   margin-bottom: 10px;
   position: relative;
   top: 0;
@@ -165,13 +192,12 @@ const UserCommentInput = styled.div`
 
     box-sizing: border-box;
     padding: 20px;
-
     &::placeholder {
-    font-family: "Lato";
-    font-style: italic;
-    font-weight: 400;
-    font-size: 14px;
-    color: #575757;
+      font-family: "Lato";
+      font-style: italic;
+      font-weight: 400;
+      font-size: 14px;
+      color: #575757;
     }
   }
 `;
