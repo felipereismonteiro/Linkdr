@@ -17,8 +17,6 @@ export default function CommentBox({ post,  update, setUpdate }) {
     }
   }
 
-  console.log(user);
-
   async function sendComment() {
     try {
       const body = {

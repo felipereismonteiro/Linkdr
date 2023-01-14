@@ -1,7 +1,7 @@
 import axios from "axios";
 
-/* const BASE_URL = "https://linkr-api-hhbp.onrender.com"; */
-const BASE_URL = "http://localhost:4000";
+ const BASE_URL = "https://linkr-api-hhbp.onrender.com"; 
+// const BASE_URL = "http://localhost:4000";
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -34,6 +34,11 @@ function getPosts(page, token) {
   return promise;
 }
 
+function getOlderPosts(timestampPostgre, page, token) {
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/posts/loadmore?page=${page}&timestamp=${timestampPostgre}`, config);
+}
+
 function publishForm(postInfo, token) {
   const config = createConfig(token);
   const promisse = axios.post(`${BASE_URL}/posts`, postInfo, config);
@@ -61,6 +66,11 @@ function getPostsByUserId(id, page, token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/user/${id}?page=${page}`, config);
 }
+
+// function getOlderPostsByUserId(id, page, timestampPostgre, token) {
+//   const config = createConfig(token);
+//   return axios.get(`${BASE_URL}/user/${id}?page=${page}&timestamp=${timestampPostgre}`, config);
+// }
 
 function likePost(id, token) {
   const config = createConfig(token);
@@ -95,6 +105,12 @@ function sharePost(id, token) {
 function commentPost(token, id, body) {
   const config = createConfig(token);
   const promise = axios.post(`${BASE_URL}/posts/comment/${id}`, body, config);
+  return promise; 
+}
+
+function countNewPosts(token, timestampPostgre) {
+  const config = createConfig(token);
+  const promise = axios.get(`${BASE_URL}/posts/newafter/${timestampPostgre}`, config);
   return promise;
 }
 
@@ -115,6 +131,8 @@ const api = {
   unfollowUser,
   sharePost,
   commentPost,
+  countNewPosts,
+  getOlderPosts
 };
 
 export default api;

@@ -11,8 +11,11 @@ import { PublishingForm } from "../../components/PublishingForm/PublishingForm.j
 import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
 import { TokenContext } from "../../contexts/TokenContext.js";
 import { useNavigate } from "react-router-dom";
+import TimelineUpdateButton from "../../components/TimelineUpdateButton/TimelineUpdateButton.js";
+import moment from "moment";
 import { ScrollLoading } from "../../components/ScrollLoading/ScrollLoading";
-import InfiniteScroll from "react-infinite-scroller";
+import InfiniteScroll from "react-infinite-scroller"; 
+
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
@@ -21,15 +24,22 @@ export default function TimelinePage() {
   const initialPage = useRef(1);
   const [hasMore, setHasMore] = useState(true);
   const { token } = useContext(TokenContext);
+  const [timestampPostgre, setTimestampPostgre] = useState((moment(Date.now()).utc().format('YYYY-MM-DDTHH:mm:ss.SSSZ')));
+  const [newPostsCounter, setNewPostsCounter] = useState(0);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
   const [update, setUpdate] = useState(false);
+
 
   useEffect(() => {
     if (!userData) {
       navigate("/");
     }
-  }, []);
+      const interval = setInterval(countNewPosts, 25000)
+      return () => clearInterval(interval);
+
+  }, [timestampPostgre, token]);
+
 
   useEffect(() => {
     if (token) {
@@ -37,11 +47,22 @@ export default function TimelinePage() {
     }
   }, [loading, token, update]);
 
+  async function countNewPosts () {
+    try {
+      const newPosts  = await api.countNewPosts(token, timestampPostgre);
+      setNewPostsCounter(Number(newPosts.data.new_posts))
+    } catch(err) {
+      console.log(err.message)
+    }
+    
+  }
+  
   async function renderPosts(page) {
+
     try {
       const postsFound = await api.getPosts(page, token);
       setPosts(postsFound.data.posts);
-      console.log(postsFound.data);
+      // console.log(postsFound.data);
       setFollowedAccounts(postsFound.data.accounts_you_follow);
       setLoading(false);
 
@@ -54,6 +75,26 @@ export default function TimelinePage() {
       );
     }
   }
+
+  async function renderOlderPosts(page) {
+
+    try {
+      const postsFound = await api.getOlderPosts(timestampPostgre, page, token);
+      setPosts(postsFound.data.posts);
+      // console.log(postsFound.data);
+      setFollowedAccounts(postsFound.data.accounts_you_follow);
+      setLoading(false);
+
+      if (postsFound.data.posts.length % 10 !== 0) {
+        setHasMore(false);
+      }
+    } catch (err) {
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+      );
+    }
+  }
+
 
   if (!userData) {
     return;
@@ -73,7 +114,7 @@ export default function TimelinePage() {
             <MainContent>
               <Title title={"timeline"} />
               <PublishingForm renderPosts={renderPosts} />
-
+              {newPostsCounter !== 0 && <TimelineUpdateButton newPostsCounter={newPostsCounter} setNewPostsCounter={setNewPostsCounter} setTimestampPostgre={setTimestampPostgre} update={update} setUpdate={setUpdate}/>}
               {followedAccounts.length === 0 && (
                 <NoAccountsFollowedMessage>
                   You don't follow anyone yet. Search for new friends!
@@ -88,7 +129,7 @@ export default function TimelinePage() {
                 <InfiniteScroll
                   pageStart={1}
                   hasMore={hasMore}
-                  loadMore={renderPosts}
+                  loadMore={renderOlderPosts}
                   loader={<ScrollLoading />}
                 >
                   {posts.map((p, i) => (
