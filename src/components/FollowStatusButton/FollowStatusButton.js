@@ -68,10 +68,17 @@ const Container = styled.button`
   align-items: center;
   justify-content: center;
   position: absolute;
-  left: 820px;
+  top:71px;
+  right: 0px;
+  z-index: 20;
   cursor: pointer;
   pointer-events: ${(props) => (props.isLoading ? "none" : "")};
   opacity: ${(props) => (props.isLoading ? "0.6" : "1")};
   color: ${(props) => (props.status ? "#1877F2" : "#FFFFFF")};
   background: ${(props) => (props.status ? "#FFFFFF" : " #1877F2")};
+
+  @media (max-width: 940px) {
+    top: 170px;
+    right: 0px;
+  }
 `;

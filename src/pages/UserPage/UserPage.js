@@ -49,7 +49,7 @@ export default function UserPage() {
       setFollowStatus(result.data.is_followed);
       setPosts(result.data.posts);
 
-      if (result.data.posts.length !== 10) {
+      if (result.data.posts.length % 10 !== 0) {
         setHasMore(false);
       }
     } catch (err) {
@@ -72,14 +72,14 @@ export default function UserPage() {
         {personalData === null ? (
           <Loading>Loading...</Loading>
         ) : (
-          <>
+          <Content>
+            {user.id !== Number(id) && (
+              <FollowStatusButton isFollowed={followStatus} id={id} />
+            )}
             <MainContent>
               <TitleContainer>
                 <img src={personalData.profile_picture} alt="profile" />
                 <Title title={`${personalData.user_name}'s posts`} />
-                {user.id !== Number(id) && (
-                  <FollowStatusButton isFollowed={followStatus} id={id} />
-                )}
               </TitleContainer>
               <InfiniteScroll
                 pageStart={1}
@@ -98,7 +98,7 @@ export default function UserPage() {
               </InfiniteScroll>
             </MainContent>
             <HashtagTable />
-          </>
+          </Content>
         )}
       </PageContainer>
     </>
@@ -142,3 +142,9 @@ const SearchBarContainer = styled.div`
     align-items: center;
   }
 `;
+
+const Content = styled.div`
+display: flex;
+gap: 25px;
+position: relative;
+`

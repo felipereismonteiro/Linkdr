@@ -27,7 +27,7 @@ export default function Navbar({renderPosts}) {
             <Menu>
           <HomeButton onClick={() => {
             navigate("/timeline");
-            renderPosts();
+            renderPosts(1);
             window.scrollTo(0, 0);
           }}>
             <AiFillHome />

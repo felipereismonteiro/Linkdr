@@ -1,21 +1,30 @@
 import styled from "styled-components";
 import vector from "../../assets/images/vector.png";
 import SimpleBar from "simplebar-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "../../services/api";
 import { ColorRing } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 
 export default function CommentBox({ post,  update, setUpdate }) {
   const { user } = JSON.parse(localStorage.getItem("userData"));
   const { token } = JSON.parse(localStorage.getItem("userData"));
   const [inputValue, setInputValue] = useState();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const ref = useRef(null);
 
   function handleKeyPressed(e) {
     if (e.code === "Enter") {
       sendComment();
     }
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      handleScroll();
+    }, 1000)
+  }, [])
 
   async function sendComment() {
     try {
@@ -24,14 +33,29 @@ export default function CommentBox({ post,  update, setUpdate }) {
       };
       setLoading(true);
       const promisse = await api.commentPost(token, post.id, body);
+
       setLoading(false);
       setInputValue("");
       setUpdate(!update);
+      // await renderPost();
+      setTimeout(() => {
+        handleScroll();
+      }, 1000)
+      console.log(promisse);
     } catch (err) {
       setLoading(false);
       setInputValue("");
-      console.log(err);
+      console.log(err.response.data);
     }
+  }
+
+
+
+  function handleScroll() {
+    ref.current.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
   }
 
   return (
