@@ -22,7 +22,7 @@ export function PublishingForm({renderPosts}) {
 
         try {
             await api.publishForm(postInfo, token);
-            await renderPosts()
+            await renderPosts(1)
             setIsPublishing(false);
             e.target.url.value = "";
             e.target.content.value = "";
