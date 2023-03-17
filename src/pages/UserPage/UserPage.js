@@ -192,6 +192,8 @@ const Cover = styled.div`
   height: 222px;
   background: url(${(props) => props.cover});
   background-position: right;
+  background-size: cover;
+  background-repeat: no-repeat;
   border-radius: 20px 20px 0px 0px;
 `;
 
