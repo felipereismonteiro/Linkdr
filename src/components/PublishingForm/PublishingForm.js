@@ -5,7 +5,7 @@ import { TokenContext } from "../../contexts/TokenContext.js";
 import api from '../../services/api.js';
 
 
-export function PublishingForm({renderPosts}) {
+export function PublishingForm({renderPosts, loading}) {
     const {user} = useContext(UserContext);
     const {token} = useContext(TokenContext); 
     const [isPublishing, setIsPublishing] = useState(false);
@@ -35,7 +35,12 @@ export function PublishingForm({renderPosts}) {
     }
 
     return(
-            <PublishingContainer>
+            <PublishingContainer loading={loading}>
+                {loading ? 
+                <>
+                </>
+                :
+                <>
                 <UserPic src={user.profile_picture} alt="User picture"/>
                 <Form onSubmit={publish} >
                     <FormTitle>What are you going to share today?</FormTitle>
@@ -45,6 +50,8 @@ export function PublishingForm({renderPosts}) {
                         <Button type="submit" disabled={isPublishing}>{isPublishing ? "Publishing..." : "Publish"}</Button>
                     </ButtonDiv>
                 </Form>
+                </>
+                }
             </PublishingContainer>
     )
 }
@@ -53,7 +60,7 @@ export function PublishingForm({renderPosts}) {
 const PublishingContainer = styled.div`
     width: 100%;
     height: 209px;
-    background: #FFFFFF;
+    background: ${props => props.loading ? 'grey' : '#FFFFFF'};
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 16px;
     display: flex;

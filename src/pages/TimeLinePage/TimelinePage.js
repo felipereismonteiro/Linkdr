@@ -1,21 +1,20 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import Navbar from "../../components/NavBar/Navbar.js";
-import Post from "../../components/Post/Post.js";
-import Title from "../../components/Title/Title.js";
-import PageContainer from "../../components/Container/Container.js";
-import MainContent from "../../components/MainContent/MainContent.js";
-import HashtagTable from "../../components/HashtagTable/HashtagTable.js";
-import api from "../../services/api.js";
-import { PublishingForm } from "../../components/PublishingForm/PublishingForm.js";
-import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
-import { TokenContext } from "../../contexts/TokenContext.js";
-import { useNavigate } from "react-router-dom";
-import TimelineUpdateButton from "../../components/TimelineUpdateButton/TimelineUpdateButton.js";
-import moment from "moment";
-import { ScrollLoading } from "../../components/ScrollLoading/ScrollLoading";
-import InfiniteScroll from "react-infinite-scroller"; 
-
+import { useContext, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import Navbar from '../../components/NavBar/Navbar.js';
+import Post from '../../components/Post/Post.js';
+import Title from '../../components/Title/Title.js';
+import PageContainer from '../../components/Container/Container.js';
+import FeedContainer from '../../components/FeedContainer/FeedContainer.js';
+import SideBar from '../../components/SideBar/SideBar.js';
+import api from '../../services/api.js';
+import { PublishingForm } from '../../components/PublishingForm/PublishingForm.js';
+import SearchBarComponent from '../../components/NavBar/SearchBarComponent.js';
+import { TokenContext } from '../../contexts/TokenContext.js';
+import { useNavigate } from 'react-router-dom';
+import TimelineUpdateButton from '../../components/TimelineUpdateButton/TimelineUpdateButton.js';
+import moment from 'moment';
+import { ScrollLoading } from '../../components/ScrollLoading/ScrollLoading';
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function TimelinePage() {
   const [loading, setLoading] = useState(true);
@@ -24,22 +23,19 @@ export default function TimelinePage() {
   const initialPage = useRef(1);
   const [hasMore, setHasMore] = useState(true);
   const { token } = useContext(TokenContext);
-  const [timestampPostgre, setTimestampPostgre] = useState((moment(Date.now()).utc().format('YYYY-MM-DDTHH:mm:ss.SSSZ')));
+  const [timestampPostgre, setTimestampPostgre] = useState(moment(Date.now()).utc().format('YYYY-MM-DDTHH:mm:ss.SSSZ'));
   const [newPostsCounter, setNewPostsCounter] = useState(0);
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const userData = JSON.parse(localStorage.getItem('userData'));
   const navigate = useNavigate();
   const [update, setUpdate] = useState(false);
 
-
   useEffect(() => {
     if (!userData) {
-      navigate("/");
+      navigate('/');
     }
-      const interval = setInterval(countNewPosts, 25000)
-      return () => clearInterval(interval);
-
+    const interval = setInterval(countNewPosts, 25000);
+    return () => clearInterval(interval);
   }, [timestampPostgre, token]);
-
 
   useEffect(() => {
     if (token) {
@@ -47,22 +43,19 @@ export default function TimelinePage() {
     }
   }, [loading, token, update]);
 
-  async function countNewPosts () {
+  async function countNewPosts() {
     try {
-      const newPosts  = await api.countNewPosts(token, timestampPostgre);
-      setNewPostsCounter(Number(newPosts.data.new_posts))
-    } catch(err) {
-      console.log(err.message)
+      const newPosts = await api.countNewPosts(token, timestampPostgre);
+      setNewPostsCounter(Number(newPosts.data.new_posts));
+    } catch (err) {
+      console.log(err.message);
     }
-    
   }
-  
-  async function renderPosts(page) {
 
+  async function renderPosts(page) {
     try {
       const postsFound = await api.getPosts(page, token);
       setPosts(postsFound.data.posts);
-      // console.log(postsFound.data);
       setFollowedAccounts(postsFound.data.accounts_you_follow);
       setLoading(false);
 
@@ -70,14 +63,11 @@ export default function TimelinePage() {
         setHasMore(false);
       }
     } catch (err) {
-      alert(
-        "An error occured while trying to fetch the posts, please refresh the page"
-      );
+      alert('An error occured while trying to fetch the posts, please refresh the page');
     }
   }
 
   async function renderOlderPosts(page) {
-
     try {
       const postsFound = await api.getOlderPosts(timestampPostgre, page, token);
       setPosts(postsFound.data.posts);
@@ -89,12 +79,9 @@ export default function TimelinePage() {
         setHasMore(false);
       }
     } catch (err) {
-      alert(
-        "An error occured while trying to fetch the posts, please refresh the page"
-      );
+      alert('An error occured while trying to fetch the posts, please refresh the page');
     }
   }
-
 
   if (!userData) {
     return;
@@ -107,46 +94,55 @@ export default function TimelinePage() {
         <SearchBarContainer>
           <SearchBarComponent />
         </SearchBarContainer>
-        {loading ? (
-          <Loading>Loading...</Loading>
-        ) : (
-          <>
-            <MainContent>
-              <Title title={"timeline"} />
-              <PublishingForm renderPosts={renderPosts} />
-              {newPostsCounter !== 0 && <TimelineUpdateButton newPostsCounter={newPostsCounter} setNewPostsCounter={setNewPostsCounter} setTimestampPostgre={setTimestampPostgre} update={update} setUpdate={setUpdate}/>}
-              {followedAccounts.length === 0 && (
+        <Content>
+          <Title title={'timeline'} loading={loading} />
+          <MainContent>
+            <FeedContainer>
+              <PublishingForm renderPosts={renderPosts} loading={loading} />
+              {newPostsCounter !== 0 && (
+                <TimelineUpdateButton
+                  newPostsCounter={newPostsCounter}
+                  setNewPostsCounter={setNewPostsCounter}
+                  setTimestampPostgre={setTimestampPostgre}
+                  update={update}
+                  setUpdate={setUpdate}
+                />
+              )}
+              {followedAccounts?.length === 0 && (
                 <NoAccountsFollowedMessage>
                   You don't follow anyone yet. Search for new friends!
                 </NoAccountsFollowedMessage>
               )}
 
-              {followedAccounts.length !== 0 && posts.length === 0 && (
+              {followedAccounts?.length !== 0 && posts.length === 0 && loading === false && (
                 <NoPostsMessage>There are no posts yet</NoPostsMessage>
               )}
 
-              {posts.length !== 0 && (
-                <InfiniteScroll
-                  pageStart={1}
-                  hasMore={hasMore}
-                  loadMore={renderOlderPosts}
-                  loader={<ScrollLoading />}
-                >
-                  {posts.map((p, i) => (
+              {/* {posts.length !== 0 && ( */}
+              <InfiniteScroll pageStart={1} hasMore={hasMore} loadMore={renderOlderPosts} loader={<ScrollLoading />}>
+                {loading ? (
+                  <>
+                    <LoadingPostDiv />
+                    <LoadingPostDiv />
+                  </>
+                ) : (
+                  posts.map((p, i) => (
                     <Post
                       post={p}
                       key={p.post_share_id}
                       renderPosts={renderPosts}
                       update={update}
                       setUpdate={setUpdate}
+                      loading={loading}
                     />
-                  ))}
-                </InfiniteScroll>
-              )}
-            </MainContent>
-            <HashtagTable />
-          </>
-        )}
+                  ))
+                )}
+              </InfiniteScroll>
+              {/* )} */}
+            </FeedContainer>
+            <SideBar />
+          </MainContent>
+        </Content>
       </PageContainer>
     </>
   );
@@ -169,13 +165,21 @@ const SearchBarContainer = styled.div`
   }
 `;
 
-const Loading = styled.p`
-  font-family: "Oswald";
-  font-weight: 700;
-  font-size: 24px;
-  color: #ffffff;
-  text-align: center;
-  margin-top: 75px;
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 53px;
+`;
+
+const MainContent = styled.div`
+  display: flex;
+`;
+
+const LoadingPostDiv = styled.div`
+  width: 100%;
+  min-height: 260px;
+  background-color: grey;
+  border-radius: 16px;
 `;
 
 const NoPostsMessage = styled.p`
@@ -191,5 +195,6 @@ const NoAccountsFollowedMessage = styled.p`
   font-size: 24px;
   color: #ffffff;
   text-align: center;
-  margin-top: 75px;
+  margin-top: 50px;
+  margin-bottom: 40px;
 `;
