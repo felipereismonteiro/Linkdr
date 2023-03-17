@@ -27,7 +27,6 @@ export default function Navbar({renderPosts}) {
             <Menu>
           <HomeButton onClick={() => {
             navigate("/timeline");
-            renderPosts(1);
             window.scrollTo(0, 0);
           }}>
             <AiFillHome />
@@ -59,8 +58,8 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    z-index: 20;
-    padding: 0 17px;
+    z-index: 100;
+    padding: 0 30px 0 17px;
 `;
 
 const LogoContainer = styled.div`

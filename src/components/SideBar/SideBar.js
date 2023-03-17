@@ -4,7 +4,7 @@ import api from "../../services/api";
 import Hashtag from "./Hashtag";
 import { Oval } from "react-loader-spinner";
 
-export default function HashtagTable() {
+export default function SideBar() {
   const [hashtags, setHashtags] = useState(null);
 
   useEffect(() => {
@@ -20,32 +20,26 @@ export default function HashtagTable() {
   }, []);
 
   return (
-    <Container>
+    <Container hashtags={hashtags}>
+      { hashtags ? (
+      <>
       <Title>trending</Title>
       <HashtagContainer loading={hashtags ? false : true}>
-        {!hashtags ? (
-          <Oval
-            height={40}
-            width={40}
-            color="grey"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-            ariaLabel="oval-loading"
-            secondaryColor="black"
-            strokeWidth={2}
-            strokeWidthSecondary={2}
+        {hashtags?.map((hashtag, index) => (
+          <Hashtag
+            key={hashtag.id}
+            id={hashtag.id}
+            name={hashtag.name}
           />
-        ) : (
-          hashtags.map((hashtag, index) => (
-            <Hashtag
-              key={hashtag.id}
-              id={hashtag.id}
-              name={hashtag.name}
-            />
-          ))
-        )}
+          ))}
       </HashtagContainer>
+      </>
+      ) : (
+        <>
+        </>
+      )
+      }
+      
     </Container>
   );
 }
@@ -53,8 +47,7 @@ export default function HashtagTable() {
 const Container = styled.section`
   height: 400px;
   width: 300px;
-  background: #171717;
-  margin-top: 143px;
+  background: ${props => props.hashtags ? '#171717' : 'grey'};
   margin-left: 25px;
   border-radius: 16px;
 

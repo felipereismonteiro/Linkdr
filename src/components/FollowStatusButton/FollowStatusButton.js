@@ -68,8 +68,8 @@ const Container = styled.button`
   align-items: center;
   justify-content: center;
   position: absolute;
-  top:71px;
-  right: 0px;
+  top:26px;
+  right: 35px;
   z-index: 20;
   cursor: pointer;
   pointer-events: ${(props) => (props.isLoading ? "none" : "")};
@@ -78,7 +78,7 @@ const Container = styled.button`
   background: ${(props) => (props.status ? "#FFFFFF" : " #1877F2")};
 
   @media (max-width: 940px) {
-    top: 170px;
+    top: 30px;
     right: 0px;
   }
 `;

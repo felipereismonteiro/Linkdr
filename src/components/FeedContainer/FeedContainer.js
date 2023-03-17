@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
-const MainContent = styled.div`
+const FeedContainer = styled.div`
     width: 611px;
     height: auto;
-    margin-top: 58px;
 
     @media (max-width: 950px) {
             margin-top: 90px;
@@ -14,4 +13,4 @@ const MainContent = styled.div`
   }
 `;
 
-export default MainContent;
+export default FeedContainer;

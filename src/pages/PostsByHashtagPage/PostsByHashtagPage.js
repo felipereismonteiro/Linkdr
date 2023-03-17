@@ -1,17 +1,17 @@
-import PageContainer from "../../components/Container/Container";
-import MainContent from "../../components/MainContent/MainContent";
-import Title from "../../components/Title/Title";
-import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../../components/NavBar/Navbar";
-import Post from "../../components/Post/Post";
-import SearchBarComponent from "../../components/NavBar/SearchBarComponent.js";
-import HashtagTable from "../../components/HashtagTable/HashtagTable";
-import { useEffect, useState, useContext, useRef } from "react";
-import api from "../../services/api";
-import styled from "styled-components";
-import { TokenContext } from "../../contexts/TokenContext.js";
-import InfiniteScroll from "react-infinite-scroller";
-import { ScrollLoading } from "../../components/ScrollLoading/ScrollLoading";
+import PageContainer from '../../components/Container/Container';
+import FeedContainer from '../../components/FeedContainer/FeedContainer';
+import Title from '../../components/Title/Title';
+import { useParams, useNavigate } from 'react-router-dom';
+import Navbar from '../../components/NavBar/Navbar';
+import Post from '../../components/Post/Post';
+import SearchBarComponent from '../../components/NavBar/SearchBarComponent.js';
+import SideBar from '../../components/SideBar/SideBar';
+import { useEffect, useState, useContext, useRef } from 'react';
+import api from '../../services/api';
+import styled from 'styled-components';
+import { TokenContext } from '../../contexts/TokenContext.js';
+import InfiniteScroll from 'react-infinite-scroller';
+import { ScrollLoading } from '../../components/ScrollLoading/ScrollLoading';
 
 export default function PostsByHashtagPage() {
   const [posts, setPosts] = useState([]);
@@ -20,7 +20,7 @@ export default function PostsByHashtagPage() {
   const { hashtag } = useParams();
   const [update, setUpdate] = useState(false);
   const { token } = useContext(TokenContext);
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const userData = JSON.parse(localStorage.getItem('userData'));
   const navigate = useNavigate();
   const initialPage = useRef(1);
 
@@ -32,12 +32,12 @@ export default function PostsByHashtagPage() {
 
   useEffect(() => {
     if (!userData) {
-      navigate("/");
+      navigate('/');
     }
   }, []);
 
   const renderPosts = async (page) => {
-    console.log('fui chamada')
+    console.log('fui chamada');
     try {
       const resp = await api.getPostsByHashtag(hashtag, page, token);
       console.log(resp.data);
@@ -75,25 +75,19 @@ export default function PostsByHashtagPage() {
           <Loading>Loading...</Loading>
         ) : (
           <>
-            <MainContent>
+            <Content>
               <Title title={hashtag} showHashtag={true} />
-              <InfiniteScroll
-                pageStart={1}
-                hasMore={hasMore}
-                loadMore={renderPosts}
-                loader={<ScrollLoading />}
-              >
-                {posts.map((post) => (
-                  <Post
-                    key={post.post_share_id}
-                    post={post}
-                    update={update}
-                    setUpdate={setUpdate}
-                  />
-                ))}
-              </InfiniteScroll>
-            </MainContent>
-            <HashtagTable />
+              <MainContent>
+                <FeedContainer>
+                  <InfiniteScroll pageStart={1} hasMore={hasMore} loadMore={renderPosts} loader={<ScrollLoading />}>
+                    {posts.map((post) => (
+                      <Post key={post.post_share_id} post={post} update={update} setUpdate={setUpdate} />
+                    ))}
+                  </InfiniteScroll>
+                </FeedContainer>
+                <SideBar />
+              </MainContent>
+            </Content>
           </>
         )}
       </PageContainer>
@@ -118,10 +112,22 @@ const SearchBarContainer = styled.div`
   }
 `;
 const Loading = styled.p`
-  font-family: "Oswald";
+  font-family: 'Oswald';
   font-weight: 700;
   font-size: 24px;
   color: #ffffff;
   text-align: center;
   margin-top: 75px;
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+`;
+
+const MainContent = styled.div`
+  display: flex;
+  gap: 25px;
+  position: relative;
 `;
